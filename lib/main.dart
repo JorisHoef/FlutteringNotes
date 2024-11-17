@@ -27,6 +27,11 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
+
+  void getNext() {
+    current = WordPair.random();
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatelessWidget {
@@ -38,20 +43,13 @@ class MyHomePage extends StatelessWidget {
       body: Column(
         children: [
           Text('A random idea:'),
-          Text(appState.current.asLowerCase),
+          Text(appState.current.asPascalCase),
           ElevatedButton(
-            onPressed: (OnElevatedButtonPressed),
+            onPressed: (appState.getNext),
             child: Text('Next'),
           ),
         ],
       ),
     );
   }
-}
-
-//global function I am assuming, otherwise this should be defined above in
-//the class scope itself
-void OnElevatedButtonPressed()
-{
-  print('button pressed!');
 }
