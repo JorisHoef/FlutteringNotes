@@ -40,13 +40,18 @@ class MyHomePage extends StatelessWidget {
           Text('A random idea:'),
           Text(appState.current.asLowerCase),
           ElevatedButton(
-            onPressed: () {
-              print('button pressed!');
-            },
+            onPressed: (OnElevatedButtonPressed),
             child: Text('Next'),
           ),
         ],
       ),
     );
   }
+}
+
+//global function I am assuming, otherwise this should be defined above in
+//the class scope itself
+void OnElevatedButtonPressed()
+{
+  print('button pressed!');
 }
