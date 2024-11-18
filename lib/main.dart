@@ -2,6 +2,8 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'constants/strings_constants.dart';
+import 'constants/theme_constants.dart';
 import 'screens/home_screen.dart';
 
 void main() {
@@ -16,10 +18,10 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: 'Fluttering Notes',
+        title: appName,
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
         ),
         home: HomePage(),
       ),

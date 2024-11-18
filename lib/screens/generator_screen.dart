@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../main.dart';
 import '../widgets/big_card.dart';
-import '../utils/constants.dart';
+import '../constants//strings_constants.dart';
+import '../constants//layout_constants.dart';
 
 class WordGeneratorPage extends StatelessWidget {
   @override
@@ -33,7 +34,7 @@ class WordGeneratorPage extends StatelessWidget {
                   appState.toggleFavorite();
                 },
                 icon: Icon(icon),
-                label: Text(nextText),
+                label: Text(favoriteText),
               ),
               SizedBox(width: defaultBoxWidthHeight),
               ElevatedButton(

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fluttering_notes/utils/constants.dart';
+
 import 'generator_screen.dart';
 import 'favorites_screen.dart';
+import '../constants//navigation_constants.dart';
 
 class HomePage extends StatefulWidget {
   @override

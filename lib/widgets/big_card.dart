@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 
-import '../utils/constants.dart';
+import '../constants//layout_constants.dart';
 
 class BigCard extends StatelessWidget {
   const BigCard({

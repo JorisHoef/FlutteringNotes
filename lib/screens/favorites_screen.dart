@@ -4,7 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../main.dart';
-import '../utils/constants.dart';
+import '../constants/layout_constants.dart';
+import '../constants/strings_constants.dart';
 
 class FavoritesPage extends StatelessWidget {
   @override
