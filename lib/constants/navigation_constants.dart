@@ -1,2 +1,2 @@
-const String homeRoute = '/home';
-const String favoritesRoute = '/favorites';
+const String homeRoute = 'Home';
+const String favoritesRoute = 'Favorites';
