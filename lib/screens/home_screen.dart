@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttering_notes/utils/constants.dart';
 import 'generator_screen.dart';
 import 'favorites_screen.dart';
 
@@ -35,11 +36,11 @@ class _HomePageState extends State<HomePage> {
                     destinations: [
                       NavigationRailDestination(
                         icon: Icon(Icons.home),
-                        label: Text('Home'),
+                        label: Text(homeRoute),
                       ),
                       NavigationRailDestination(
                         icon: Icon(Icons.favorite),
-                        label: Text('Favorites'),
+                        label: Text(favoritesRoute),
                       ),
                     ],
                     selectedIndex: selectedIndex,
