@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
-import '../main.dart';
+import '../states/myapp_state.dart';
 import '../widgets/big_card.dart';
 import '../constants//strings_constants.dart';
 import '../constants//layout_constants.dart';

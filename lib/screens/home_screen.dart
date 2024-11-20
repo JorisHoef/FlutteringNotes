@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttering_notes/screens/notes_writing_screen.dart';
+import 'package:fluttering_notes/screens/note_writing_screen.dart';
+import 'package:fluttering_notes/screens/note_overview_screen.dart';
 
-import 'generator_screen.dart';
-import 'favorites_screen.dart';
 import '../constants//navigation_constants.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,10 +17,10 @@ class _HomePageState extends State<HomePage> {
     Widget page;
     switch (selectedIndex) {
       case 0:
-        page = NotesWriting();
+        page = NoteOverviewPage();
         break;
       case 1:
-        page = FavoritesPage();
+        page = NoteWritingPage();
         break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
@@ -40,7 +39,7 @@ class _HomePageState extends State<HomePage> {
                     label: Text(homeRoute),
                   ),
                   NavigationRailDestination(
-                    icon: Icon(Icons.favorite),
+                    icon: Icon(Icons.note),
                     label: Text(favoritesRoute),
                   ),
                 ],
