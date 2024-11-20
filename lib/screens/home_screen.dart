@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttering_notes/screens/notes_writing_screen.dart';
 
 import 'generator_screen.dart';
 import 'favorites_screen.dart';
@@ -17,7 +18,7 @@ class _HomePageState extends State<HomePage> {
     Widget page;
     switch (selectedIndex) {
       case 0:
-        page = WordGeneratorPage();
+        page = NotesWriting();
         break;
       case 1:
         page = FavoritesPage();
