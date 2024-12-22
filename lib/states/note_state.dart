@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import '../models/note.dart';
+
 class NoteState extends ChangeNotifier {
   var _currentValue = "";
   List<Note> get notes => _notes;
@@ -35,11 +37,4 @@ class NoteState extends ChangeNotifier {
   void _saveUpload(){
     print("Not Implemented Yet");
   }
-}
-
-class Note {
-  final String title;
-  final String content;
-
-  Note({required this.title, required this.content});
 }

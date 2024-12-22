@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'constants/strings_constants.dart';
+import 'constants/notes_constants.dart';
 import 'constants/theme_constants.dart';
-import 'screens/home_screen.dart';
+import 'screens/main_screen.dart';
 import 'states/myapp_state.dart';
 import 'states/note_state.dart';
 
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
         ),
-        home: HomePage(),
+        home: MainScreen(),
       ),
     );
   }
