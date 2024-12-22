@@ -13,7 +13,7 @@ class NoteWritingPage extends StatelessWidget{
       slivers: <Widget>[
         const SliverAppBar(
           pinned: true,
-          expandedHeight: 250.0,
+          expandedHeight: 50.0,
           flexibleSpace: FlexibleSpaceBar(
             title: Text(appName),
           ),
