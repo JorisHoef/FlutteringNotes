@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'constants/notes_constants.dart';
 import 'constants/theme_constants.dart';
 import 'screens/main_screen.dart';
-import 'states/myapp_state.dart';
 import 'states/note_state.dart';
 
 void main() {
@@ -18,7 +17,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => MyAppState()),
         ChangeNotifierProvider(create: (context) => NoteState()),
       ],
       child: MaterialApp(
