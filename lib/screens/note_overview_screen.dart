@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttering_notes/constants/notes_constants.dart';
 import 'package:provider/provider.dart';
 
+import '../models/note.dart';
 import '../states/note_state.dart';
 import '../screens/note_writing_screen.dart';
 
@@ -31,7 +32,7 @@ class NoteOverviewScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => NoteWritingScreen(),
+                        builder: (context) => NoteWritingScreen(note),
                       ),
                     );
                   },
@@ -44,10 +45,11 @@ class NoteOverviewScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          var note = new Note(title: newNoteText, content: 'placeholder');
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => NoteWritingScreen(),
+              builder: (context) => NoteWritingScreen(note),
             ),
           );
         },

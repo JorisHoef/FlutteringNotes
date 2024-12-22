@@ -1,26 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:fluttering_notes/constants/notes_constants.dart';
+import 'package:fluttering_notes/models/note.dart';
 import 'package:provider/provider.dart';
 
 import '../states/note_state.dart';
 
 class NoteWritingScreen extends StatelessWidget {
+  final Note note;
+
+  NoteWritingScreen(this.note);
+
   @override
   Widget build(BuildContext context) {
     var notesState = context.watch<NoteState>();
 
+    final TextEditingController textController = TextEditingController(text: note.content);
+
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
-          const SliverAppBar(
+          SliverAppBar(
             pinned: true,
             expandedHeight: 50.0,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(editNoteText),
+              title: Text(note.title),
             ),
           ),
           SliverFillRemaining(
             child: TextField(
+              controller: textController,
               expands: true,
               minLines: null,
               maxLines: null,
