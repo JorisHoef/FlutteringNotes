@@ -34,11 +34,11 @@ class _HomePageState extends State<HomePage> {
               child: NavigationRail(
                 extended: constraints.maxWidth >= 600,
                 destinations: [
-                  NavigationRailDestination(
+                  const NavigationRailDestination(
                     icon: Icon(Icons.home),
                     label: Text(homeRoute),
                   ),
-                  NavigationRailDestination(
+                  const NavigationRailDestination(
                     icon: Icon(Icons.note),
                     label: Text(favoritesRoute),
                   ),

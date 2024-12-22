@@ -2,6 +2,17 @@ import 'package:flutter/widgets.dart';
 
 class NoteState extends ChangeNotifier {
   var _currentValue = "";
+  List<Note> get notes => _notes;
+
+  List<Note> _notes = [
+    Note(title: "Note 1", content: "First Test Note"),
+    Note(title: "Note 2", content: "Second Test Note"),
+  ];
+
+  void addNote(Note note) {
+    _notes.add(note);
+    notifyListeners();
+  }
 
   void onNotesChanged(String value) {
     print("Old Value: ${_currentValue}");
@@ -24,4 +35,11 @@ class NoteState extends ChangeNotifier {
   void _saveUpload(){
     print("Not Implemented Yet");
   }
+}
+
+class Note {
+  final String title;
+  final String content;
+
+  Note({required this.title, required this.content});
 }
