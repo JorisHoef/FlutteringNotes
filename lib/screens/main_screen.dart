@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fluttering_notes/screens/note_writing_screen.dart';
-import 'package:fluttering_notes/screens/note_overview_screen.dart';
 
 import '../constants/navigation_constants.dart';
+import 'home_screen.dart';
+import 'note_overview_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -17,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
     Widget page;
     switch (selectedIndex) {
       case 0:
-        page = NoteOverviewScreen();
+        page = HomeScreen();
         break;
       case 1:
         page = NoteOverviewScreen();
