@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttering_notes/constants/notes_constants.dart';
+import 'package:fluttering_notes/widgets/custom_listTile.dart';
 import 'package:provider/provider.dart';
 
 import '../models/note.dart';
@@ -25,17 +26,17 @@ class NoteOverviewScreen extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                 final note = notesState.notes[index];
-                return ListTile(
-                  title: Text(note.title),
-                  subtitle: Text(note.content),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NoteWritingScreen(note),
-                      ),
-                    );
-                  },
+                return CustomListTile(
+                    title: note.title,
+                    subTitle: note.content,
+                    onTapCallback: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NoteWritingScreen(note),
+                        ),
+                      );
+                    }
                 );
               },
               childCount: notesState.notes.length,
