@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fluttering_notes/constants/notes_constants.dart';
-import 'package:fluttering_notes/widgets/custom_listTile.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/notes_constants.dart';
 import '../models/note.dart';
 import '../states/note_state.dart';
-import '../screens/note_writing_screen.dart';
+import '../widgets/listTile_withMenu.dart';
+import 'note_writing_screen.dart';
 
 class NoteOverviewScreen extends StatelessWidget {
   @override
@@ -26,17 +26,25 @@ class NoteOverviewScreen extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                 final note = notesState.notes[index];
-                return CustomListTile(
-                    title: note.title,
-                    subTitle: note.content,
-                    onTapCallback: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NoteWritingScreen(note),
-                        ),
-                      );
-                    }
+                return ListTileWithMenu(
+                  title: note.title,
+                  subTitle: note.content,
+                  onEdit: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NoteWritingScreen(note),
+                      ),
+                    );
+                  },
+                  onDelete: () {
+                    notesState.deleteNote(note);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('${note.title} ${deletedText}'),
+                      ),
+                    );
+                  },
                 );
               },
               childCount: notesState.notes.length,

@@ -4,12 +4,16 @@ class CustomListTile extends StatelessWidget {
   final String title;
   final String subTitle;
   final VoidCallback onTapCallback;
+  final List<PopupMenuEntry<String>> menuItems;
+  final void Function(String) onMenuItemSelected;
 
   const CustomListTile({
     Key? key,
     required this.title,
     required this.subTitle,
     required this.onTapCallback,
+    required this.menuItems,
+    required this.onMenuItemSelected,
   }) : super(key: key);
 
   @override
@@ -28,6 +32,11 @@ class CustomListTile extends StatelessWidget {
         softWrap: true,
       ),
       onTap: onTapCallback,
+      trailing: PopupMenuButton<String>(
+        icon: Icon(Icons.more_vert),
+        onSelected: onMenuItemSelected,
+        itemBuilder: (BuildContext context) => menuItems,
+      ),
     );
   }
 }

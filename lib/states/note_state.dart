@@ -22,4 +22,9 @@ class NoteState extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void deleteNote(Note note) {
+    _notes.remove(note);
+    notifyListeners();
+  }
 }
