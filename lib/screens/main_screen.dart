@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:fluttering_notes/constants/layout_constants.dart';
+import 'package:fluttering_notes/utils/layout_utils.dart';
 
-import '../constants/navigation_constants.dart';
+import '../widgets/custom_bottomNavigationBar.dart';
+import '../widgets/custom_navigationRail.dart';
 import 'home_screen.dart';
 import 'note_overview_screen.dart';
 
@@ -14,45 +17,23 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget page;
-    switch (selectedIndex) {
-      case 0:
-        page = HomeScreen();
-        break;
-      case 1:
-        page = NoteOverviewScreen();
-        break;
-      default:
-        throw UnimplementedError('no widget for $selectedIndex');
-    }
+    Widget page = getSelectedPage(selectedIndex);
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Determine which navigation to show based on the screen width
-        if (constraints.maxWidth >= 600) {
-          // Show NavigationRail for larger screens (e.g., tablets or desktop)
+        if (LayoutUtils.isLandscapeMode(constraints)) {
           return Scaffold(
             body: Row(
               children: [
                 SafeArea(
-                  child: NavigationRail(
-                    extended: constraints.maxWidth >= 800,
-                    destinations: [
-                      NavigationRailDestination(
-                        icon: Icon(Icons.home),
-                        label: Text(homeRoute),
-                      ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.note),
-                        label: Text(notesRoute),
-                      ),
-                    ],
+                  child: CustomNavigationRail(
                     selectedIndex: selectedIndex,
                     onDestinationSelected: (value) {
                       setState(() {
                         selectedIndex = value;
                       });
                     },
+                    extended: CustomNavigationRail.isRailExtended(constraints, railThreshold),
                   ),
                 ),
                 Expanded(
@@ -65,30 +46,30 @@ class _MainScreenState extends State<MainScreen> {
             ),
           );
         } else {
-          // Show BottomNavigationBar for smaller screens (mobile devices)
           return Scaffold(
             body: page,
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: selectedIndex,
+            bottomNavigationBar: CustomBottomNavigationBar(
+              selectedIndex: selectedIndex,
               onTap: (index) {
                 setState(() {
                   selectedIndex = index;
                 });
               },
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: homeRoute,
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.note),
-                  label: notesRoute,
-                ),
-              ],
             ),
           );
         }
       },
     );
+  }
+
+  Widget getSelectedPage(int index) {
+    switch (index) {
+      case 0:
+        return HomeScreen();
+      case 1:
+        return NoteOverviewScreen();
+      default:
+        throw UnimplementedError('No widget for index $index');
+    }
   }
 }
