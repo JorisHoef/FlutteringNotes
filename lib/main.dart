@@ -1,10 +1,10 @@
-import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'constants/strings_constants.dart';
+import 'constants/notes_constants.dart';
 import 'constants/theme_constants.dart';
-import 'screens/home_screen.dart';
+import 'screens/main_screen.dart';
+import 'states/note_state.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,36 +15,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => NoteState()),
+      ],
       child: MaterialApp(
         title: appName,
         theme: ThemeData(
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
         ),
-        home: HomePage(),
+        home: MainScreen(),
       ),
     );
-  }
-}
-
-class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
-
-  void getNext() {
-    current = WordPair.random();
-    notifyListeners();
-  }
-
-  var favorites = <WordPair>[];
-
-  void toggleFavorite() {
-    if (favorites.contains(current)) {
-      favorites.remove(current);
-    } else {
-      favorites.add(current);
-    }
-    notifyListeners();
   }
 }

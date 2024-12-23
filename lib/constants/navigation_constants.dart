@@ -1,2 +1,2 @@
 const String homeRoute = 'Home';
-const String favoritesRoute = 'Favorites';
+const String notesRoute = 'Notes';
