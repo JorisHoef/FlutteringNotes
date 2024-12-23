@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/notes_constants.dart';
+import '../constants/theme_constants.dart';
 import '../models/note.dart';
 import '../states/note_state.dart';
 import '../widgets/listTile_withMenu.dart';
@@ -13,7 +14,9 @@ class NoteOverviewScreen extends StatelessWidget {
     var notesState = context.watch<NoteState>();
 
     return Scaffold(
-      body: CustomScrollView(
+      body: Container(
+        color: Theme.of(context).colorScheme.secondary,
+        child: CustomScrollView(
         slivers: <Widget>[
           const SliverAppBar(
             pinned: true,
@@ -51,12 +54,13 @@ class NoteOverviewScreen extends StatelessWidget {
             ),
           ),
         ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           final newNote = Note(
             id: notesState.notes.length,
-            title: newNoteText,
+            title: '',
             content: '',
           );
           notesState.addNote(newNote);

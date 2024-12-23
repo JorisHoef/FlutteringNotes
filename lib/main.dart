@@ -11,8 +11,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -21,10 +19,9 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: appName,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
-        ),
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.dark,//ThemeMode.system,
         home: MainScreen(),
       ),
     );

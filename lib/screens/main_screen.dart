@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttering_notes/constants/layout_constants.dart';
-import 'package:fluttering_notes/utils/layout_utils.dart';
 
+import '../constants/layout_constants.dart';
+import '../utils/layout_utils.dart';
 import '../widgets/custom_bottomNavigationBar.dart';
 import '../widgets/custom_navigationRail.dart';
 import 'home_screen.dart';
