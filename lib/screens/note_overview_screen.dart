@@ -45,11 +45,17 @@ class NoteOverviewScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          var note = new Note(title: newNoteText, content: 'placeholder');
+          final newNote = Note(
+            id: notesState.notes.length,
+            title: newNoteText,
+            content: '',
+          );
+          notesState.addNote(newNote);
+
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => NoteWritingScreen(note),
+              builder: (context) => NoteWritingScreen(newNote),
             ),
           );
         },
