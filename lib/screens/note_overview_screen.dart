@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/notes_constants.dart';
-import '../constants/theme_constants.dart';
 import '../models/note.dart';
 import '../states/note_state.dart';
 import '../widgets/listTile_withMenu.dart';
@@ -20,7 +19,7 @@ class NoteOverviewScreen extends StatelessWidget {
         slivers: <Widget>[
           const SliverAppBar(
             pinned: true,
-            expandedHeight: 50.0,
+            expandedHeight: 50.0, //todo probably remove but keep for test
             flexibleSpace: FlexibleSpaceBar(
               title: Text(overViewNoteText),
             ),

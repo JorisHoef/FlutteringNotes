@@ -19,16 +19,13 @@ class CustomNavigationRail extends StatelessWidget {
   Widget build(BuildContext context) {
     return NavigationRail(
       extended: extended,
-      destinations: const [
-        NavigationRailDestination(
-          icon: Icon(Icons.home),
-          label: Text(homeRoute),
+      destinations: navigationDestinations
+          .map(
+            (destination) => NavigationRailDestination(
+          icon: destination.icon,
+          label: Text(destination.label),
         ),
-        NavigationRailDestination(
-          icon: Icon(Icons.note),
-          label: Text(notesRoute),
-        ),
-      ],
+      ).toList(),
       selectedIndex: selectedIndex,
       onDestinationSelected: onDestinationSelected,
     );

@@ -10,3 +10,4 @@ const String noteTextPlaceholder = "Start writing your note...";
 const String editText = "Edit";
 const String deleteText = "Delete";
 const String deletedText = "Deleted";
+const String toggleThemeText = "Toggle Dark/Light Theme";
