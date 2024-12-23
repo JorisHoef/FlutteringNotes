@@ -13,6 +13,7 @@ class NoteWritingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var notesState = context.watch<NoteState>();
 
+    final TextEditingController titleController = TextEditingController(text: note.title);
     final TextEditingController textController = TextEditingController(text: note.content);
 
     return Scaffold(
@@ -22,7 +23,10 @@ class NoteWritingScreen extends StatelessWidget {
             pinned: true,
             expandedHeight: 50.0,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(note.title),
+              title: TextField(
+                controller: titleController,
+              )
+              ,
             ),
           ),
           SliverFillRemaining(
@@ -32,7 +36,7 @@ class NoteWritingScreen extends StatelessWidget {
               minLines: null,
               maxLines: null,
               onChanged: (String value) {
-                notesState.onNotesChanged(value);
+                notesState.onContentChanged(note, value);
               },
             ),
           ),

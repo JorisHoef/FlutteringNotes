@@ -36,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
               children: [
                 SafeArea(
                   child: NavigationRail(
-                    extended: constraints.maxWidth >= 700,
+                    extended: constraints.maxWidth >= 800,
                     destinations: [
                       NavigationRailDestination(
                         icon: Icon(Icons.home),
