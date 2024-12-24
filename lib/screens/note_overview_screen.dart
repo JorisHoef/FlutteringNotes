@@ -134,7 +134,7 @@ class NoteOverviewScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         child: Icon(
           Icons.add,
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
         ),
       ),
     );
