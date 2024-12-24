@@ -33,26 +33,23 @@ class OptionsScreen extends StatelessWidget {
             Divider(
               height: 1,
             ),
-            Container(
-                //color: themeProvider.themeData.colorScheme.secondaryContainer,
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Text(AppStrings.selectThemeText),
+            Column(
+              children: [
+                ListTile(
+                  title: Text(AppStrings.selectThemeText),
+                ),
+                ...themeProvider.availableThemes.map((theme) {
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: isDarkMode
+                          ? theme.darkTheme.colorScheme.secondary
+                          : theme.lightTheme.colorScheme.secondary,
                     ),
-                    ...themeProvider.availableThemes.map((theme) {
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: isDarkMode
-                              ? theme.darkTheme.colorScheme.secondary
-                              : theme.lightTheme.colorScheme.secondary,
-                        ),
-                        title: Text(theme.name),
-                        onTap: () => themeProvider.switchTheme(theme.name),
-                      );
-                    }),
-                  ],
-              ),
+                    title: Text(theme.name),
+                    onTap: () => themeProvider.switchTheme(theme.name),
+                  );
+                }),
+              ],
             ),
           ],
         ),
