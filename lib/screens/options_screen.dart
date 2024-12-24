@@ -17,13 +17,46 @@ class OptionsScreen extends StatelessWidget {
     ColorScheme colorScheme = themeProvider.themeData.colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        surfaceTintColor: colorScheme.onPrimaryContainer,
-        backgroundColor: themeProvider.themeData.colorScheme.primaryContainer,
-        title: Text(
-          NavigationConstants.optionsRoute,
-          style: textTheme.bodyLarge?.copyWith(
-            color: themeProvider.themeData.colorScheme.onPrimaryContainer,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(100), // AppBar height
+        child: AppBar(
+          surfaceTintColor: colorScheme.primaryContainer,
+          backgroundColor: themeProvider.themeData.colorScheme.primaryContainer,
+          title: Text(
+            NavigationConstants.optionsRoute,
+            style: textTheme.bodyLarge?.copyWith(
+              color: themeProvider.themeData.colorScheme.onPrimaryContainer,
+            ),
+          ),
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(90), // Increased height to include the divider
+            child: Container(
+              color: themeProvider.themeData.colorScheme.primaryContainer,
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text(
+                      AppStrings.toggleThemeText,
+                      style: textTheme.bodySmall?.copyWith(
+                        color: themeProvider.themeData.colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                    trailing: Switch(
+                      activeColor: colorScheme.secondaryContainer,
+                      activeTrackColor: colorScheme.onPrimaryContainer,
+                      inactiveThumbColor: colorScheme.primaryContainer,
+                      inactiveTrackColor: colorScheme.secondaryContainer,
+                      value: isDarkMode,
+                      onChanged: (value) => themeProvider.toggleThemeMode(),
+                    ),
+                  ),
+                  Divider(
+                    height: 1,
+                    color: themeProvider.themeData.colorScheme.onPrimaryContainer,
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -31,29 +64,6 @@ class OptionsScreen extends StatelessWidget {
         color: themeProvider.themeData.colorScheme.secondaryContainer,
         child: ListView(
           children: [
-            Container(
-              color: themeProvider.themeData.colorScheme.primaryContainer,
-              child: ListTile(
-                title: Text(
-                  AppStrings.toggleThemeText,
-                  style: textTheme.bodySmall?.copyWith(
-                    color: themeProvider.themeData.colorScheme.onPrimaryContainer,
-                  ),
-                ),
-                trailing: Switch(
-                  activeColor: colorScheme.secondaryContainer,
-                  activeTrackColor: colorScheme.onPrimaryContainer,
-                  inactiveThumbColor: colorScheme.primaryContainer,
-                  inactiveTrackColor: colorScheme.secondaryContainer,
-                  value: isDarkMode,
-                  onChanged: (value) => themeProvider.toggleThemeMode(),
-                ),
-              ),
-            ),
-            Divider(
-              height: 1,
-              color: themeProvider.themeData.colorScheme.onPrimaryContainer,
-            ),
             Column(
               children: [
                 ListTile(
