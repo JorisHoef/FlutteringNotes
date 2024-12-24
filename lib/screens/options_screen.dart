@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../constants/app_strings.dart';
 import '../constants/navigation_constants.dart';
 import '../themes/theme_provider.dart';
+import '../widgets/listTile_withMenu.dart';
 
 class OptionsScreen extends StatelessWidget {
   @override
@@ -64,19 +65,15 @@ class OptionsScreen extends StatelessWidget {
                   ),
                 ),
                 ...themeProvider.availableThemes.map((theme) {
-                  return ListTile(
-                    leading: CircleAvatar(
+                  return ListTileWithMenu(
+                    leadingWidget: CircleAvatar(
                       backgroundColor: isDarkMode
                           ? theme.darkTheme.colorScheme.primary
                           : theme.lightTheme.colorScheme.primary,
                     ),
-                    title: Text(
-                      theme.name,
-                      style: textTheme.bodySmall?.copyWith(
-                        color: themeProvider.themeData.colorScheme.onSecondaryContainer,
-                      ),
-                    ),
+                    title: theme.name,
                     onTap: () => themeProvider.switchTheme(theme.name),
+                    titleStyle: textTheme.bodySmall,
                   );
                 }),
               ],

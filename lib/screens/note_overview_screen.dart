@@ -98,6 +98,16 @@ class NoteOverviewScreen extends StatelessWidget {
                         ),
                       );
                     },
+                    titleStyle: Theme.of(context).textTheme.bodyMedium,
+                    subTitleStyle: Theme.of(context).textTheme.bodySmall,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NoteWritingScreen(note),
+                        ),
+                      );
+                    },
                     onDelete: () {
                       notesState.deleteNote(note);
                       ScaffoldMessenger.of(context).showSnackBar(

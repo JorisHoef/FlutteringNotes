@@ -7,16 +7,24 @@ import 'custom_listTile.dart';
 
 class ListTileWithMenu extends StatelessWidget {
   final String title;
-  final String subTitle;
+  final String? subTitle;
+  final VoidCallback? onTap;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+  final Widget? leadingWidget;
+  final TextStyle? titleStyle;
+  final TextStyle? subTitleStyle;
 
   const ListTileWithMenu({
     super.key,
     required this.title,
-    required this.subTitle,
+    this.subTitle,
+    this.onTap,
     this.onEdit,
     this.onDelete,
+    this.leadingWidget,
+    this.titleStyle,
+    this.subTitleStyle,
   });
 
   @override
@@ -27,7 +35,8 @@ class ListTileWithMenu extends StatelessWidget {
     return CustomListTile(
       title: title,
       subTitle: subTitle,
-      onTapCallback: onEdit ?? () {},
+      onTapCallback: onTap ?? () {},
+      leadingWidget: leadingWidget,
       menuItems: [
         if (onEdit != null)
           PopupMenuItem<String>(
@@ -57,6 +66,8 @@ class ListTileWithMenu extends StatelessWidget {
           onDelete!();
         }
       },
+      textStyleTitle: titleStyle,
+      textStyleSubTitle: subTitleStyle,
     );
   }
 }

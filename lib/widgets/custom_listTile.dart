@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:fluttering_notes/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 
 import '../themes/theme_provider.dart';
 
 class CustomListTile extends StatelessWidget {
   final String title;
-  final String subTitle;
+  final String? subTitle;
   final VoidCallback onTapCallback;
   final List<PopupMenuEntry<String>> menuItems;
   final void Function(String) onMenuItemSelected;
+  final Widget? leadingWidget;
+  final TextStyle? textStyleTitle;
+  final TextStyle? textStyleSubTitle;
 
   const CustomListTile({
     Key? key,
     required this.title,
-    required this.subTitle,
+    this.subTitle,
     required this.onTapCallback,
     required this.menuItems,
     required this.onMenuItemSelected,
+    this.leadingWidget,
+    this.textStyleTitle,
+    this.textStyleSubTitle,
   }) : super(key: key);
 
   @override
@@ -27,24 +32,27 @@ class CustomListTile extends StatelessWidget {
     final textTheme = themeData.textTheme;
 
     return ListTile(
+      leading: leadingWidget,
       title: Text(
         title,
         maxLines: 1,
         overflow: TextOverflow.fade,
         softWrap: true,
-        style: textTheme.bodyMedium?.copyWith(
+        style: textStyleTitle?.copyWith(
           color: colorScheme.onPrimaryContainer,
-        ),
+        )
       ),
-      subtitle: Text(
-        subTitle,
+      subtitle: subTitle != null
+          ? Text(
+        subTitle!,
         maxLines: 1,
         overflow: TextOverflow.fade,
         softWrap: true,
-        style: textTheme.bodySmall?.copyWith(
+        style: textStyleSubTitle?.copyWith(
           color: colorScheme.onSecondaryContainer,
         ),
-      ),
+      )
+          : null,
       onTap: onTapCallback,
       trailing: PopupMenuButton<String>(
         icon: Icon(
