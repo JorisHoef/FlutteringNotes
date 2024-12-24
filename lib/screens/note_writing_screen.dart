@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/layout_constants.dart';
 import '../constants/notes_constants.dart';
 import '../models/note.dart';
 import '../states/note_state.dart';
@@ -69,7 +70,7 @@ class _NoteWritingScreenState extends State<NoteWritingScreen> {
                 decoration: InputDecoration(
                   hintText: noteTextPlaceholder,
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.all(16.0),
+                  contentPadding: defaultPadding,
                 ),
               ),
             ),

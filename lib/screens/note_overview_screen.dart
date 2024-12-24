@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/layout_constants.dart';
 import '../constants/notes_constants.dart';
 import '../models/note.dart';
 import '../states/note_state.dart';
@@ -14,14 +15,50 @@ class NoteOverviewScreen extends StatelessWidget {
 
     return Scaffold(
       body: Container(
-        color: Theme.of(context).colorScheme.secondary,
+        color: Theme.of(context).colorScheme.secondaryContainer,
         child: CustomScrollView(
         slivers: <Widget>[
-          const SliverAppBar(
+          SliverAppBar(
             pinned: true,
-            expandedHeight: 50.0, //todo probably remove but keep for test
+            expandedHeight: 250.0,
+            title: Padding(
+              padding: defaultPadding,
+              child: Text(overViewNoteText),
+            ),
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(overViewNoteText),
+              background: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(
+                    'assets/images/your_image.png',
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    bottom: 20.0,
+                    left: 20.0,
+                    child: Text(
+                      'Some Text Here',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 50.0,
+                    left: 20.0,
+                    child: Text(
+                      'Another Line of Text',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.normal,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           SliverList(
@@ -64,12 +101,12 @@ class NoteOverviewScreen extends StatelessWidget {
           );
           notesState.addNote(newNote);
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => NoteWritingScreen(newNote),
-            ),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => NoteWritingScreen(newNote),
+          //   ),
+          // );
         },
         child: Icon(Icons.add),
         tooltip: addNoteText,
