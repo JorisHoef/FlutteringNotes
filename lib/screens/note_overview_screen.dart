@@ -21,6 +21,7 @@ class NoteOverviewScreen extends StatelessWidget {
             SliverAppBar(
               pinned: true,
               expandedHeight: 250.0,
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
               title: Text(
                 AppStrings.overViewNoteText,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
