@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/app_strings.dart';
 import '../constants/layout_constants.dart';
 import '../constants/navigation_constants.dart';
-import '../constants/notes_constants.dart';
 import '../providers/theme_provider.dart';
 
 class OptionsScreen extends StatelessWidget {
@@ -15,7 +15,7 @@ class OptionsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Padding(
           padding: defaultPadding,
-          child: Text(optionsRoute),
+          child: Text(NavigationConstants.optionsRoute),
         ),
       ),
       body: Container(
@@ -24,7 +24,7 @@ class OptionsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ListTile(
-              title: Text(toggleThemeText),
+              title: Text(AppStrings.toggleThemeText),
               trailing: Switch(
                 value: themeProvider.isDarkMode,
                 onChanged: (value) {

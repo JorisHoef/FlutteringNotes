@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants/notes_constants.dart';
+import '../constants/app_strings.dart';
 import 'custom_listTile.dart';
 
 class ListTileWithMenu extends StatelessWidget {
@@ -28,19 +28,19 @@ class ListTileWithMenu extends StatelessWidget {
       menuItems: [
         if (onEdit != null)
           PopupMenuItem<String>(
-            value: editText,
-            child: Text(editText),
+            value: AppStrings.editText,
+            child: Text(AppStrings.editText),
           ),
         if (onDelete != null)
           PopupMenuItem<String>(
-            value: deleteText,
-            child: Text(deleteText),
+            value: AppStrings.deleteText,
+            child: Text(AppStrings.deleteText),
           ),
       ],
       onMenuItemSelected: (value) {
-        if (value == editText && onEdit != null) {
+        if (value == AppStrings.editText && onEdit != null) {
           onEdit!();
-        } else if (value == deleteText && onDelete != null) {
+        } else if (value == AppStrings.deleteText && onDelete != null) {
           onDelete!();
         }
       },

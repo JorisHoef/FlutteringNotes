@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 
-const Color primaryColor = Color(0xFF6200EE);
-const Color secondaryColor = Color(0xFF03DAC6);
-const Color tertiaryColor = Color(0xFF018786);
+class ThemeValues{
+  static const Color primaryColor = Color(0xFF6200EE);
+  static const Color secondaryColor = Color(0xFF03DAC6);
+  static const Color tertiaryColor = Color(0xFF018786);
 
-const double fontSizeSmall = 14.0;
-const double fontSizeMedium = 18.0;
-const double fontSizeLarge = 24.0;
-const double fontSizeXLarge = 30.0;
+  static const double fontSizeSmall = 14.0;
+  static const double fontSizeMedium = 18.0;
+  static const double fontSizeLarge = 24.0;
+  static const double fontSizeXLarge = 30.0;
+}
 
 final ThemeData lightTheme = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme(
-    primary: primaryColor,
+    primary: ThemeValues.primaryColor,
     primaryContainer: Color(0xFFBB86FC),
-    secondary: secondaryColor,
+    secondary: ThemeValues.secondaryColor,
     secondaryContainer: Color(0xFF03DAC6),
     surface: Colors.white,
     background: Colors.white,
@@ -25,16 +27,16 @@ final ThemeData lightTheme = ThemeData(
     onBackground: Colors.black,
     onError: Colors.white,
     brightness: Brightness.light,
-    tertiary: tertiaryColor,
+    tertiary: ThemeValues.tertiaryColor,
   ),
 );
 
 final ThemeData darkTheme = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme(
-    primary: primaryColor,
+    primary: ThemeValues.primaryColor,
     primaryContainer: Color(0xFFBB86FC),
-    secondary: secondaryColor,
+    secondary: ThemeValues.secondaryColor,
     secondaryContainer: Color(0xFF03DAC6),
     surface: Color(0xFF121212),
     background: Color(0xFF121212),
@@ -45,6 +47,6 @@ final ThemeData darkTheme = ThemeData(
     onBackground: Colors.white,
     onError: Colors.black,
     brightness: Brightness.dark,
-    tertiary: tertiaryColor,
+    tertiary: ThemeValues.tertiaryColor,
   ),
 );

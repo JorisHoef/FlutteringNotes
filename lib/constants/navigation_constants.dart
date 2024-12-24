@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 
-const String homeRoute = 'Home';
-const String notesRoute = 'Notes';
-const String optionsRoute = "Options";
+class NavigationConstants {
+  static const String homeRoute = 'Home';
+  static const String notesRoute = 'Notes';
+  static const String optionsRoute = "Options";
+}
 
 const List<NavigationDestinationConfig> navigationDestinations = [
   NavigationDestinationConfig(
     icon: Icon(Icons.home),
-    label: homeRoute,
-    route: '/${homeRoute}',
+    label: NavigationConstants.homeRoute,
+    route: '/${NavigationConstants.homeRoute}',
   ),
   NavigationDestinationConfig(
     icon: Icon(Icons.note),
-    label: notesRoute,
-    route: '/${notesRoute}',
+    label: NavigationConstants.notesRoute,
+    route: '/${NavigationConstants.notesRoute}',
   ),
   NavigationDestinationConfig(
     icon: Icon(Icons.settings),
-    label: optionsRoute,
-    route: '/${optionsRoute}',
+    label: NavigationConstants.optionsRoute,
+    route: '/${NavigationConstants.optionsRoute}',
   ),
 ];
 

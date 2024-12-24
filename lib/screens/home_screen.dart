@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants/notes_constants.dart';
+import '../constants/app_strings.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -8,7 +8,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Text(
-          appName,
+          AppStrings.appName,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
       ),

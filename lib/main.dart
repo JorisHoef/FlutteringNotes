@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'constants/notes_constants.dart';
+import 'constants/app_strings.dart';
 import 'screens/main_screen.dart';
 import 'states/note_state.dart';
 import 'providers/theme_provider.dart';
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
           return MaterialApp(
-            title: appName,
+            title: AppStrings.appName,
             theme: themeProvider.currentTheme,
             home: MainScreen(),
           );
