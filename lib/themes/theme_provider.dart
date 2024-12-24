@@ -1,64 +1,10 @@
 import 'package:flutter/material.dart';
+
+import '../constants/theme_constants.dart';
 import 'theme_manager.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  final List<ThemeModel> _availableThemes = [
-    ThemeModel(
-      name: 'Blue Theme',
-      lightTheme: ThemeModel.buildLightTheme(
-        primary: Color(0xFF2196F3),
-        secondary: Color(0xFF90CAF9),
-      ),
-      darkTheme: ThemeModel.buildDarkTheme(
-        primary: Color(0xFF2196F3),
-        secondary: Color(0xFF90CAF9),
-      ),
-    ),
-    ThemeModel(
-      name: 'Indigo Theme',
-      lightTheme: ThemeModel.buildLightTheme(
-        primary: Color(0xFF6200EE),
-        secondary: Color(0xFFBB86FC),
-      ),
-      darkTheme: ThemeModel.buildDarkTheme(
-        primary: Color(0xFF6200EE),
-        secondary: Color(0xFFBB86FC),
-      ),
-    ),
-    ThemeModel(
-      name: 'Green Theme',
-      lightTheme: ThemeModel.buildLightTheme(
-        primary: Color(0xFF4CAF50),
-        secondary: Color(0xFFA5D6A7),
-      ),
-      darkTheme: ThemeModel.buildDarkTheme(
-        primary: Color(0xFF4CAF50),
-        secondary: Color(0xFFA5D6A7),
-      ),
-    ),
-    ThemeModel(
-      name: 'Red Theme',
-      lightTheme: ThemeModel.buildLightTheme(
-        primary: Color(0xFFF44336),
-        secondary: Color(0xFFEF9A9A),
-      ),
-      darkTheme: ThemeModel.buildDarkTheme(
-        primary: Color(0xFFF44336),
-        secondary: Color(0xFFEF9A9A),
-      ),
-    ),
-    ThemeModel(
-      name: 'Electron-Inspired Theme',
-      lightTheme: ThemeModel.buildLightTheme(
-        primary: Color(0xFF1C9EB3), // Inspired by Electron, with less green.
-        secondary: Color(0xFF82CBD9),
-      ),
-      darkTheme: ThemeModel.buildDarkTheme(
-        primary: Color(0xFF1C9EB3),
-        secondary: Color(0xFF82CBD9),
-      ),
-    ),
-  ];
+  final List<ThemeModel> _availableThemes = predefinedThemes();
 
   late ThemeModel _currentTheme;
   bool _isDarkMode = false;
@@ -89,5 +35,47 @@ class ThemeProvider extends ChangeNotifier {
   void addTheme(ThemeModel newTheme) {
     _availableThemes.add(newTheme);
     notifyListeners();
+  }
+
+  void customizeTheme({
+    required String themeName,
+    Color? primary,
+    Color? secondary,
+    Color? tertiary,
+    Color? tertiaryContainer,
+    Color? surface,
+    Color? onPrimary,
+    Color? onSecondary,
+    Color? onSurface,
+  }) {
+    final themeIndex = _availableThemes.indexWhere((theme) => theme.name == themeName);
+    if (themeIndex != -1) {
+      final theme = _availableThemes[themeIndex];
+      final updatedTheme = ThemeModel(
+        name: theme.name,
+        lightTheme: ThemeModel.buildLightTheme(
+          primary: primary ?? theme.lightTheme.colorScheme.primary,
+          secondary: secondary ?? theme.lightTheme.colorScheme.secondary,
+          tertiary: tertiary ?? theme.lightTheme.colorScheme.tertiary,
+          tertiaryContainer: tertiaryContainer ?? theme.lightTheme.colorScheme.tertiaryContainer,
+          surface: surface ?? theme.lightTheme.colorScheme.surface,
+          onPrimary: onPrimary ?? theme.lightTheme.colorScheme.onPrimary,
+          onSecondary: onSecondary ?? theme.lightTheme.colorScheme.onSecondary,
+          onSurface: onSurface ?? theme.lightTheme.colorScheme.onSurface,
+        ),
+        darkTheme: ThemeModel.buildDarkTheme(
+          primary: primary ?? theme.darkTheme.colorScheme.primary,
+          secondary: secondary ?? theme.darkTheme.colorScheme.secondary,
+          tertiary: tertiary ?? theme.darkTheme.colorScheme.tertiary,
+          tertiaryContainer: tertiaryContainer ?? theme.darkTheme.colorScheme.tertiaryContainer,
+          surface: surface ?? theme.darkTheme.colorScheme.surface,
+          onPrimary: onPrimary ?? theme.darkTheme.colorScheme.onPrimary,
+          onSecondary: onSecondary ?? theme.darkTheme.colorScheme.onSecondary,
+          onSurface: onSurface ?? theme.darkTheme.colorScheme.onSurface,
+        ),
+      );
+      _availableThemes[themeIndex] = updatedTheme;
+      notifyListeners();
+    }
   }
 }
