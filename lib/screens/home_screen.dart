@@ -9,7 +9,9 @@ class HomeScreen extends StatelessWidget {
       body: Center(
         child: Text(
           AppStrings.appName,
-          style: Theme.of(context).textTheme.headlineMedium,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: Theme.of(context).colorScheme.onPrimaryContainer,
+          ),
         ),
       ),
     );

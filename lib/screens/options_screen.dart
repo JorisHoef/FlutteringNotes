@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttering_notes/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/app_strings.dart';

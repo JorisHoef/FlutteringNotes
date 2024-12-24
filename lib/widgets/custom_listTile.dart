@@ -32,9 +32,8 @@ class CustomListTile extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.fade,
         softWrap: true,
-        style: TextStyle(
-          color: colorScheme.onSecondaryContainer,
-          fontSize: ThemeConstants.fontSizeMedium
+        style: textTheme.bodyMedium?.copyWith(
+          color: colorScheme.onPrimaryContainer,
         ),
       ),
       subtitle: Text(
@@ -42,16 +41,15 @@ class CustomListTile extends StatelessWidget {
         maxLines: 1,
         overflow: TextOverflow.fade,
         softWrap: true,
-        style: TextStyle(
+        style: textTheme.bodySmall?.copyWith(
           color: colorScheme.onSecondaryContainer,
-          fontSize: ThemeConstants.fontSizeSmall,
         ),
       ),
       onTap: onTapCallback,
       trailing: PopupMenuButton<String>(
         icon: Icon(
           Icons.more_vert,
-          color: colorScheme.onSecondaryContainer,
+          color: colorScheme.onPrimaryContainer,
         ),
         onSelected: onMenuItemSelected,
         itemBuilder: (BuildContext context) => menuItems,

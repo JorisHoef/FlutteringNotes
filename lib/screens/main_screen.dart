@@ -34,7 +34,10 @@ class _MainScreenState extends State<MainScreen> {
                         selectedIndex = value;
                       });
                     },
-                    extended: CustomNavigationRail.isRailExtended(constraints, railThreshold),
+                    extended: CustomNavigationRail.isRailExtended(
+                        constraints,
+                        railThreshold
+                    ),
                   ),
                 ),
                 Expanded(
