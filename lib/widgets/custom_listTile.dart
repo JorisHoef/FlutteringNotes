@@ -51,6 +51,7 @@ class CustomListTile extends StatelessWidget {
           Icons.more_vert,
           color: colorScheme.onPrimaryContainer,
         ),
+        color: colorScheme.primaryContainer,
         onSelected: onMenuItemSelected,
         itemBuilder: (BuildContext context) => menuItems,
       ),
