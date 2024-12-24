@@ -18,6 +18,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
       currentIndex: selectedIndex,
       onTap: onTap,
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      selectedItemColor: Theme.of(context).colorScheme.onPrimaryContainer,
+      unselectedItemColor: Theme.of(context).colorScheme.onSecondaryContainer,
       items: navigationDestinations
           .map(
             (destination) => BottomNavigationBarItem(

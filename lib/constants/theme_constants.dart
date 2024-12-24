@@ -349,13 +349,13 @@ List<ThemeModel> predefinedThemes() => [
       tertiary: Color(0xFF00BCD4),
       surface: Color(0xFF1B1C26),
       onPrimary: Color(0xFF1B1C26),
-      onSecondary: Colors.white,
+      onSecondary: Color(0xFFDFDFDF),
       onSurface: Color(0xFF82CBD9),
       primaryContainer: Color(0xFF1B1B1D),
       secondaryContainer: Color(0xFF1B1C26),
       tertiaryContainer: Color(0xFF141218),
       onPrimaryContainer: Color(0xFF82CBD9),
-      onSecondaryContainer: Colors.white,
+      onSecondaryContainer: Color(0xFFDFDFDF),
       textTheme: TextTheme(
         bodySmall: TextStyle(
             fontFamily: ThemeConstants.fontFamilyElectron,
