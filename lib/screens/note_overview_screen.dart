@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttering_notes/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/app_strings.dart';
 import '../constants/layout_constants.dart';
-import '../constants/notes_constants.dart';
 import '../models/note.dart';
 import '../states/note_state.dart';
 import '../widgets/listTile_withMenu.dart';
@@ -25,7 +25,7 @@ class NoteOverviewScreen extends StatelessWidget {
               title: Padding(
                 padding: defaultPadding,
                 child: Text(
-                  overViewNoteText,
+                  AppStrings.overViewNoteText,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
@@ -51,7 +51,7 @@ class NoteOverviewScreen extends StatelessWidget {
                                 Text(
                                   'Look at your notes',
                                   style: TextStyle(
-                                    fontSize: fontSizeMedium,
+                                    fontSize: ThemeValues.fontSizeMedium,
                                     fontWeight: FontWeight.normal,
                                     color: Theme.of(context).colorScheme.onSurface,
                                   ),
@@ -59,7 +59,7 @@ class NoteOverviewScreen extends StatelessWidget {
                                 Text(
                                   'They are very pretty',
                                   style: TextStyle(
-                                    fontSize: fontSizeLarge,
+                                    fontSize: ThemeValues.fontSizeLarge,
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).colorScheme.onSurface,
                                   ),
@@ -92,7 +92,9 @@ class NoteOverviewScreen extends StatelessWidget {
                       notesState.deleteNote(note);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('${note.title} ${deletedText}'),
+                          content: Text(
+                              '${note.title} ${AppStrings.deletedText}'
+                          ),
                         ),
                       );
                     },
@@ -121,7 +123,7 @@ class NoteOverviewScreen extends StatelessWidget {
           );
         },
         child: Icon(Icons.add),
-        tooltip: addNoteText,
+        tooltip: AppStrings.addNoteText,
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
     );

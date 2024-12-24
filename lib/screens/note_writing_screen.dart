@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/app_strings.dart';
 import '../constants/layout_constants.dart';
-import '../constants/notes_constants.dart';
 import '../models/note.dart';
 import '../states/note_state.dart';
 
@@ -52,7 +52,7 @@ class _NoteWritingScreenState extends State<NoteWritingScreen> {
                     notesState.updateNote(widget.note.id, title: value);
                   },
                   decoration: InputDecoration(
-                    hintText: noteTitlePlaceholder,
+                    hintText: AppStrings.noteTitlePlaceholder,
                     border: InputBorder.none,
                   ),
                 ),
@@ -68,7 +68,7 @@ class _NoteWritingScreenState extends State<NoteWritingScreen> {
                   notesState.updateNote(widget.note.id, content: value);
                 },
                 decoration: InputDecoration(
-                  hintText: noteTextPlaceholder,
+                  hintText: AppStrings.noteTextPlaceholder,
                   border: InputBorder.none,
                   contentPadding: defaultPadding,
                 ),
