@@ -18,7 +18,7 @@ class OptionsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100), // AppBar height
+        preferredSize: Size.fromHeight(100),
         child: AppBar(
           surfaceTintColor: colorScheme.primaryContainer,
           backgroundColor: themeProvider.themeData.colorScheme.primaryContainer,
@@ -29,7 +29,7 @@ class OptionsScreen extends StatelessWidget {
             ),
           ),
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(90), // Increased height to include the divider
+            preferredSize: Size.fromHeight(50),
             child: Container(
               color: themeProvider.themeData.colorScheme.primaryContainer,
               child: Column(
