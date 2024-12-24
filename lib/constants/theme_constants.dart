@@ -194,7 +194,7 @@ List<ThemeModel> predefinedThemes() => [
       secondaryContainer: Color(0xFF1B1C26),
       tertiaryContainer: Color(0xFF004D40),
       onPrimaryContainer: Color(0xFF9DE8F7),
-      onSecondaryContainer: Colors.white,
+      onSecondaryContainer: Color(0xFFDFDFDF),
       onTertiaryContainer: Colors.pink,
       textTheme: TextTheme(
         bodySmall: TextStyle(
@@ -289,7 +289,7 @@ List<ThemeModel> predefinedThemes() => [
       secondaryContainer: Color(0xFF1B1B1D),
       tertiaryContainer: Color(0xFF004D40),
       onPrimaryContainer: Color(0xFF9DE8F7),
-      onSecondaryContainer: Colors.white,
+      onSecondaryContainer: Color(0xFFDFDFDF),
       onTertiaryContainer: Colors.pink,
       textTheme: TextTheme(
         bodySmall: TextStyle(
