@@ -13,6 +13,7 @@ class OptionsScreen extends StatelessWidget {
     bool isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
 
     TextTheme textTheme = themeProvider.themeData.textTheme;
+    ColorScheme colorScheme = themeProvider.themeData.colorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -38,6 +39,10 @@ class OptionsScreen extends StatelessWidget {
                   ),
                 ),
                 trailing: Switch(
+                  activeColor: colorScheme.onPrimaryContainer,
+                  activeTrackColor: colorScheme.secondaryContainer,
+                  inactiveThumbColor: colorScheme.primaryContainer,
+                  inactiveTrackColor: colorScheme.secondaryContainer,
                   value: isDarkMode,
                   onChanged: (value) => themeProvider.toggleThemeMode(),
                 ),
