@@ -17,6 +17,7 @@ class OptionsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: colorScheme.onPrimaryContainer,
         backgroundColor: themeProvider.themeData.colorScheme.primaryContainer,
         title: Text(
           NavigationConstants.optionsRoute,
@@ -66,8 +67,8 @@ class OptionsScreen extends StatelessWidget {
                   return ListTile(
                     leading: CircleAvatar(
                       backgroundColor: isDarkMode
-                          ? theme.darkTheme.colorScheme.secondary
-                          : theme.lightTheme.colorScheme.secondary,
+                          ? theme.darkTheme.colorScheme.primary
+                          : theme.lightTheme.colorScheme.primary,
                     ),
                     title: Text(
                       theme.name,
