@@ -17,16 +17,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: selectedIndex,
       onTap: onTap,
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: homeRoute,
+      items: navigationDestinations
+          .map(
+            (destination) => BottomNavigationBarItem(
+          icon: destination.icon,
+          label: destination.label,
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.note),
-          label: notesRoute,
-        ),
-      ],
+      ).toList(),
     );
   }
 }

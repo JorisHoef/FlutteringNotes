@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:fluttering_notes/constants/layout_constants.dart';
-import 'package:fluttering_notes/utils/layout_utils.dart';
 
+import '../constants/layout_constants.dart';
+import '../utils/layout_utils.dart';
 import '../widgets/custom_bottomNavigationBar.dart';
 import '../widgets/custom_navigationRail.dart';
 import 'home_screen.dart';
 import 'note_overview_screen.dart';
+import 'options_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -68,6 +69,8 @@ class _MainScreenState extends State<MainScreen> {
         return HomeScreen();
       case 1:
         return NoteOverviewScreen();
+      case 2:
+        return OptionsScreen();
       default:
         throw UnimplementedError('No widget for index $index');
     }

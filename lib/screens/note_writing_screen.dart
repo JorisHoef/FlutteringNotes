@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/layout_constants.dart';
+import '../constants/notes_constants.dart';
 import '../models/note.dart';
 import '../states/note_state.dart';
 
@@ -36,32 +38,44 @@ class _NoteWritingScreenState extends State<NoteWritingScreen> {
     var notesState = context.watch<NoteState>();
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            pinned: true,
-            expandedHeight: 50.0,
-            flexibleSpace: FlexibleSpaceBar(
-              title: TextField(
-                controller: titleController,
-                onChanged: (value) {
-                  notesState.updateNote(widget.note.id, title: value);
-                },
+      body: Container(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              pinned: true,
+              expandedHeight: 50.0,
+              flexibleSpace: FlexibleSpaceBar(
+                title: TextField(
+                  controller: titleController,
+                  onChanged: (value) {
+                    notesState.updateNote(widget.note.id, title: value);
+                  },
+                  decoration: InputDecoration(
+                    hintText: noteTitlePlaceholder,
+                    border: InputBorder.none,
+                  ),
+                ),
               ),
             ),
-          ),
-          SliverFillRemaining(
-            child: TextField(
-              controller: textController,
-              expands: true,
-              minLines: null,
-              maxLines: null,
-              onChanged: (value) {
-                notesState.updateNote(widget.note.id, content: value);
-              },
+            SliverFillRemaining(
+              child: TextField(
+                controller: textController,
+                expands: true,
+                minLines: null,
+                maxLines: null,
+                onChanged: (value) {
+                  notesState.updateNote(widget.note.id, content: value);
+                },
+                decoration: InputDecoration(
+                  hintText: noteTextPlaceholder,
+                  border: InputBorder.none,
+                  contentPadding: defaultPadding,
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

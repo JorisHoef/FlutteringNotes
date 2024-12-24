@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:fluttering_notes/constants/notes_constants.dart';
+import 'package:fluttering_notes/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/layout_constants.dart';
+import '../constants/notes_constants.dart';
 import '../models/note.dart';
 import '../states/note_state.dart';
-import '../screens/note_writing_screen.dart';
+import '../widgets/listTile_withMenu.dart';
+import 'note_writing_screen.dart';
 
 class NoteOverviewScreen extends StatelessWidget {
   @override
@@ -12,42 +15,100 @@ class NoteOverviewScreen extends StatelessWidget {
     var notesState = context.watch<NoteState>();
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          const SliverAppBar(
-            pinned: true,
-            expandedHeight: 50.0,
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text(overViewNoteText),
+      body: Container(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        child: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              pinned: true,
+              expandedHeight: 250.0,
+              title: Padding(
+                padding: defaultPadding,
+                child: Text(
+                  overViewNoteText,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+              ),
+              flexibleSpace: FlexibleSpaceBar(
+                background: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.asset(
+                      'assets/images/your_image.png',
+                      fit: BoxFit.cover,
+                    ),
+                    Positioned(
+                      bottom: defaultPadding.bottom-defaultPadding.bottom,
+                        child: Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Padding(
+                            padding: defaultPadding,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Look at your notes',
+                                  style: TextStyle(
+                                    fontSize: fontSizeMedium,
+                                    fontWeight: FontWeight.normal,
+                                    color: Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                ),
+                                Text(
+                                  'They are very pretty',
+                                  style: TextStyle(
+                                    fontSize: fontSizeLarge,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                final note = notesState.notes[index];
-                return ListTile(
-                  title: Text(note.title),
-                  subtitle: Text(note.content),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NoteWritingScreen(note),
-                      ),
-                    );
-                  },
-                );
-              },
-              childCount: notesState.notes.length,
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                  final note = notesState.notes[index];
+                  return ListTileWithMenu(
+                    title: note.title,
+                    subTitle: note.content,
+                    onEdit: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NoteWritingScreen(note),
+                        ),
+                      );
+                    },
+                    onDelete: () {
+                      notesState.deleteNote(note);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${note.title} ${deletedText}'),
+                        ),
+                      );
+                    },
+                  );
+                },
+                childCount: notesState.notes.length,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           final newNote = Note(
             id: notesState.notes.length,
-            title: newNoteText,
+            title: '',
             content: '',
           );
           notesState.addNote(newNote);
@@ -61,6 +122,7 @@ class NoteOverviewScreen extends StatelessWidget {
         },
         child: Icon(Icons.add),
         tooltip: addNoteText,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
     );
   }
