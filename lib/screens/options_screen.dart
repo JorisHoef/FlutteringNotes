@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttering_notes/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/app_strings.dart';
@@ -14,7 +15,14 @@ class OptionsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(NavigationConstants.optionsRoute),
+        backgroundColor: themeProvider.themeData.colorScheme.primaryContainer,
+        title: Text(
+          NavigationConstants.optionsRoute,
+          style: TextStyle(
+            color: themeProvider.themeData.colorScheme.onPrimaryContainer,
+            fontSize: ThemeConstants.fontSizeLarge,
+          ),
+        ),
       ),
       body: Container(
         color: themeProvider.themeData.colorScheme.secondaryContainer,
@@ -23,7 +31,13 @@ class OptionsScreen extends StatelessWidget {
             Container(
               color: themeProvider.themeData.colorScheme.primaryContainer,
               child: ListTile(
-              title: Text(AppStrings.toggleThemeText),
+              title: Text(
+                  AppStrings.toggleThemeText,
+                style: TextStyle(
+                  color: themeProvider.themeData.colorScheme.onPrimaryContainer,
+                  fontSize: ThemeConstants.fontSizeSmall,
+                ),
+              ),
               trailing: Switch(
                 value: isDarkMode,
                 onChanged: (value) => themeProvider.toggleThemeMode(),
@@ -36,7 +50,13 @@ class OptionsScreen extends StatelessWidget {
             Column(
               children: [
                 ListTile(
-                  title: Text(AppStrings.selectThemeText),
+                  title: Text(
+                    AppStrings.selectThemeText,
+                    style: TextStyle(
+                      color: themeProvider.themeData.colorScheme.onSecondaryContainer,
+                      fontSize: ThemeConstants.fontSizeMedium,
+                    ),
+                  ),
                 ),
                 ...themeProvider.availableThemes.map((theme) {
                   return ListTile(
@@ -45,7 +65,13 @@ class OptionsScreen extends StatelessWidget {
                           ? theme.darkTheme.colorScheme.secondary
                           : theme.lightTheme.colorScheme.secondary,
                     ),
-                    title: Text(theme.name),
+                    title: Text(
+                      theme.name,
+                      style: TextStyle(
+                        color: themeProvider.themeData.colorScheme.onSecondaryContainer,
+                        fontSize: ThemeConstants.fontSizeSmall,
+                      ),
+                    ),
                     onTap: () => themeProvider.switchTheme(theme.name),
                   );
                 }),

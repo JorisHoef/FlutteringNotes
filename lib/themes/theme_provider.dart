@@ -47,6 +47,10 @@ class ThemeProvider extends ChangeNotifier {
     Color? onPrimary,
     Color? onSecondary,
     Color? onSurface,
+    Color? primaryContainer,
+    Color? secondaryContainer,
+    Color? onPrimaryContainer,
+    Color? onSecondaryContainer,
   }) {
     final themeIndex = _availableThemes.indexWhere((theme) => theme.name == themeName);
     if (themeIndex != -1) {
@@ -62,6 +66,10 @@ class ThemeProvider extends ChangeNotifier {
           onPrimary: onPrimary ?? theme.lightTheme.colorScheme.onPrimary,
           onSecondary: onSecondary ?? theme.lightTheme.colorScheme.onSecondary,
           onSurface: onSurface ?? theme.lightTheme.colorScheme.onSurface,
+          primaryContainer: primaryContainer ?? theme.lightTheme.colorScheme.primaryContainer,
+          secondaryContainer: secondaryContainer ?? theme.lightTheme.colorScheme.secondaryContainer,
+          onPrimaryContainer: onPrimaryContainer ?? theme.lightTheme.colorScheme.onPrimaryContainer,
+          onSecondaryContainer: onSecondaryContainer ?? theme.lightTheme.colorScheme.onSecondaryContainer,
         ),
         darkTheme: ThemeModel.buildDarkTheme(
           primary: primary ?? theme.darkTheme.colorScheme.primary,
@@ -72,6 +80,10 @@ class ThemeProvider extends ChangeNotifier {
           onPrimary: onPrimary ?? theme.darkTheme.colorScheme.onPrimary,
           onSecondary: onSecondary ?? theme.darkTheme.colorScheme.onSecondary,
           onSurface: onSurface ?? theme.darkTheme.colorScheme.onSurface,
+          primaryContainer: primaryContainer ?? theme.darkTheme.colorScheme.primaryContainer,
+          secondaryContainer: secondaryContainer ?? theme.darkTheme.colorScheme.secondaryContainer,
+          onPrimaryContainer: onPrimaryContainer ?? theme.darkTheme.colorScheme.onPrimaryContainer,
+          onSecondaryContainer: onSecondaryContainer ?? theme.darkTheme.colorScheme.onSecondaryContainer,
         ),
       );
       _availableThemes[themeIndex] = updatedTheme;
