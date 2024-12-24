@@ -102,12 +102,18 @@ class NoteOverviewScreen extends StatelessWidget {
                       notesState.deleteNote(note);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('${note.title} ${AppStrings.deletedText}'),
+                          content: Text(
+                              '${note.title} ${AppStrings.deletedText}',
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: Theme.of(context).colorScheme.onPrimaryContainer
+                              ),
+                          ),
+                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                         ),
                       );
-                    },
+                      },
                   );
-                },
+                  },
                 childCount: notesState.notes.length,
               ),
             ),
