@@ -17,5 +17,5 @@ class AppStrings {
 
   // Theme
   static const String toggleThemeText = "Toggle Dark/Light Theme";
-  static const String selectedThemeText = "Select Theme";
+  static const String selectThemeText = "Select Theme";
 }

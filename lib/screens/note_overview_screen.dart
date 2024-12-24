@@ -22,13 +22,10 @@ class NoteOverviewScreen extends StatelessWidget {
             SliverAppBar(
               pinned: true,
               expandedHeight: 250.0,
-              title: Padding(
-                padding: defaultPadding,
-                child: Text(
-                  AppStrings.overViewNoteText,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+              title:  Text(
+                AppStrings.overViewNoteText,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               flexibleSpace: FlexibleSpaceBar(

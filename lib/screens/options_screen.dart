@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/app_strings.dart';
+import '../constants/navigation_constants.dart';
 import '../themes/theme_provider.dart';
 
 class OptionsScreen extends StatelessWidget {
@@ -9,32 +10,45 @@ class OptionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeProvider = context.watch<ThemeProvider>();
 
+    bool isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Options"),
+        title: Text(NavigationConstants.optionsRoute),
       ),
       body: ListView(
         children: [
           ListTile(
             title: Text(AppStrings.toggleThemeText),
             trailing: Switch(
-              value: themeProvider.themeData.brightness == Brightness.dark,
+              value: isDarkMode,
               onChanged: (value) => themeProvider.toggleThemeMode(),
             ),
           ),
           Divider(),
-          ListTile(
-            title: Text(AppStrings.selectedThemeText),
-          ),
-          ...themeProvider.availableThemes.map((theme) {
-            return ListTile(
-              leading: CircleAvatar(
-                backgroundColor: theme.lightTheme.colorScheme.primary,
+          Expanded(
+            child: Container(
+              color: themeProvider.themeData.colorScheme.secondaryContainer,
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text(AppStrings.selectThemeText),
+                  ),
+                  ...themeProvider.availableThemes.map((theme) {
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: isDarkMode
+                            ? theme.darkTheme.colorScheme.secondary
+                            : theme.lightTheme.colorScheme.secondary,
+                      ),
+                      title: Text(theme.name),
+                      onTap: () => themeProvider.switchTheme(theme.name),
+                    );
+                  }),
+                ],
               ),
-              title: Text(theme.name),
-              onTap: () => themeProvider.switchTheme(theme.name),
-            );
-          }),
+            ),
+          ),
         ],
       ),
     );
