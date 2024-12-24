@@ -16,40 +16,46 @@ class OptionsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(NavigationConstants.optionsRoute),
       ),
-      body: ListView(
-        children: [
-          ListTile(
-            title: Text(AppStrings.toggleThemeText),
-            trailing: Switch(
-              value: isDarkMode,
-              onChanged: (value) => themeProvider.toggleThemeMode(),
-            ),
-          ),
-          Divider(),
-          Expanded(
-            child: Container(
-              color: themeProvider.themeData.colorScheme.secondaryContainer,
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Text(AppStrings.selectThemeText),
-                  ),
-                  ...themeProvider.availableThemes.map((theme) {
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: isDarkMode
-                            ? theme.darkTheme.colorScheme.secondary
-                            : theme.lightTheme.colorScheme.secondary,
-                      ),
-                      title: Text(theme.name),
-                      onTap: () => themeProvider.switchTheme(theme.name),
-                    );
-                  }),
-                ],
+      body: Container(
+        color: themeProvider.themeData.colorScheme.secondaryContainer,
+        child: ListView(
+          children: [
+            Container(
+              color: themeProvider.themeData.colorScheme.primaryContainer,
+              child: ListTile(
+              title: Text(AppStrings.toggleThemeText),
+              trailing: Switch(
+                value: isDarkMode,
+                onChanged: (value) => themeProvider.toggleThemeMode(),
               ),
             ),
-          ),
-        ],
+            ),
+            Divider(
+              height: 1,
+            ),
+            Container(
+                //color: themeProvider.themeData.colorScheme.secondaryContainer,
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text(AppStrings.selectThemeText),
+                    ),
+                    ...themeProvider.availableThemes.map((theme) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: isDarkMode
+                              ? theme.darkTheme.colorScheme.secondary
+                              : theme.lightTheme.colorScheme.secondary,
+                        ),
+                        title: Text(theme.name),
+                        onTap: () => themeProvider.switchTheme(theme.name),
+                      );
+                    }),
+                  ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
