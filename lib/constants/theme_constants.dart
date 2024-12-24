@@ -4,6 +4,11 @@ const Color primaryColor = Color(0xFF6200EE);
 const Color secondaryColor = Color(0xFF03DAC6);
 const Color tertiaryColor = Color(0xFF018786);
 
+const double fontSizeSmall = 14.0;
+const double fontSizeMedium = 18.0;
+const double fontSizeLarge = 24.0;
+const double fontSizeXLarge = 30.0;
+
 final ThemeData lightTheme = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme(

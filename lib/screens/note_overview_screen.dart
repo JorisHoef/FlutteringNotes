@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttering_notes/constants/theme_constants.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/layout_constants.dart';
@@ -50,7 +51,7 @@ class NoteOverviewScreen extends StatelessWidget {
                                 Text(
                                   'Look at your notes',
                                   style: TextStyle(
-                                    fontSize: 18,
+                                    fontSize: fontSizeMedium,
                                     fontWeight: FontWeight.normal,
                                     color: Theme.of(context).colorScheme.onSurface,
                                   ),
@@ -58,7 +59,7 @@ class NoteOverviewScreen extends StatelessWidget {
                                 Text(
                                   'They are very pretty',
                                   style: TextStyle(
-                                    fontSize: 24,
+                                    fontSize: fontSizeLarge,
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).colorScheme.onSurface,
                                   ),
