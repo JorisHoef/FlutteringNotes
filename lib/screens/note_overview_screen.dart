@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../constants/app_strings.dart';
 import '../constants/layout_constants.dart';
-import '../constants/theme_constants.dart';
 import '../models/note.dart';
 import '../states/note_state.dart';
 import '../widgets/listTile_withMenu.dart';
@@ -22,7 +21,7 @@ class NoteOverviewScreen extends StatelessWidget {
             SliverAppBar(
               pinned: true,
               expandedHeight: 250.0,
-              title:  Text(
+              title: Text(
                 AppStrings.overViewNoteText,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: Theme.of(context).colorScheme.onPrimaryContainer,
@@ -37,34 +36,50 @@ class NoteOverviewScreen extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                     Positioned(
-                      bottom: defaultPadding.bottom-defaultPadding.bottom,
-                        child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Padding(
-                            padding: defaultPadding,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Look at your notes',
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                                  ),
+                      bottom: defaultPadding.bottom - defaultPadding.bottom,
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                          padding: defaultPadding,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Look at your notes',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
                                 ),
-                                Text(
-                                  'They are very pretty',
-                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              ),
+                              Text(
+                                'They are very pretty',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                  fontWeight: FontWeight.w600,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
+                      ),
                     ),
                   ],
                 ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Divider(
+                height: 1,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
             ),
             SliverList(
@@ -86,9 +101,7 @@ class NoteOverviewScreen extends StatelessWidget {
                       notesState.deleteNote(note);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(
-                              '${note.title} ${AppStrings.deletedText}'
-                          ),
+                          content: Text('${note.title} ${AppStrings.deletedText}'),
                         ),
                       );
                     },
