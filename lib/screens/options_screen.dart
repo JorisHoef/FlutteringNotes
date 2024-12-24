@@ -39,8 +39,8 @@ class OptionsScreen extends StatelessWidget {
                   ),
                 ),
                 trailing: Switch(
-                  activeColor: colorScheme.onPrimaryContainer,
-                  activeTrackColor: colorScheme.secondaryContainer,
+                  activeColor: colorScheme.secondaryContainer,
+                  activeTrackColor: colorScheme.onPrimaryContainer,
                   inactiveThumbColor: colorScheme.primaryContainer,
                   inactiveTrackColor: colorScheme.secondaryContainer,
                   value: isDarkMode,
