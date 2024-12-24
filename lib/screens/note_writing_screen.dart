@@ -45,8 +45,13 @@ class _NoteWritingScreenState extends State<NoteWritingScreen> {
             SliverAppBar(
               pinned: true,
               expandedHeight: 50.0,
-              flexibleSpace: FlexibleSpaceBar(
-                title: TextField(
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              title: Padding(
+                padding: defaultPadding,
+                child: TextField(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
                   controller: titleController,
                   onChanged: (value) {
                     notesState.updateNote(widget.note.id, title: value);
@@ -60,6 +65,9 @@ class _NoteWritingScreenState extends State<NoteWritingScreen> {
             ),
             SliverFillRemaining(
               child: TextField(
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                ),
                 controller: textController,
                 expands: true,
                 minLines: null,
@@ -68,6 +76,9 @@ class _NoteWritingScreenState extends State<NoteWritingScreen> {
                   notesState.updateNote(widget.note.id, content: value);
                 },
                 decoration: InputDecoration(
+                  hintStyle: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
                   hintText: AppStrings.noteTextPlaceholder,
                   border: InputBorder.none,
                   contentPadding: defaultPadding,
