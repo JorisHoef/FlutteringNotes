@@ -51,7 +51,7 @@ class NoteOverviewScreen extends StatelessWidget {
                                 Text(
                                   'Look at your notes',
                                   style: TextStyle(
-                                    fontSize: ThemeValues.fontSizeMedium,
+                                    fontSize: ThemeConstants.fontSizeMedium,
                                     fontWeight: FontWeight.normal,
                                     color: Theme.of(context).colorScheme.onSurface,
                                   ),
@@ -59,7 +59,7 @@ class NoteOverviewScreen extends StatelessWidget {
                                 Text(
                                   'They are very pretty',
                                   style: TextStyle(
-                                    fontSize: ThemeValues.fontSizeLarge,
+                                    fontSize: ThemeConstants.fontSizeLarge,
                                     fontWeight: FontWeight.bold,
                                     color: Theme.of(context).colorScheme.onSurface,
                                   ),

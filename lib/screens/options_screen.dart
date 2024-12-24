@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/app_strings.dart';
 import '../themes/theme_provider.dart';
 
 class OptionsScreen extends StatelessWidget {
@@ -15,7 +16,7 @@ class OptionsScreen extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
-            title: Text("Toggle Dark/Light Mode"),
+            title: Text(AppStrings.toggleThemeText),
             trailing: Switch(
               value: themeProvider.themeData.brightness == Brightness.dark,
               onChanged: (value) => themeProvider.toggleThemeMode(),
@@ -23,7 +24,7 @@ class OptionsScreen extends StatelessWidget {
           ),
           Divider(),
           ListTile(
-            title: Text('Select Theme'),
+            title: Text(AppStrings.selectedThemeText),
           ),
           ...themeProvider.availableThemes.map((theme) {
             return ListTile(
@@ -33,7 +34,7 @@ class OptionsScreen extends StatelessWidget {
               title: Text(theme.name),
               onTap: () => themeProvider.switchTheme(theme.name),
             );
-          }).toList(),
+          }),
         ],
       ),
     );

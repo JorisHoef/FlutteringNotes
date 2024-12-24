@@ -15,6 +15,7 @@ class AppStrings {
   static const String deleteText = "Delete";
   static const String deletedText = "Deleted";
 
-  // Theme Toggle
+  // Theme
   static const String toggleThemeText = "Toggle Dark/Light Theme";
+  static const String selectedThemeText = "Select Theme";
 }
