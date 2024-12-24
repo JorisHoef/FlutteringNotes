@@ -220,8 +220,8 @@ List<ThemeModel> predefinedThemes() => [
       onPrimary: Color(0xFF1B1C26),
       onSecondary: Colors.white,
       onSurface: Color(0xFF82CBD9),
-      primaryContainer: Color(0xFF1B1C26),
-      secondaryContainer: Color(0xFF2B2A2A),
+      primaryContainer: Color(0xFF141218),
+      secondaryContainer: Color(0xFF1B1C26),
       onPrimaryContainer: Color(0xFF82CBD9),
       onSecondaryContainer: Colors.white,
       textTheme: TextTheme(

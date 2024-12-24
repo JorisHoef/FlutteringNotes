@@ -24,8 +24,8 @@ class NoteOverviewScreen extends StatelessWidget {
               expandedHeight: 250.0,
               title:  Text(
                 AppStrings.overViewNoteText,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                 ),
               ),
               flexibleSpace: FlexibleSpaceBar(
@@ -47,18 +47,15 @@ class NoteOverviewScreen extends StatelessWidget {
                               children: [
                                 Text(
                                   'Look at your notes',
-                                  style: TextStyle(
-                                    fontSize: ThemeConstants.fontSizeMedium,
-                                    fontWeight: FontWeight.normal,
-                                    color: Theme.of(context).colorScheme.onSurface,
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Theme.of(context).colorScheme.onPrimaryContainer,
                                   ),
                                 ),
                                 Text(
                                   'They are very pretty',
-                                  style: TextStyle(
-                                    fontSize: ThemeConstants.fontSizeLarge,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).colorScheme.onSurface,
+                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                    fontWeight: FontWeight.w600,
                                   ),
                                 ),
                               ],
@@ -119,9 +116,12 @@ class NoteOverviewScreen extends StatelessWidget {
             ),
           );
         },
-        child: Icon(Icons.add),
         tooltip: AppStrings.addNoteText,
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        child: Icon(
+          Icons.add,
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }

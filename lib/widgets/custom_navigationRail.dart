@@ -18,13 +18,13 @@ class CustomNavigationRail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NavigationRail(
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       extended: extended,
       destinations: navigationDestinations
-          .map(
-            (destination) => NavigationRailDestination(
-          icon: destination.icon,
-          label: Text(destination.label),
-        ),
+          .map((destination) => NavigationRailDestination(
+        icon: destination.icon,
+        label: Text(destination.label),
+      ),
       ).toList(),
       selectedIndex: selectedIndex,
       onDestinationSelected: onDestinationSelected,
