@@ -11,40 +11,6 @@ class ThemeModel {
     required this.darkTheme,
   });
 
-  factory ThemeModel.fromJson(Map<String, dynamic> json) {
-    return ThemeModel(
-      name: json['name'],
-      lightTheme: buildLightTheme(
-        primary: Color(int.parse(json['primaryColor'])),
-        secondary: Color(int.parse(json['secondaryColor'])),
-        tertiary: Color(int.parse(json['tertiaryColor'])),
-        tertiaryContainer: Color(int.parse(json['tertiaryContainerColor'])),
-        surface: Color(int.parse(json['surfaceColor'])),
-        onPrimary: Color(int.parse(json['onPrimaryColor'])),
-        onSecondary: Color(int.parse(json['onSecondaryColor'])),
-        onSurface: Color(int.parse(json['onSurfaceColor'])),
-        primaryContainer: Color(int.parse(json['primaryContainerColor'])),
-        secondaryContainer: Color(int.parse(json['secondaryContainerColor'])),
-        onPrimaryContainer: Color(int.parse(json['onPrimaryContainerColor'])),
-        onSecondaryContainer: Color(int.parse(json['onSecondaryContainerColor'])),
-      ),
-      darkTheme: buildDarkTheme(
-        primary: Color(int.parse(json['primaryColor'])),
-        secondary: Color(int.parse(json['secondaryColor'])),
-        tertiary: Color(int.parse(json['tertiaryColor'])),
-        tertiaryContainer: Color(int.parse(json['tertiaryContainerColor'])),
-        surface: Color(int.parse(json['surfaceColor'])),
-        onPrimary: Color(int.parse(json['onPrimaryColor'])),
-        onSecondary: Color(int.parse(json['onSecondaryColor'])),
-        onSurface: Color(int.parse(json['onSurfaceColor'])),
-        primaryContainer: Color(int.parse(json['primaryContainerColor'])),
-        secondaryContainer: Color(int.parse(json['secondaryContainerColor'])),
-        onPrimaryContainer: Color(int.parse(json['onPrimaryContainerColor'])),
-        onSecondaryContainer: Color(int.parse(json['onSecondaryContainerColor'])),
-      ),
-    );
-  }
-
   static ThemeData buildLightTheme({
     required Color primary,
     required Color secondary,
@@ -58,26 +24,24 @@ class ThemeModel {
     required Color secondaryContainer,
     required Color onPrimaryContainer,
     required Color onSecondaryContainer,
+    required TextTheme textTheme,
   }) {
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme(
+    return ThemeData.light().copyWith(
+      colorScheme: ColorScheme.light(
         primary: primary,
-        primaryContainer: primaryContainer,
         secondary: secondary,
-        secondaryContainer: secondaryContainer,
         tertiary: tertiary,
         tertiaryContainer: tertiaryContainer,
         surface: surface,
-        error: Colors.red,
         onPrimary: onPrimary,
         onSecondary: onSecondary,
         onSurface: onSurface,
+        primaryContainer: primaryContainer,
+        secondaryContainer: secondaryContainer,
         onPrimaryContainer: onPrimaryContainer,
         onSecondaryContainer: onSecondaryContainer,
-        onError: Colors.white,
-        brightness: Brightness.light,
       ),
+      textTheme: textTheme,
     );
   }
 
@@ -94,26 +58,24 @@ class ThemeModel {
     required Color secondaryContainer,
     required Color onPrimaryContainer,
     required Color onSecondaryContainer,
+    required TextTheme textTheme,
   }) {
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme(
+    return ThemeData.dark().copyWith(
+      colorScheme: ColorScheme.dark(
         primary: primary,
-        primaryContainer: primaryContainer,
         secondary: secondary,
-        secondaryContainer: secondaryContainer,
         tertiary: tertiary,
         tertiaryContainer: tertiaryContainer,
         surface: surface,
-        error: Colors.red,
         onPrimary: onPrimary,
         onSecondary: onSecondary,
         onSurface: onSurface,
+        primaryContainer: primaryContainer,
+        secondaryContainer: secondaryContainer,
         onPrimaryContainer: onPrimaryContainer,
         onSecondaryContainer: onSecondaryContainer,
-        onError: Colors.black,
-        brightness: Brightness.dark,
       ),
+      textTheme: textTheme,
     );
   }
 }

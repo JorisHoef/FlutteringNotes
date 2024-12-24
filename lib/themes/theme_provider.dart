@@ -5,7 +5,6 @@ import 'theme_manager.dart';
 
 class ThemeProvider extends ChangeNotifier {
   final List<ThemeModel> _availableThemes = predefinedThemes();
-
   late ThemeModel _currentTheme;
   bool _isDarkMode = false;
 
@@ -51,6 +50,7 @@ class ThemeProvider extends ChangeNotifier {
     Color? secondaryContainer,
     Color? onPrimaryContainer,
     Color? onSecondaryContainer,
+    TextTheme? textTheme,
   }) {
     final themeIndex = _availableThemes.indexWhere((theme) => theme.name == themeName);
     if (themeIndex != -1) {
@@ -70,6 +70,7 @@ class ThemeProvider extends ChangeNotifier {
           secondaryContainer: secondaryContainer ?? theme.lightTheme.colorScheme.secondaryContainer,
           onPrimaryContainer: onPrimaryContainer ?? theme.lightTheme.colorScheme.onPrimaryContainer,
           onSecondaryContainer: onSecondaryContainer ?? theme.lightTheme.colorScheme.onSecondaryContainer,
+          textTheme: textTheme ?? theme.lightTheme.textTheme,
         ),
         darkTheme: ThemeModel.buildDarkTheme(
           primary: primary ?? theme.darkTheme.colorScheme.primary,
@@ -84,6 +85,7 @@ class ThemeProvider extends ChangeNotifier {
           secondaryContainer: secondaryContainer ?? theme.darkTheme.colorScheme.secondaryContainer,
           onPrimaryContainer: onPrimaryContainer ?? theme.darkTheme.colorScheme.onPrimaryContainer,
           onSecondaryContainer: onSecondaryContainer ?? theme.darkTheme.colorScheme.onSecondaryContainer,
+          textTheme: textTheme ?? theme.darkTheme.textTheme,
         ),
       );
       _availableThemes[themeIndex] = updatedTheme;

@@ -7,6 +7,13 @@ class ThemeConstants {
   static const double fontSizeMedium = 18.0;
   static const double fontSizeLarge = 24.0;
   static const double fontSizeXLarge = 30.0;
+
+  static const String fontFamilyBlue = 'Roboto';
+  static const String fontFamilyIndigo = 'Poppins';
+  static const String fontFamilyGreen = 'Lato';
+  static const String fontFamilyRed = 'SourceSerif4';
+  static const String fontFamilyElectron = 'Montserrat';
+  static const String fontFamilySerif = 'SourceSans3'; //unused for now
 }
 
 List<ThemeModel> predefinedThemes() => [
@@ -25,6 +32,20 @@ List<ThemeModel> predefinedThemes() => [
       secondaryContainer: Color(0xFFE3F2FD),
       onPrimaryContainer: Color(0xFF0D47A1),
       onSecondaryContainer: Color(0xFF1976D2),
+      textTheme: TextTheme(
+        bodySmall: TextStyle(
+          fontFamily: ThemeConstants.fontFamilyBlue,
+          fontSize: ThemeConstants.fontSizeSmall,
+        ),
+        bodyMedium: TextStyle(
+            fontFamily: ThemeConstants.fontFamilyBlue,
+            fontSize: ThemeConstants.fontSizeMedium
+        ),
+        bodyLarge: TextStyle(
+            fontFamily: ThemeConstants.fontFamilyBlue,
+            fontSize: ThemeConstants.fontSizeLarge
+        ),
+      ),
     ),
     darkTheme: ThemeModel.buildDarkTheme(
       primary: Color(0xFF1E88E5),
@@ -39,6 +60,11 @@ List<ThemeModel> predefinedThemes() => [
       secondaryContainer: Color(0xFF1565C0),
       onPrimaryContainer: Colors.white,
       onSecondaryContainer: Colors.white,
+      textTheme: TextTheme(
+        bodySmall: TextStyle(fontFamily: ThemeConstants.fontFamilyBlue, fontSize: ThemeConstants.fontSizeSmall),
+        bodyMedium: TextStyle(fontFamily: ThemeConstants.fontFamilyBlue, fontSize: ThemeConstants.fontSizeMedium),
+        bodyLarge: TextStyle(fontFamily: ThemeConstants.fontFamilyBlue, fontSize: ThemeConstants.fontSizeLarge),
+      ),
     ),
   ),
   ThemeModel(
@@ -56,6 +82,11 @@ List<ThemeModel> predefinedThemes() => [
       secondaryContainer: Color(0xFFE8EAF6),
       onPrimaryContainer: Color(0xFF303F9F),
       onSecondaryContainer: Color(0xFF5C6BC0),
+      textTheme: TextTheme(
+        bodySmall: TextStyle(fontFamily: ThemeConstants.fontFamilyIndigo, fontSize: ThemeConstants.fontSizeSmall),
+        bodyMedium: TextStyle(fontFamily: ThemeConstants.fontFamilyIndigo, fontSize: ThemeConstants.fontSizeMedium),
+        bodyLarge: TextStyle(fontFamily: ThemeConstants.fontFamilyIndigo, fontSize: ThemeConstants.fontSizeLarge),
+      ),
     ),
     darkTheme: ThemeModel.buildDarkTheme(
       primary: Color(0xFF3F51B5),
@@ -70,6 +101,11 @@ List<ThemeModel> predefinedThemes() => [
       secondaryContainer: Color(0xFF3949AB),
       onPrimaryContainer: Colors.white,
       onSecondaryContainer: Colors.white,
+      textTheme: TextTheme(
+        bodySmall: TextStyle(fontFamily: ThemeConstants.fontFamilyIndigo, fontSize: ThemeConstants.fontSizeSmall),
+        bodyMedium: TextStyle(fontFamily: ThemeConstants.fontFamilyIndigo, fontSize: ThemeConstants.fontSizeMedium),
+        bodyLarge: TextStyle(fontFamily: ThemeConstants.fontFamilyIndigo, fontSize: ThemeConstants.fontSizeLarge),
+      ),
     ),
   ),
   ThemeModel(
@@ -87,6 +123,11 @@ List<ThemeModel> predefinedThemes() => [
       secondaryContainer: Color(0xFFB2DFDB),
       onPrimaryContainer: Color(0xFF1B5E20),
       onSecondaryContainer: Color(0xFF2C6E49),
+      textTheme: TextTheme(
+        bodySmall: TextStyle(fontFamily: ThemeConstants.fontFamilyGreen, fontSize: ThemeConstants.fontSizeSmall),
+        bodyMedium: TextStyle(fontFamily: ThemeConstants.fontFamilyGreen, fontSize: ThemeConstants.fontSizeMedium),
+        bodyLarge: TextStyle(fontFamily: ThemeConstants.fontFamilyGreen, fontSize: ThemeConstants.fontSizeLarge),
+      ),
     ),
     darkTheme: ThemeModel.buildDarkTheme(
       primary: Color(0xFF388E3C),
@@ -101,6 +142,11 @@ List<ThemeModel> predefinedThemes() => [
       secondaryContainer: Color(0xFF2C6E49),
       onPrimaryContainer: Colors.white,
       onSecondaryContainer: Colors.white,
+      textTheme: TextTheme(
+        bodySmall: TextStyle(fontFamily: ThemeConstants.fontFamilyGreen, fontSize: ThemeConstants.fontSizeSmall),
+        bodyMedium: TextStyle(fontFamily: ThemeConstants.fontFamilyGreen, fontSize: ThemeConstants.fontSizeMedium),
+        bodyLarge: TextStyle(fontFamily: ThemeConstants.fontFamilyGreen, fontSize: ThemeConstants.fontSizeLarge),
+      ),
     ),
   ),
   ThemeModel(
@@ -118,6 +164,11 @@ List<ThemeModel> predefinedThemes() => [
       secondaryContainer: Color(0xFFF8BBD0),
       onPrimaryContainer: Color(0xFFF44336),
       onSecondaryContainer: Color(0xFFEF9A9A),
+      textTheme: TextTheme(
+        bodySmall: TextStyle(fontFamily: ThemeConstants.fontFamilyRed, fontSize: ThemeConstants.fontSizeSmall),
+        bodyMedium: TextStyle(fontFamily: ThemeConstants.fontFamilyRed, fontSize: ThemeConstants.fontSizeMedium),
+        bodyLarge: TextStyle(fontFamily: ThemeConstants.fontFamilyRed, fontSize: ThemeConstants.fontSizeLarge),
+      ),
     ),
     darkTheme: ThemeModel.buildDarkTheme(
       primary: Color(0xFFF44336),
@@ -132,6 +183,11 @@ List<ThemeModel> predefinedThemes() => [
       secondaryContainer: Color(0xFF2B2A2A),
       onPrimaryContainer: Color(0xFFF44336),
       onSecondaryContainer: Color(0xFFEF9A9A),
+      textTheme: TextTheme(
+        bodySmall: TextStyle(fontFamily: ThemeConstants.fontFamilyRed, fontSize: ThemeConstants.fontSizeSmall),
+        bodyMedium: TextStyle(fontFamily: ThemeConstants.fontFamilyRed, fontSize: ThemeConstants.fontSizeMedium),
+        bodyLarge: TextStyle(fontFamily: ThemeConstants.fontFamilyRed, fontSize: ThemeConstants.fontSizeLarge),
+      ),
     ),
   ),
   ThemeModel(
@@ -149,6 +205,11 @@ List<ThemeModel> predefinedThemes() => [
       secondaryContainer: Color(0xFFB2EBF2),
       onPrimaryContainer: Color(0xFF1B1C26),
       onSecondaryContainer: Color(0xFF2B2A2A),
+      textTheme: TextTheme(
+        bodySmall: TextStyle(fontFamily: ThemeConstants.fontFamilyElectron, fontSize: ThemeConstants.fontSizeSmall),
+        bodyMedium: TextStyle(fontFamily: ThemeConstants.fontFamilyElectron, fontSize: ThemeConstants.fontSizeMedium),
+        bodyLarge: TextStyle(fontFamily: ThemeConstants.fontFamilyElectron, fontSize: ThemeConstants.fontSizeLarge),
+      ),
     ),
     darkTheme: ThemeModel.buildDarkTheme(
       primary: Color(0xFF1C9EB3),
@@ -163,6 +224,14 @@ List<ThemeModel> predefinedThemes() => [
       secondaryContainer: Color(0xFF2B2A2A),
       onPrimaryContainer: Color(0xFF82CBD9),
       onSecondaryContainer: Colors.white,
+      textTheme: TextTheme(
+        bodySmall: TextStyle(
+            fontFamily: ThemeConstants.fontFamilyElectron,
+            fontSize: ThemeConstants.fontSizeSmall
+        ),
+        bodyMedium: TextStyle(fontFamily: ThemeConstants.fontFamilyElectron, fontSize: ThemeConstants.fontSizeMedium),
+        bodyLarge: TextStyle(fontFamily: ThemeConstants.fontFamilyElectron, fontSize: ThemeConstants.fontSizeLarge),
+      ),
     ),
   ),
 ];

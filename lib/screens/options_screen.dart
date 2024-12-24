@@ -13,14 +13,15 @@ class OptionsScreen extends StatelessWidget {
 
     bool isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
 
+    TextTheme textTheme = themeProvider.themeData.textTheme;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeProvider.themeData.colorScheme.primaryContainer,
         title: Text(
           NavigationConstants.optionsRoute,
-          style: TextStyle(
+          style: textTheme.bodyLarge?.copyWith(
             color: themeProvider.themeData.colorScheme.onPrimaryContainer,
-            fontSize: ThemeConstants.fontSizeLarge,
           ),
         ),
       ),
@@ -31,30 +32,29 @@ class OptionsScreen extends StatelessWidget {
             Container(
               color: themeProvider.themeData.colorScheme.primaryContainer,
               child: ListTile(
-              title: Text(
+                title: Text(
                   AppStrings.toggleThemeText,
-                style: TextStyle(
-                  color: themeProvider.themeData.colorScheme.onPrimaryContainer,
-                  fontSize: ThemeConstants.fontSizeSmall,
+                  style: textTheme.bodySmall?.copyWith(
+                    color: themeProvider.themeData.colorScheme.onPrimaryContainer,
+                  ),
+                ),
+                trailing: Switch(
+                  value: isDarkMode,
+                  onChanged: (value) => themeProvider.toggleThemeMode(),
                 ),
               ),
-              trailing: Switch(
-                value: isDarkMode,
-                onChanged: (value) => themeProvider.toggleThemeMode(),
-              ),
-            ),
             ),
             Divider(
               height: 1,
+              color: themeProvider.themeData.colorScheme.onPrimaryContainer,
             ),
             Column(
               children: [
                 ListTile(
                   title: Text(
                     AppStrings.selectThemeText,
-                    style: TextStyle(
+                    style: textTheme.bodyMedium?.copyWith(
                       color: themeProvider.themeData.colorScheme.onSecondaryContainer,
-                      fontSize: ThemeConstants.fontSizeMedium,
                     ),
                   ),
                 ),
@@ -67,9 +67,8 @@ class OptionsScreen extends StatelessWidget {
                     ),
                     title: Text(
                       theme.name,
-                      style: TextStyle(
+                      style: textTheme.bodySmall?.copyWith(
                         color: themeProvider.themeData.colorScheme.onSecondaryContainer,
-                        fontSize: ThemeConstants.fontSizeSmall,
                       ),
                     ),
                     onTap: () => themeProvider.switchTheme(theme.name),

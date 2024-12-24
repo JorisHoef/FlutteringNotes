@@ -23,3 +23,36 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: SourceSerif4
+      fonts:
+        - asset: fonts/Source_Serif_4/static/SourceSerif4-Regular.ttf
+        - asset: fonts/Source_Serif_4/static/SourceSerif4-Bold.ttf
+        - asset: fonts/Source_Serif_4/static/SourceSerif4-Italic.ttf
+
+    - family: Montserrat
+      fonts:
+        - asset: fonts/Montserrat/static/Montserrat-Regular.ttf
+        - asset: fonts/Montserrat/static/Montserrat-Bold.ttf
+        - asset: fonts/Montserrat/static/Montserrat-Italic.ttf
+
+    - family: SourceSans3
+      fonts:
+        - asset: fonts/Source_Sans_3/static/SourceSans3-Regular.ttf
+        - asset: fonts/Source_Sans_3/static/SourceSans3-Bold.ttf
+        - asset: fonts/Source_Sans_3/static/SourceSans3-Italic.ttf
+
+    - family: Lato
+      fonts:
+        - asset: fonts/Lato/Lato-Regular.ttf
+        - asset: fonts/Lato/Lato-Bold.ttf
+
+    - family: Poppins
+      fonts:
+        - asset: fonts/Poppins/Poppins-Regular.ttf
+        - asset: fonts/Poppins/Poppins-Bold.ttf
+
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto/Roboto-Regular.ttf
+        - asset: fonts/Roboto/Roboto-Bold.ttf
