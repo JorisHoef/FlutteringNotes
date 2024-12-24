@@ -1,55 +1,32 @@
 import 'package:flutter/material.dart';
 
-class ThemeValues {
-  // Font sizes
-  static const double fontSizeSmall = 14.0;
-  static const double fontSizeMedium = 18.0;
-  static const double fontSizeLarge = 24.0;
-  static const double fontSizeXLarge = 30.0;
-}
-
-class AppTheme {
+class ThemeModel {
+  final String name;
   final ThemeData lightTheme;
   final ThemeData darkTheme;
 
-  AppTheme({required this.lightTheme, required this.darkTheme});
-}
+  ThemeModel({
+    required this.name,
+    required this.lightTheme,
+    required this.darkTheme,
+  });
 
-class Themes {
-  static AppTheme blueTheme = AppTheme(
-    lightTheme: _buildLightTheme(
-      primary: Color(0xFF2196F3),
-      secondary: Color(0xFF90CAF9),
-    ),
-    darkTheme: _buildDarkTheme(
-      primary: Color(0xFF2196F3),
-      secondary: Color(0xFF90CAF9),
-    ),
-  );
+  // Allow uploading a JSON for colors, perhaps in future can use colorpicker
+  factory ThemeModel.fromJson(Map<String, dynamic> json) {
+    return ThemeModel(
+      name: json['name'],
+      lightTheme: buildLightTheme(
+        primary: Color(int.parse(json['primaryColor'])),
+        secondary: Color(int.parse(json['secondaryColor'])),
+      ),
+      darkTheme: buildDarkTheme(
+        primary: Color(int.parse(json['primaryColor'])),
+        secondary: Color(int.parse(json['secondaryColor'])),
+      ),
+    );
+  }
 
-  static AppTheme indigoTheme = AppTheme(
-    lightTheme: _buildLightTheme(
-      primary: Color(0xFF6200EE),
-      secondary: Color(0xFFBB86FC),
-    ),
-    darkTheme: _buildDarkTheme(
-      primary: Color(0xFF6200EE),
-      secondary: Color(0xFFBB86FC),
-    ),
-  );
-
-  static AppTheme greenTheme = AppTheme(
-    lightTheme: _buildLightTheme(
-      primary: Color(0xFF4CAF50),
-      secondary: Color(0xFFA5D6A7),
-    ),
-    darkTheme: _buildDarkTheme(
-      primary: Color(0xFF4CAF50),
-      secondary: Color(0xFFA5D6A7),
-    ),
-  );
-
-  static ThemeData _buildLightTheme({
+  static ThemeData buildLightTheme({
     required Color primary,
     required Color secondary,
   }) {
@@ -72,7 +49,7 @@ class Themes {
     );
   }
 
-  static ThemeData _buildDarkTheme({
+  static ThemeData buildDarkTheme({
     required Color primary,
     required Color secondary,
   }) {
