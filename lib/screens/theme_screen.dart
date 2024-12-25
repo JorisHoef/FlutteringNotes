@@ -6,8 +6,12 @@ import '../themes/theme_manager.dart';
 
 class ThemeScreen extends StatefulWidget {
   final ThemeModel initialTheme;
+  final Function(String themeName, Map<String, Color>) onThemeChange;
 
-  ThemeScreen({required this.initialTheme});
+  ThemeScreen({
+    required this.initialTheme,
+    required this.onThemeChange,
+  });
 
   @override
   _ThemeScreenState createState() => _ThemeScreenState();
@@ -57,36 +61,69 @@ class _ThemeScreenState extends State<ThemeScreen> {
               padding: defaultPadding,
               child: Column(
                 children: [
-                  _buildColorPicker('Primary Container Color', primaryContainer, (color) {
-                    _updateThemeColor(isDarkMode, (colorScheme) {
-                      return colorScheme.copyWith(primaryContainer: color);
-                    });
-                  }),
-                  _buildColorPicker('On Primary Container Color', onPrimaryContainer, (color) {
-                    _updateThemeColor(isDarkMode, (colorScheme) {
-                      return colorScheme.copyWith(onPrimaryContainer: color);
-                    });
-                  }),
-                  _buildColorPicker('Secondary Container Color', secondaryContainer, (color) {
-                    _updateThemeColor(isDarkMode, (colorScheme) {
-                      return colorScheme.copyWith(secondaryContainer: color);
-                    });
-                  }),
-                  _buildColorPicker('On Secondary Container Color', onSecondaryContainer, (color) {
-                    _updateThemeColor(isDarkMode, (colorScheme) {
-                      return colorScheme.copyWith(onSecondaryContainer: color);
-                    });
-                  }),
-                  _buildColorPicker('Tertiary Container Color', tertiaryContainer, (color) {
-                    _updateThemeColor(isDarkMode, (colorScheme) {
-                      return colorScheme.copyWith(tertiaryContainer: color);
-                    });
-                  }),
-                  _buildColorPicker('On Tertiary Container Color', onTertiaryContainer, (color) {
-                    _updateThemeColor(isDarkMode, (colorScheme) {
-                      return colorScheme.copyWith(onTertiaryContainer: color);
-                    });
-                  }),
+                  _buildColorPicker(
+                    'Primary Container Color',
+                    primaryContainer,
+                        (color) => _updateThemeColor(
+                      isUpdatingDarkTheme: isDarkMode,
+                      label: 'Primary Container Color',
+                      newColor: color,
+                    ),
+                  ),
+                  _buildColorPicker(
+                    'Primary Container Color',
+                    primaryContainer,
+                        (color) => _updateThemeColor(
+                      isUpdatingDarkTheme: isDarkMode,
+                      label: 'Primary Container Color',
+                      newColor: color,
+                    ),
+                  ),
+                  _buildColorPicker(
+                    'On Primary Container Color',
+                    onPrimaryContainer,
+                        (color) => _updateThemeColor(
+                      isUpdatingDarkTheme: isDarkMode,
+                      label: 'On Primary Container Color',
+                      newColor: color,
+                    ),
+                  ),
+                  _buildColorPicker(
+                    'Secondary Container Color',
+                    secondaryContainer,
+                        (color) => _updateThemeColor(
+                      isUpdatingDarkTheme: isDarkMode,
+                      label: 'Secondary Container Color',
+                      newColor: color,
+                    ),
+                  ),
+                  _buildColorPicker(
+                    'On Secondary Container Color',
+                    onSecondaryContainer,
+                        (color) => _updateThemeColor(
+                      isUpdatingDarkTheme: isDarkMode,
+                      label: 'On Secondary Container Color',
+                      newColor: color,
+                    ),
+                  ),
+                  _buildColorPicker(
+                    'Tertiary Container Color',
+                    tertiaryContainer,
+                        (color) => _updateThemeColor(
+                      isUpdatingDarkTheme: isDarkMode,
+                      label: 'Tertiary Container Color',
+                      newColor: color,
+                    ),
+                  ),
+                  _buildColorPicker(
+                    'On Tertiary Container Color',
+                    onTertiaryContainer,
+                        (color) => _updateThemeColor(
+                      isUpdatingDarkTheme: isDarkMode,
+                      label: 'On Tertiary Container Color',
+                      newColor: color,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -179,45 +216,18 @@ class _ThemeScreenState extends State<ThemeScreen> {
           builder: (BuildContext context) {
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-                final themeData = isDarkMode ? _theme.darkTheme : _theme.lightTheme;
-
                 return AlertDialog(
-                  title: Text('Edit $label'),
+                  title: Text('Edit "$label"'),
                   content: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        _buildNestedContainerPreview(
-                          primaryContainer: label == 'Primary Container Color'
-                              ? tempColor
-                              : themeData.colorScheme.primaryContainer,
-                          onPrimaryContainer: label == 'On Primary Container Color'
-                              ? tempColor
-                              : themeData.colorScheme.onPrimaryContainer,
-                          secondaryContainer: label == 'Secondary Container Color'
-                              ? tempColor
-                              : themeData.colorScheme.secondaryContainer,
-                          onSecondaryContainer: label == 'On Secondary Container Color'
-                              ? tempColor
-                              : themeData.colorScheme.onSecondaryContainer,
-                          tertiaryContainer: label == 'Tertiary Container Color'
-                              ? tempColor
-                              : themeData.colorScheme.tertiaryContainer,
-                          onTertiaryContainer: label == 'On Tertiary Container Color'
-                              ? tempColor
-                              : themeData.colorScheme.onTertiaryContainer,
-                        ),
-                        SizedBox(height: 20),
-                        ColorPicker(
-                          pickerColor: tempColor,
-                          onColorChanged: (color) {
-                            setState(() {
-                              tempColor = color;
-                            });
-                          },
-                          enableAlpha: true,
-                          pickerAreaHeightPercent: 0.5,
-                        ),
-                      ],
+                    child: ColorPicker(
+                      pickerColor: tempColor,
+                      onColorChanged: (color) {
+                        setState(() {
+                          tempColor = color;
+                        });
+                      },
+                      enableAlpha: true,
+                      pickerAreaHeightPercent: 0.5,
                     ),
                   ),
                   actions: [
@@ -244,21 +254,71 @@ class _ThemeScreenState extends State<ThemeScreen> {
     );
   }
 
-  void _updateThemeColor(bool isDarkMode, ColorScheme Function(ColorScheme) colorSchemeUpdater) {
+  void _updateThemeColor({
+    required bool isUpdatingDarkTheme,
+    required String label,
+    required Color newColor,
+  }) {
     setState(() {
-      if (isDarkMode) {
+      // Determine which theme’s color scheme to update
+      if (isUpdatingDarkTheme) {
         _theme = _theme.copyWith(
           darkTheme: _theme.darkTheme.copyWith(
-            colorScheme: colorSchemeUpdater(_theme.darkTheme.colorScheme),
+            colorScheme: _updateColorScheme(
+              _theme.darkTheme.colorScheme,
+              label,
+              newColor,
+            ),
           ),
         );
       } else {
         _theme = _theme.copyWith(
           lightTheme: _theme.lightTheme.copyWith(
-            colorScheme: colorSchemeUpdater(_theme.lightTheme.colorScheme),
+            colorScheme: _updateColorScheme(
+              _theme.lightTheme.colorScheme,
+              label,
+              newColor,
+            ),
           ),
         );
       }
+
+      widget.onThemeChange(
+        _theme.name,
+        {
+          'lightPrimaryContainer': _theme.lightTheme.colorScheme.primaryContainer,
+          'lightOnPrimaryContainer': _theme.lightTheme.colorScheme.onPrimaryContainer,
+          'lightSecondaryContainer': _theme.lightTheme.colorScheme.secondaryContainer,
+          'lightOnSecondaryContainer': _theme.lightTheme.colorScheme.onSecondaryContainer,
+          'lightTertiaryContainer': _theme.lightTheme.colorScheme.tertiaryContainer,
+          'lightOnTertiaryContainer': _theme.lightTheme.colorScheme.onTertiaryContainer,
+          'darkPrimaryContainer': _theme.darkTheme.colorScheme.primaryContainer,
+          'darkOnPrimaryContainer': _theme.darkTheme.colorScheme.onPrimaryContainer,
+          'darkSecondaryContainer': _theme.darkTheme.colorScheme.secondaryContainer,
+          'darkOnSecondaryContainer': _theme.darkTheme.colorScheme.onSecondaryContainer,
+          'darkTertiaryContainer': _theme.darkTheme.colorScheme.tertiaryContainer,
+          'darkOnTertiaryContainer': _theme.darkTheme.colorScheme.onTertiaryContainer,
+        },
+      );
     });
+  }
+
+  ColorScheme _updateColorScheme(ColorScheme scheme, String label, Color newColor) {
+    switch (label) {
+      case 'Primary Container Color':
+        return scheme.copyWith(primaryContainer: newColor);
+      case 'On Primary Container Color':
+        return scheme.copyWith(onPrimaryContainer: newColor);
+      case 'Secondary Container Color':
+        return scheme.copyWith(secondaryContainer: newColor);
+      case 'On Secondary Container Color':
+        return scheme.copyWith(onSecondaryContainer: newColor);
+      case 'Tertiary Container Color':
+        return scheme.copyWith(tertiaryContainer: newColor);
+      case 'On Tertiary Container Color':
+        return scheme.copyWith(onTertiaryContainer: newColor);
+      default:
+        return scheme;
+    }
   }
 }

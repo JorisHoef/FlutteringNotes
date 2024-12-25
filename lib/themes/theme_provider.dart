@@ -41,44 +41,16 @@ class ThemeProvider extends ChangeNotifier {
 
   void customizeTheme({
     required String themeName,
-    Color? primary,
-    Color? secondary,
-    Color? tertiary,
-    Color? tertiaryContainer,
-    Color? surface,
-    Color? onPrimary,
-    Color? onSecondary,
-    Color? onSurface,
-    Color? primaryContainer,
-    Color? secondaryContainer,
-    Color? onPrimaryContainer,
-    Color? onSecondaryContainer,
-    Color? onTertiaryContainer,
-    TextTheme? textTheme,
+    required ColorScheme lightScheme,
+    required ColorScheme darkScheme,
   }) {
     final themeIndex = _availableThemes.indexWhere((theme) => theme.name == themeName);
     if (themeIndex != -1) {
       final theme = _availableThemes[themeIndex];
       final updatedTheme = ThemeModel(
         name: theme.name,
-        lightTheme: ThemeModel.buildLightTheme(
-          primaryContainer: primaryContainer ?? theme.lightTheme.colorScheme.primaryContainer,
-          secondaryContainer: secondaryContainer ?? theme.lightTheme.colorScheme.secondaryContainer,
-          tertiaryContainer: tertiaryContainer ?? theme.lightTheme.colorScheme.tertiaryContainer,
-          onPrimaryContainer: onPrimaryContainer ?? theme.lightTheme.colorScheme.onPrimaryContainer,
-          onSecondaryContainer: onSecondaryContainer ?? theme.lightTheme.colorScheme.onSecondaryContainer,
-          onTertiaryContainer: onTertiaryContainer ?? theme.lightTheme.colorScheme.onTertiaryContainer,
-          textTheme: textTheme ?? theme.lightTheme.textTheme,
-        ),
-        darkTheme: ThemeModel.buildDarkTheme(
-          primaryContainer: primaryContainer ?? theme.darkTheme.colorScheme.primaryContainer,
-          secondaryContainer: secondaryContainer ?? theme.darkTheme.colorScheme.secondaryContainer,
-          tertiaryContainer: tertiaryContainer ?? theme.darkTheme.colorScheme.tertiaryContainer,
-          onPrimaryContainer: onPrimaryContainer ?? theme.darkTheme.colorScheme.onPrimaryContainer,
-          onSecondaryContainer: onSecondaryContainer ?? theme.darkTheme.colorScheme.onSecondaryContainer,
-          onTertiaryContainer: onTertiaryContainer ?? theme.darkTheme.colorScheme.onTertiaryContainer,
-          textTheme: textTheme ?? theme.darkTheme.textTheme,
-        ),
+        lightTheme: theme.lightTheme.copyWith(colorScheme: lightScheme),
+        darkTheme: theme.darkTheme.copyWith(colorScheme: darkScheme),
       );
       _availableThemes[themeIndex] = updatedTheme;
       notifyListeners();
