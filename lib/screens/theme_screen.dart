@@ -141,11 +141,10 @@ class _ThemeScreenState extends State<ThemeScreen> {
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 return AlertDialog(
-                  title: Text('Select $label'),
+                  title: Text('Edit $label'),
                   content: SingleChildScrollView(
                     child: Column(
                       children: [
-                        // Use the helper method for the preview
                         _buildNestedContainerPreview(
                           primaryContainer: primaryContainer,
                           onPrimaryContainer: onPrimaryContainer,
@@ -155,7 +154,6 @@ class _ThemeScreenState extends State<ThemeScreen> {
                           onTertiaryContainer: onTertiaryContainer,
                         ),
                         SizedBox(height: 20),
-                        // Color Picker
                         ColorPicker(
                           pickerColor: tempColor,
                           onColorChanged: (color) {
@@ -214,7 +212,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: defaultPadding,
               child: Column(
                 children: [
                   _buildColorPicker('Primary Container Color', primaryContainer, (color) {
@@ -259,7 +257,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
             Divider(),
             // Main preview using the helper method
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: defaultPadding,
               child: _buildNestedContainerPreview(
                 primaryContainer: isDarkMode
                     ? currentTheme.darkTheme.colorScheme.primaryContainer
