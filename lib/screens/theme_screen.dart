@@ -103,24 +103,39 @@ class _ThemeScreenState extends State<ThemeScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  // Primary Container Color Picker
                   _buildColorPicker('Primary Container Color', primaryContainer, (color) {
                     setState(() {
                       primaryContainer = color;
                       _updateTheme();
                     });
                   }),
-                  // Secondary Container Color Picker
+                  _buildColorPicker('On Primary Container Color', onPrimaryContainer, (color) {
+                    setState(() {
+                      onPrimaryContainer = color;
+                      _updateTheme();
+                    });
+                  }),
                   _buildColorPicker('Secondary Container Color', secondaryContainer, (color) {
                     setState(() {
                       secondaryContainer = color;
                       _updateTheme();
                     });
                   }),
-                  // Tertiary Container Color Picker
+                  _buildColorPicker('On Secondary Container Color', onSecondaryContainer, (color) {
+                    setState(() {
+                      onSecondaryContainer = color;
+                      _updateTheme();
+                    });
+                  }),
                   _buildColorPicker('Tertiary Container Color', tertiaryContainer, (color) {
                     setState(() {
                       tertiaryContainer = color;
+                      _updateTheme();
+                    });
+                  }),
+                  _buildColorPicker('On Tertiary Container Color', onTertiaryContainer, (color) {
+                    setState(() {
+                      onTertiaryContainer = color;
                       _updateTheme();
                     });
                   }),
@@ -198,7 +213,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            Color tempColor = initialColor; // Temporary color for live preview
+            Color tempColor = initialColor;
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 return AlertDialog(
@@ -206,40 +221,36 @@ class _ThemeScreenState extends State<ThemeScreen> {
                   content: SingleChildScrollView(
                     child: Column(
                       children: [
-                        // Theme Preview (reuse from ThemeScreen)
+                        // Nested preview for Primary, Secondary, and Tertiary Containers
                         Container(
-                          padding: EdgeInsets.all(16),
-                          color: tempColor,
+                          padding: EdgeInsets.all(8),
+                          color: primaryContainer,
                           child: Column(
                             children: [
                               Text(
-                                'Preview',
-                                style: TextStyle(
-                                  color: useWhiteForeground(tempColor)
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                'Primary Container',
+                                style: TextStyle(color: onPrimaryContainer),
                               ),
-                              ListTile(
-                                title: Text(
-                                  'Primary Text Color',
-                                  style: TextStyle(
-                                    color: useWhiteForeground(tempColor)
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                ),
-                              ),
-                              ListTile(
-                                title: Text(
-                                  'Secondary Text Color',
-                                  style: TextStyle(
-                                    color: useWhiteForeground(tempColor)
-                                        ? Colors.white70
-                                        : Colors.black87,
-                                  ),
+                              Container(
+                                margin: EdgeInsets.all(8),
+                                padding: EdgeInsets.all(8),
+                                color: secondaryContainer,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Secondary Container',
+                                      style: TextStyle(color: onSecondaryContainer),
+                                    ),
+                                    Container(
+                                      margin: EdgeInsets.all(8),
+                                      padding: EdgeInsets.all(8),
+                                      color: tertiaryContainer,
+                                      child: Text(
+                                        'Tertiary Container',
+                                        style: TextStyle(color: onTertiaryContainer),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -247,16 +258,16 @@ class _ThemeScreenState extends State<ThemeScreen> {
                         ),
                         SizedBox(height: 20),
                         // Color Picker
-                        SlidePicker(
+                        ColorPicker(
                           pickerColor: tempColor,
                           onColorChanged: (color) {
                             setState(() {
                               tempColor = color; // Update temporary color
                             });
-                            onColorChanged(color); // Update live color
+                            onColorChanged(color); // Pass the color back
                           },
                           enableAlpha: true,
-                          showIndicator: true,
+                         // showIndicator: true,
                         ),
                       ],
                     ),
