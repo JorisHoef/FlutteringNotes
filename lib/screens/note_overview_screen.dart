@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../constants/app_strings.dart';
 import '../constants/layout_constants.dart';
-import '../constants/theme_constants.dart';
 import '../models/note.dart';
 import '../states/note_state.dart';
 import '../widgets/listTile_withMenu.dart';
@@ -22,10 +21,11 @@ class NoteOverviewScreen extends StatelessWidget {
             SliverAppBar(
               pinned: true,
               expandedHeight: 250.0,
-              title:  Text(
+              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              title: Text(
                 AppStrings.overViewNoteText,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
                 ),
               ),
               flexibleSpace: FlexibleSpaceBar(
@@ -37,37 +37,50 @@ class NoteOverviewScreen extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                     Positioned(
-                      bottom: defaultPadding.bottom-defaultPadding.bottom,
-                        child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Padding(
-                            padding: defaultPadding,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Look at your notes',
-                                  style: TextStyle(
-                                    fontSize: ThemeConstants.fontSizeMedium,
-                                    fontWeight: FontWeight.normal,
-                                    color: Theme.of(context).colorScheme.onSurface,
-                                  ),
+                      bottom: defaultPadding.bottom - defaultPadding.bottom,
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                          padding: defaultPadding,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Look at your notes',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
                                 ),
-                                Text(
-                                  'They are very pretty',
-                                  style: TextStyle(
-                                    fontSize: ThemeConstants.fontSizeLarge,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).colorScheme.onSurface,
-                                  ),
+                              ),
+                              Text(
+                                'They are very pretty',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                  fontWeight: FontWeight.w600,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
+                      ),
                     ),
                   ],
                 ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Divider(
+                height: 1,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
             ),
             SliverList(
@@ -85,18 +98,32 @@ class NoteOverviewScreen extends StatelessWidget {
                         ),
                       );
                     },
+                    titleStyle: Theme.of(context).textTheme.bodyMedium,
+                    subTitleStyle: Theme.of(context).textTheme.bodySmall,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NoteWritingScreen(note),
+                        ),
+                      );
+                    },
                     onDelete: () {
                       notesState.deleteNote(note);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                              '${note.title} ${AppStrings.deletedText}'
+                              '${note.title} ${AppStrings.deletedText}',
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: Theme.of(context).colorScheme.onPrimaryContainer
+                              ),
                           ),
+                          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                         ),
                       );
-                    },
+                      },
                   );
-                },
+                  },
                 childCount: notesState.notes.length,
               ),
             ),
@@ -119,9 +146,12 @@ class NoteOverviewScreen extends StatelessWidget {
             ),
           );
         },
-        child: Icon(Icons.add),
         tooltip: AppStrings.addNoteText,
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        child: Icon(
+          Icons.add,
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
+        ),
       ),
     );
   }

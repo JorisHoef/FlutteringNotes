@@ -11,89 +11,64 @@ class ThemeModel {
     required this.darkTheme,
   });
 
-  factory ThemeModel.fromJson(Map<String, dynamic> json) {
+  ThemeModel copyWith({
+    ThemeData? lightTheme,
+    ThemeData? darkTheme,
+  }) {
     return ThemeModel(
-      name: json['name'],
-      lightTheme: buildLightTheme(
-        primary: Color(int.parse(json['primaryColor'])),
-        secondary: Color(int.parse(json['secondaryColor'])),
-        tertiary: Color(int.parse(json['tertiaryColor'])),
-        tertiaryContainer: Color(int.parse(json['tertiaryContainerColor'])),
-        surface: Color(int.parse(json['surfaceColor'])),
-        onPrimary: Color(int.parse(json['onPrimaryColor'])),
-        onSecondary: Color(int.parse(json['onSecondaryColor'])),
-        onSurface: Color(int.parse(json['onSurfaceColor'])),
-      ),
-      darkTheme: buildDarkTheme(
-        primary: Color(int.parse(json['primaryColor'])),
-        secondary: Color(int.parse(json['secondaryColor'])),
-        tertiary: Color(int.parse(json['tertiaryColor'])),
-        tertiaryContainer: Color(int.parse(json['tertiaryContainerColor'])),
-        surface: Color(int.parse(json['surfaceColor'])),
-        onPrimary: Color(int.parse(json['onPrimaryColor'])),
-        onSecondary: Color(int.parse(json['onSecondaryColor'])),
-        onSurface: Color(int.parse(json['onSurfaceColor'])),
-      ),
+      name: name,
+      lightTheme: lightTheme ?? this.lightTheme,
+      darkTheme: darkTheme ?? this.darkTheme,
     );
   }
 
   static ThemeData buildLightTheme({
-    required Color primary,
-    required Color secondary,
-    required Color tertiary,
+    required Color onPrimaryContainer,
+    required Color onSecondaryContainer,
+    required Color onTertiaryContainer,
     required Color tertiaryContainer,
-    required Color surface,
-    required Color onPrimary,
-    required Color onSecondary,
-    required Color onSurface,
+    required Color primaryContainer,
+    required Color secondaryContainer,
+    required TextTheme textTheme,
   }) {
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme(
-        primary: primary,
-        primaryContainer: primary.withOpacity(0.7),
-        secondary: secondary,
-        secondaryContainer: secondary.withOpacity(0.7),
-        tertiary: tertiary,
+    return ThemeData.light().copyWith(
+      colorScheme: ColorScheme.light(
+        primary: onPrimaryContainer,
+        secondary: onSecondaryContainer,
+        tertiary: onTertiaryContainer,
+        primaryContainer: primaryContainer,
+        secondaryContainer: secondaryContainer,
         tertiaryContainer: tertiaryContainer,
-        surface: surface,
-        error: Colors.red,
-        onPrimary: onPrimary,
-        onSecondary: onSecondary,
-        onSurface: onSurface,
-        onError: Colors.white,
-        brightness: Brightness.light,
+        onPrimaryContainer: onPrimaryContainer,
+        onSecondaryContainer: onSecondaryContainer,
+        onTertiaryContainer: onTertiaryContainer,
       ),
+      textTheme: textTheme,
     );
   }
 
   static ThemeData buildDarkTheme({
-    required Color primary,
-    required Color secondary,
-    required Color tertiary,
+    required Color onPrimaryContainer,
+    required Color onSecondaryContainer,
+    required Color onTertiaryContainer,
     required Color tertiaryContainer,
-    required Color surface,
-    required Color onPrimary,
-    required Color onSecondary,
-    required Color onSurface,
+    required Color primaryContainer,
+    required Color secondaryContainer,
+    required TextTheme textTheme,
   }) {
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme(
-        primary: primary,
-        primaryContainer: primary.withOpacity(0.5),
-        secondary: secondary,
-        secondaryContainer: secondary.withOpacity(0.5),
-        tertiary: tertiary,
+    return ThemeData.dark().copyWith(
+      colorScheme: ColorScheme.dark(
+        primary: onPrimaryContainer,
+        secondary: onSecondaryContainer,
+        tertiary: onTertiaryContainer,
+        primaryContainer: primaryContainer,
+        secondaryContainer: secondaryContainer,
         tertiaryContainer: tertiaryContainer,
-        surface: surface,
-        error: Colors.red,
-        onPrimary: onPrimary,
-        onSecondary: onSecondary,
-        onSurface: onSurface,
-        onError: Colors.black,
-        brightness: Brightness.dark,
+        onPrimaryContainer: onPrimaryContainer,
+        onSecondaryContainer: onSecondaryContainer,
+        onTertiaryContainer: onTertiaryContainer,
       ),
+      textTheme: textTheme,
     );
   }
 }

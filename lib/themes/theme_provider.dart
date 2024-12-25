@@ -5,9 +5,11 @@ import 'theme_manager.dart';
 
 class ThemeProvider extends ChangeNotifier {
   final List<ThemeModel> _availableThemes = predefinedThemes();
-
   late ThemeModel _currentTheme;
   bool _isDarkMode = false;
+
+  bool get isDarkMode => _isDarkMode;
+  ThemeModel get currentTheme => _currentTheme;
 
   ThemeProvider() {
     _currentTheme = _availableThemes.first;
@@ -39,40 +41,16 @@ class ThemeProvider extends ChangeNotifier {
 
   void customizeTheme({
     required String themeName,
-    Color? primary,
-    Color? secondary,
-    Color? tertiary,
-    Color? tertiaryContainer,
-    Color? surface,
-    Color? onPrimary,
-    Color? onSecondary,
-    Color? onSurface,
+    required ColorScheme lightScheme,
+    required ColorScheme darkScheme,
   }) {
     final themeIndex = _availableThemes.indexWhere((theme) => theme.name == themeName);
     if (themeIndex != -1) {
       final theme = _availableThemes[themeIndex];
       final updatedTheme = ThemeModel(
         name: theme.name,
-        lightTheme: ThemeModel.buildLightTheme(
-          primary: primary ?? theme.lightTheme.colorScheme.primary,
-          secondary: secondary ?? theme.lightTheme.colorScheme.secondary,
-          tertiary: tertiary ?? theme.lightTheme.colorScheme.tertiary,
-          tertiaryContainer: tertiaryContainer ?? theme.lightTheme.colorScheme.tertiaryContainer,
-          surface: surface ?? theme.lightTheme.colorScheme.surface,
-          onPrimary: onPrimary ?? theme.lightTheme.colorScheme.onPrimary,
-          onSecondary: onSecondary ?? theme.lightTheme.colorScheme.onSecondary,
-          onSurface: onSurface ?? theme.lightTheme.colorScheme.onSurface,
-        ),
-        darkTheme: ThemeModel.buildDarkTheme(
-          primary: primary ?? theme.darkTheme.colorScheme.primary,
-          secondary: secondary ?? theme.darkTheme.colorScheme.secondary,
-          tertiary: tertiary ?? theme.darkTheme.colorScheme.tertiary,
-          tertiaryContainer: tertiaryContainer ?? theme.darkTheme.colorScheme.tertiaryContainer,
-          surface: surface ?? theme.darkTheme.colorScheme.surface,
-          onPrimary: onPrimary ?? theme.darkTheme.colorScheme.onPrimary,
-          onSecondary: onSecondary ?? theme.darkTheme.colorScheme.onSecondary,
-          onSurface: onSurface ?? theme.darkTheme.colorScheme.onSurface,
-        ),
+        lightTheme: theme.lightTheme.copyWith(colorScheme: lightScheme),
+        darkTheme: theme.darkTheme.copyWith(colorScheme: darkScheme),
       );
       _availableThemes[themeIndex] = updatedTheme;
       notifyListeners();
