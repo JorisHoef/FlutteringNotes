@@ -8,6 +8,9 @@ class ThemeProvider extends ChangeNotifier {
   late ThemeModel _currentTheme;
   bool _isDarkMode = false;
 
+  bool get isDarkMode => _isDarkMode;
+  ThemeModel get currentTheme => _currentTheme;
+
   ThemeProvider() {
     _currentTheme = _availableThemes.first;
   }

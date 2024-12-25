@@ -89,6 +89,7 @@ class OptionsScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => ThemeScreen(
+                          initialTheme: theme,
                         ),
                       ),
                     ),

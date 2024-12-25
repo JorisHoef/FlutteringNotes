@@ -11,6 +11,17 @@ class ThemeModel {
     required this.darkTheme,
   });
 
+  ThemeModel copyWith({
+    ThemeData? lightTheme,
+    ThemeData? darkTheme,
+  }) {
+    return ThemeModel(
+      name: this.name,
+      lightTheme: lightTheme ?? this.lightTheme,
+      darkTheme: darkTheme ?? this.darkTheme,
+    );
+  }
+
   static ThemeData buildLightTheme({
     required Color onPrimaryContainer,
     required Color onSecondaryContainer,
