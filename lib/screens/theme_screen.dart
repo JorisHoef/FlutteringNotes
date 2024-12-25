@@ -291,7 +291,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
         children: [
           SizedBox(height: 16),
           Text(
-            _getLabel(AppKeys.primaryContainer),
+            _getLabel(AppKeys.onPrimaryContainer),
             style: TextStyle(
               color: _getColor(AppKeys.onPrimaryContainer),
               fontSize: 20,
@@ -319,7 +319,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    _getLabel(AppKeys.secondaryContainer),
+                    _getLabel(AppKeys.onSecondaryContainer),
                     style: TextStyle(
                       color: _getColor(AppKeys.onSecondaryContainer),
                       fontSize: 18,
@@ -345,7 +345,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                       ),
                       child: Center(
                         child: Text(
-                          _getLabel(AppKeys.tertiaryContainer),
+                          _getLabel(AppKeys.onTertiaryContainer),
                           style: TextStyle(
                             color: _getColor(AppKeys.onTertiaryContainer),
                             fontSize: 16,
