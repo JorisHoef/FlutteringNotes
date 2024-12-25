@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/provider.dart';
 
+import '../constants/app_strings.dart';
 import '../constants/layout_constants.dart';
 import '../themes/theme_manager.dart';
 import '../themes/theme_provider.dart';
@@ -79,7 +80,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
             },
           ),
           title: Text(
-            'Theme Preview',
+            AppStrings.themePreview,
             style: textTheme.bodyLarge?.copyWith(
               color: colorScheme.onPrimaryContainer,
             ),
@@ -175,9 +176,10 @@ class _ThemeScreenState extends State<ThemeScreen> {
             return StatefulBuilder(
               builder: (context, setState) {
                 return AlertDialog(
-                  title: Text(
-                    'Edit $label',
-                    style: textTheme.titleMedium?.copyWith(color: colorScheme.onPrimaryContainer),
+                  title: Text('${AppStrings.editText} $label',
+                    style: textTheme.titleMedium?.copyWith(
+                        color: colorScheme.onPrimaryContainer
+                    ),
                   ),
                   content: SingleChildScrollView(
                     child: Column(
@@ -209,11 +211,19 @@ class _ThemeScreenState extends State<ThemeScreen> {
                   ),
                   actions: [
                     TextButton(
-                      child: const Text('Cancel'),
+                      child: Text(AppStrings.cancelText,
+                        style: textTheme.titleSmall?.copyWith(
+                            color: colorScheme.onPrimaryContainer
+                        ),
+                      ),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                     TextButton(
-                      child: const Text('Select'),
+                      child: Text(AppStrings.applyText,
+                        style: textTheme.titleSmall?.copyWith(
+                            color: colorScheme.onPrimaryContainer
+                        ),
+                      ),
                       onPressed: () {
                         onColorChanged(tempColor);
                         Navigator.of(context).pop();

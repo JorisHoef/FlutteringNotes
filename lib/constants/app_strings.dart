@@ -9,6 +9,8 @@ class AppStrings {
   static const String deleteNoteText = "Delete Note";
   static const String noteTitlePlaceholder = "Enter Title...";
   static const String noteTextPlaceholder = "Start writing your note...";
+  static const String cancelText = "Cancel";
+  static const String applyText = "Apply";
 
   // Edit/Delete Actions
   static const String editText = "Edit";
@@ -18,4 +20,5 @@ class AppStrings {
   // Theme
   static const String toggleThemeText = "Toggle Dark/Light Theme";
   static const String selectThemeText = "Select Theme";
+  static const String themePreview = 'Theme Preview';
 }
