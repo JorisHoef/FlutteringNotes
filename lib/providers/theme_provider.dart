@@ -54,10 +54,10 @@ class ThemeProvider extends ChangeNotifier {
       orElse: () => _currentTheme,
     );
 
-    // Prevent deleting the currently selected theme
-    if (_currentTheme == themeToDelete) {
-      return;
-    }
+    // // Prevent deleting the currently selected theme
+    // if (_currentTheme == themeToDelete) {
+    //   return;
+    // }
 
     _availableThemes.removeWhere((theme) => theme.name == themeName);
     await _themeRepository.deleteTheme(themeName); // Remove from storage

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/app_strings.dart';
 import '../constants/navigation_constants.dart';
@@ -30,6 +31,18 @@ class OptionsScreen extends StatelessWidget {
               color: themeProvider.themeData.colorScheme.onPrimaryContainer,
             ),
           ),
+          actions: [ // Add the action section in the AppBar
+            IconButton(
+              icon: Icon(
+                Icons.delete, // Icon representing delete action
+                color: themeProvider.themeData.colorScheme.onPrimaryContainer,
+              ),
+              tooltip: AppStrings.deletePreferencesText, // Tooltip for the button
+              onPressed: () {
+                _showDeleteConfirmationDialog(context);
+              },
+            ),
+          ],
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(50),
             child: Container(
@@ -187,5 +200,44 @@ class OptionsScreen extends StatelessWidget {
       background: fallbackScheme.background, // Set fallback background
       onBackground: fallbackScheme.onBackground, // Set fallback onBackground
     );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppStrings.deletePreferencesTitle),
+          content: Text(AppStrings.deletePreferencesConfirmation),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(), // Close the dialog
+              child: Text(AppStrings.cancel),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(); // Close the dialog
+                await clearAllSharedPreferences(); // Clear preferences
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(AppStrings.preferencesDeletedSuccess),
+                  ),
+                );
+              },
+              child: Text(
+                AppStrings.confirm,
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> clearAllSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    print('All shared preferences cleared!');
   }
 }

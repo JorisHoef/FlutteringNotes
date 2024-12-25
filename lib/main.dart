@@ -9,7 +9,7 @@ import 'storage/local_note_repository.dart';
 import 'providers/theme_provider.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Required for async operations before app starts
+  WidgetsFlutterBinding.ensureInitialized();
 
   runApp(
     MultiProvider(
@@ -20,7 +20,7 @@ void main() async {
         ),
         // ThemeProvider (initialization handled internally)
         ChangeNotifierProvider(
-          create: (context) => ThemeProvider(LocalThemeRepository()), // No// explicit// `loadThemeFromPrefs` here
+          create: (context) => ThemeProvider(LocalThemeRepository()),
         ),
       ],
       child: const MyApp(),

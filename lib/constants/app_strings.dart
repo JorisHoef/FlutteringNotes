@@ -41,4 +41,11 @@ class AppStrings {
   static const String lightMode = 'Light Mode';
   static const String containerPreview = 'Container Preview';
   static const String selectColor = 'Select Color';
+
+  static const String deletePreferencesText = 'Delete Preferences';
+  static const String deletePreferencesTitle = 'Delete All Preferences';
+  static const String deletePreferencesConfirmation = 'Are you sure you want to delete all saved preferences? This action cannot be undone.';
+  static const String preferencesDeletedSuccess = 'All preferences have been successfully deleted.';
+  static const String confirm = 'Confirm';
+  static const String cancel = 'Cancel';
 }
