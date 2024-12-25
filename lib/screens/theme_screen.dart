@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttering_notes/constants/layout_constants.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
@@ -77,6 +78,121 @@ class _ThemeScreenState extends State<ThemeScreen> {
     });
   }
 
+  Widget _buildNestedContainerPreview({
+    required Color primaryContainer,
+    required Color onPrimaryContainer,
+    required Color secondaryContainer,
+    required Color onSecondaryContainer,
+    required Color tertiaryContainer,
+    required Color onTertiaryContainer,
+  }) {
+    return Container(
+      padding: defaultPadding,
+      color: primaryContainer,
+      child: Column(
+        children: [
+          Text(
+            'Primary Container',
+            style: TextStyle(color: onPrimaryContainer),
+          ),
+          Container(
+            margin: defaultPadding,
+            padding: defaultPadding,
+            color: secondaryContainer,
+            child: Column(
+              children: [
+                Text(
+                  'Secondary Container',
+                  style: TextStyle(color: onSecondaryContainer),
+                ),
+                Container(
+                  margin: defaultPadding,
+                  padding: defaultPadding,
+                  color: tertiaryContainer,
+                  child: Text(
+                    'Tertiary Container',
+                    style: TextStyle(color: onTertiaryContainer),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildColorPicker(String label, Color initialColor, ValueChanged<Color> onColorChanged) {
+    return ListTile(
+      title: Text(label),
+      trailing: Container(
+        width: 30,
+        height: 30,
+        decoration: BoxDecoration(
+          color: initialColor,
+          shape: BoxShape.circle,
+        ),
+      ),
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            Color tempColor = initialColor;
+            return StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+                return AlertDialog(
+                  title: Text('Select $label'),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        // Use the helper method for the preview
+                        _buildNestedContainerPreview(
+                          primaryContainer: primaryContainer,
+                          onPrimaryContainer: onPrimaryContainer,
+                          secondaryContainer: secondaryContainer,
+                          onSecondaryContainer: onSecondaryContainer,
+                          tertiaryContainer: tertiaryContainer,
+                          onTertiaryContainer: onTertiaryContainer,
+                        ),
+                        SizedBox(height: 20),
+                        // Color Picker
+                        ColorPicker(
+                          pickerColor: tempColor,
+                          onColorChanged: (color) {
+                            setState(() {
+                              tempColor = color;
+                            });
+                            onColorChanged(color);
+                          },
+                          enableAlpha: true,
+                          pickerAreaHeightPercent: 0.5,
+                        ),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: Text('Select'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var themeProvider = context.watch<ThemeProvider>();
@@ -88,7 +204,6 @@ class _ThemeScreenState extends State<ThemeScreen> {
             ? currentTheme.darkTheme.colorScheme.primaryContainer
             : currentTheme.lightTheme.colorScheme.primaryContainer,
         actions: [
-          // Button to toggle between light and dark themes
           IconButton(
             icon: Icon(isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
             onPressed: _toggleThemeMode,
@@ -98,7 +213,6 @@ class _ThemeScreenState extends State<ThemeScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Theme Color Pickers
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -143,155 +257,33 @@ class _ThemeScreenState extends State<ThemeScreen> {
               ),
             ),
             Divider(),
-            // Preview the theme
+            // Main preview using the helper method
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Container(
-                padding: EdgeInsets.all(16),
-                color: isDarkMode
+              child: _buildNestedContainerPreview(
+                primaryContainer: isDarkMode
                     ? currentTheme.darkTheme.colorScheme.primaryContainer
                     : currentTheme.lightTheme.colorScheme.primaryContainer,
-                child: Column(
-                  children: [
-                    Text(
-                      'Theme Preview',
-                      style: isDarkMode
-                          ? currentTheme.darkTheme.textTheme.bodyMedium?.copyWith(
-                        color: currentTheme.darkTheme.colorScheme.onPrimaryContainer,
-                      )
-                          : currentTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                        color: currentTheme.lightTheme.colorScheme.onPrimaryContainer,
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(
-                        'Primary Text Color',
-                        style: isDarkMode
-                            ? currentTheme.darkTheme.textTheme.bodySmall?.copyWith(
-                          color: currentTheme.darkTheme.colorScheme.onPrimaryContainer,
-                        )
-                            : currentTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                          color: currentTheme.lightTheme.colorScheme.onPrimaryContainer,
-                        ),
-                      ),
-                    ),
-                    ListTile(
-                      title: Text(
-                        'Secondary Text Color',
-                        style: isDarkMode
-                            ? currentTheme.darkTheme.textTheme.bodySmall?.copyWith(
-                          color: currentTheme.darkTheme.colorScheme.onSecondaryContainer,
-                        )
-                            : currentTheme.lightTheme.textTheme.bodySmall?.copyWith(
-                          color: currentTheme.lightTheme.colorScheme.onSecondaryContainer,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                onPrimaryContainer: isDarkMode
+                    ? currentTheme.darkTheme.colorScheme.onPrimaryContainer
+                    : currentTheme.lightTheme.colorScheme.onPrimaryContainer,
+                secondaryContainer: isDarkMode
+                    ? currentTheme.darkTheme.colorScheme.secondaryContainer
+                    : currentTheme.lightTheme.colorScheme.secondaryContainer,
+                onSecondaryContainer: isDarkMode
+                    ? currentTheme.darkTheme.colorScheme.onSecondaryContainer
+                    : currentTheme.lightTheme.colorScheme.onSecondaryContainer,
+                tertiaryContainer: isDarkMode
+                    ? currentTheme.darkTheme.colorScheme.tertiaryContainer
+                    : currentTheme.lightTheme.colorScheme.tertiaryContainer,
+                onTertiaryContainer: isDarkMode
+                    ? currentTheme.darkTheme.colorScheme.onTertiaryContainer
+                    : currentTheme.lightTheme.colorScheme.onTertiaryContainer,
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  // Helper method to build the color pickers
-  Widget _buildColorPicker(String label, Color initialColor, ValueChanged<Color> onColorChanged) {
-    return ListTile(
-      title: Text(label),
-      trailing: Container(
-        width: 30,
-        height: 30,
-        decoration: BoxDecoration(
-          color: initialColor,
-          shape: BoxShape.circle,
-        ),
-      ),
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            Color tempColor = initialColor;
-            return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
-                return AlertDialog(
-                  title: Text('Select $label'),
-                  content: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        // Nested preview for Primary, Secondary, and Tertiary Containers
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          color: primaryContainer,
-                          child: Column(
-                            children: [
-                              Text(
-                                'Primary Container',
-                                style: TextStyle(color: onPrimaryContainer),
-                              ),
-                              Container(
-                                margin: EdgeInsets.all(8),
-                                padding: EdgeInsets.all(8),
-                                color: secondaryContainer,
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      'Secondary Container',
-                                      style: TextStyle(color: onSecondaryContainer),
-                                    ),
-                                    Container(
-                                      margin: EdgeInsets.all(8),
-                                      padding: EdgeInsets.all(8),
-                                      color: tertiaryContainer,
-                                      child: Text(
-                                        'Tertiary Container',
-                                        style: TextStyle(color: onTertiaryContainer),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        // Color Picker
-                        ColorPicker(
-                          pickerColor: tempColor,
-                          onColorChanged: (color) {
-                            setState(() {
-                              tempColor = color; // Update temporary color
-                            });
-                            onColorChanged(color); // Pass the color back
-                          },
-                          enableAlpha: true,
-                         // showIndicator: true,
-                        ),
-                      ],
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      child: Text('Cancel'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    TextButton(
-                      child: Text('Select'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        );
-      },
     );
   }
 }
