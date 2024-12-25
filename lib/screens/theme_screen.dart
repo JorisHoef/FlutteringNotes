@@ -118,6 +118,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
       onTap: () {
         Color tempColor = initialColor;
 
+        // Open a popup for the color picker
         showDialog(
           context: context,
           builder: (context) {
@@ -132,15 +133,22 @@ class _ThemeScreenState extends State<ThemeScreen> {
                           padding: const EdgeInsets.only(bottom: 20),
                           child: Container(
                             padding: EdgeInsets.all(16),
-                            color: tempColor,
+                            height: 370,
                             child: _buildNestedContainerPreview(),
-                            height: 359,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: tempColor, width: 2),
+                            ),
                           ),
                         ),
                         ColorPicker(
                           pickerColor: tempColor,
                           onColorChanged: (newColor) {
-                            setState(() => tempColor = newColor);
+                            setState(() {
+                              tempColor = newColor;
+
+                              // Update tempColors dynamically for live updates
+                              tempColors['${isDarkMode ? 'dark' : 'light'}$label'] = newColor;
+                            });
                           },
                           enableAlpha: true,
                           pickerAreaHeightPercent: 0.5,
@@ -150,13 +158,13 @@ class _ThemeScreenState extends State<ThemeScreen> {
                   ),
                   actions: [
                     TextButton(
-                      child: Text('Cancel'),
+                      child: const Text('Cancel'),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                     TextButton(
-                      child: Text('Select'),
+                      child: const Text('Select'),
                       onPressed: () {
-                        onColorChanged(tempColor);
+                        onColorChanged(tempColor); // Commit the final changes
                         Navigator.of(context).pop();
                       },
                     ),
@@ -171,6 +179,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
   }
 
   Widget _buildNestedContainerPreview() {
+    // Constructs the container preview dynamically from tempColors
     return Container(
       color: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer'],
       child: Column(
