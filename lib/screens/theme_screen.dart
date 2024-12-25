@@ -57,7 +57,6 @@ class _ThemeScreenState extends State<ThemeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = isDarkMode ? _theme.darkTheme.colorScheme : _theme.lightTheme.colorScheme;
     final textTheme = isDarkMode ? _theme.darkTheme.textTheme : _theme.lightTheme.textTheme;
 
     return WillPopScope(
@@ -82,7 +81,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
           title: Text(
             AppStrings.themePreview,
             style: textTheme.bodyLarge?.copyWith(
-              color: colorScheme.onPrimaryContainer,
+              color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer'],
             ),
           ),
           backgroundColor: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer']!,
@@ -109,7 +108,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                 child: _buildNestedContainerPreview(context),
               ),
               Divider(
-                color: colorScheme.onPrimaryContainer,
+                color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer']!,
               ),
               _buildAllColorPickers(context),
             ],
@@ -158,7 +157,10 @@ class _ThemeScreenState extends State<ThemeScreen> {
     return ListTile(
       title: Text(
         label,
-        style: textTheme.bodyMedium?.copyWith(color: colorScheme.onPrimaryContainer),
+        style: TextStyle(
+          color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer'],
+          fontSize: textTheme.bodyMedium?.fontSize,
+        ),
       ),
       trailing: Container(
         width: 30,
@@ -169,37 +171,42 @@ class _ThemeScreenState extends State<ThemeScreen> {
         ),
       ),
       onTap: () {
-        Color tempColor = initialColor;
         showDialog(
           context: context,
           builder: (context) {
             return StatefulBuilder(
               builder: (context, setState) {
                 return AlertDialog(
-                  title: Text('${AppStrings.editText} $label',
-                    style: textTheme.titleMedium?.copyWith(
-                        color: colorScheme.onPrimaryContainer
+                  backgroundColor: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer'],
+                  title: Text(
+                    '${AppStrings.editText} $label',
+                    style: TextStyle(
+                      color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer'],
+                      fontSize: textTheme.titleMedium?.fontSize,
+                      fontWeight: textTheme.titleMedium?.fontWeight,
                     ),
                   ),
                   content: SingleChildScrollView(
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
+                          padding: const EdgeInsets.only(bottom: 20.0),
                           child: Container(
-                            padding: EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(16.0),
                             height: 370,
-                            child: _buildNestedContainerPreview(context),
                             decoration: BoxDecoration(
-                              border: Border.all(color: tempColor, width: 2),
+                              border: Border.all(
+                                color: tempColors['${isDarkMode ? 'dark' : 'light'}$label'] ?? initialColor,
+                                width: 2,
+                              ),
                             ),
+                            child: _buildNestedContainerPreview(context),
                           ),
                         ),
                         ColorPicker(
-                          pickerColor: tempColor,
+                          pickerColor: tempColors['${isDarkMode ? 'dark' : 'light'}$label'] ?? initialColor,
                           onColorChanged: (newColor) {
                             setState(() {
-                              tempColor = newColor;
                               tempColors['${isDarkMode ? 'dark' : 'light'}$label'] = newColor;
                             });
                           },
@@ -211,21 +218,23 @@ class _ThemeScreenState extends State<ThemeScreen> {
                   ),
                   actions: [
                     TextButton(
-                      child: Text(AppStrings.cancelText,
-                        style: textTheme.titleSmall?.copyWith(
-                            color: colorScheme.onPrimaryContainer
+                      child: Text(
+                        AppStrings.cancelText,
+                        style: TextStyle(
+                          color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer'],
                         ),
                       ),
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                     TextButton(
-                      child: Text(AppStrings.applyText,
-                        style: textTheme.titleSmall?.copyWith(
-                            color: colorScheme.onPrimaryContainer
+                      child: Text(
+                        AppStrings.applyText,
+                        style: TextStyle(
+                          color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer'],
                         ),
                       ),
                       onPressed: () {
-                        onColorChanged(tempColor);
+                        onColorChanged(tempColors['${isDarkMode ? 'dark' : 'light'}$label'] ?? initialColor);
                         Navigator.of(context).pop();
                       },
                     ),
@@ -325,10 +334,6 @@ class _ThemeScreenState extends State<ThemeScreen> {
 
   @override
   void dispose() {
-    // widget.onThemeChange(
-    //   _theme.name,
-    //   tempColors,
-    // );
     super.dispose();
   }
 }
