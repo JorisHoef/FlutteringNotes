@@ -14,7 +14,7 @@ class CustomListTile extends StatelessWidget {
   final TextStyle? textStyleSubTitle;
 
   const CustomListTile({
-    Key? key,
+    super.key,
     required this.title,
     this.subTitle,
     required this.onTapCallback,
@@ -23,7 +23,7 @@ class CustomListTile extends StatelessWidget {
     this.leadingWidget,
     this.textStyleTitle,
     this.textStyleSubTitle,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

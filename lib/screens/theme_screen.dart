@@ -25,10 +25,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Use the correct theme based on the current mode (light or dark)
     final themeData = isDarkMode ? _theme.darkTheme : _theme.lightTheme;
-
-    // Get color values from the color scheme of the active theme
     final colorScheme = themeData.colorScheme;
 
     final primaryContainer = colorScheme.primaryContainer;
@@ -111,24 +108,6 @@ class _ThemeScreenState extends State<ThemeScreen> {
     );
   }
 
-  void _updateThemeColor(bool isDarkMode, ColorScheme Function(ColorScheme) colorSchemeUpdater) {
-    setState(() {
-      if (isDarkMode) {
-        _theme = _theme.copyWith(
-          darkTheme: _theme.darkTheme.copyWith(
-            colorScheme: colorSchemeUpdater(_theme.darkTheme.colorScheme),
-          ),
-        );
-      } else {
-        _theme = _theme.copyWith(
-          lightTheme: _theme.lightTheme.copyWith(
-            colorScheme: colorSchemeUpdater(_theme.lightTheme.colorScheme),
-          ),
-        );
-      }
-    });
-  }
-
   Widget _buildNestedContainerPreview({
     required Color primaryContainer,
     required Color onPrimaryContainer,
@@ -137,38 +116,46 @@ class _ThemeScreenState extends State<ThemeScreen> {
     required Color tertiaryContainer,
     required Color onTertiaryContainer,
   }) {
-    return Container(
-      padding: defaultPadding,
-      color: primaryContainer,
-      child: Column(
-        children: [
-          Text(
-            'Primary Container',
-            style: TextStyle(color: onPrimaryContainer),
-          ),
-          Container(
-            margin: defaultPadding,
-            padding: defaultPadding,
-            color: secondaryContainer,
-            child: Column(
-              children: [
-                Text(
-                  'Secondary Container',
-                  style: TextStyle(color: onSecondaryContainer),
-                ),
-                Container(
-                  margin: defaultPadding,
-                  padding: defaultPadding,
-                  color: tertiaryContainer,
-                  child: Text(
-                    'Tertiary Container',
-                    style: TextStyle(color: onTertiaryContainer),
-                  ),
-                ),
-              ],
+    return SizedBox(
+      width: double.infinity,
+      child: Container(
+        padding: defaultPadding,
+        color: primaryContainer,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Primary Container',
+              style: TextStyle(color: onPrimaryContainer),
+              textAlign: TextAlign.center,
             ),
-          ),
-        ],
+            Container(
+              margin: defaultPadding,
+              padding: defaultPadding,
+              color: secondaryContainer,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Secondary Container',
+                    style: TextStyle(color: onSecondaryContainer),
+                    textAlign: TextAlign.center,
+                  ),
+                  Container(
+                    margin: defaultPadding,
+                    padding: defaultPadding,
+                    color: tertiaryContainer,
+                    child: Text(
+                      'Tertiary Container',
+                      style: TextStyle(color: onTertiaryContainer),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -185,13 +172,14 @@ class _ThemeScreenState extends State<ThemeScreen> {
         ),
       ),
       onTap: () {
+        Color tempColor = initialColor;
+
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 final themeData = isDarkMode ? _theme.darkTheme : _theme.lightTheme;
-                final colorScheme = themeData.colorScheme;
 
                 return AlertDialog(
                   title: Text('Edit $label'),
@@ -199,20 +187,31 @@ class _ThemeScreenState extends State<ThemeScreen> {
                     child: Column(
                       children: [
                         _buildNestedContainerPreview(
-                          primaryContainer: colorScheme.primaryContainer,
-                          onPrimaryContainer: colorScheme.onPrimaryContainer,
-                          secondaryContainer: colorScheme.secondaryContainer,
-                          onSecondaryContainer: colorScheme.onSecondaryContainer,
-                          tertiaryContainer: colorScheme.tertiaryContainer,
-                          onTertiaryContainer: colorScheme.onTertiaryContainer,
+                          primaryContainer: label == 'Primary Container Color'
+                              ? tempColor
+                              : themeData.colorScheme.primaryContainer,
+                          onPrimaryContainer: label == 'On Primary Container Color'
+                              ? tempColor
+                              : themeData.colorScheme.onPrimaryContainer,
+                          secondaryContainer: label == 'Secondary Container Color'
+                              ? tempColor
+                              : themeData.colorScheme.secondaryContainer,
+                          onSecondaryContainer: label == 'On Secondary Container Color'
+                              ? tempColor
+                              : themeData.colorScheme.onSecondaryContainer,
+                          tertiaryContainer: label == 'Tertiary Container Color'
+                              ? tempColor
+                              : themeData.colorScheme.tertiaryContainer,
+                          onTertiaryContainer: label == 'On Tertiary Container Color'
+                              ? tempColor
+                              : themeData.colorScheme.onTertiaryContainer,
                         ),
                         SizedBox(height: 20),
                         ColorPicker(
-                          pickerColor: initialColor,
+                          pickerColor: tempColor,
                           onColorChanged: (color) {
                             setState(() {
-                              // Update the color in the parent state
-                              onColorChanged(color);
+                              tempColor = color;
                             });
                           },
                           enableAlpha: true,
@@ -231,6 +230,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                     TextButton(
                       child: Text('Select'),
                       onPressed: () {
+                        onColorChanged(tempColor);
                         Navigator.of(context).pop();
                       },
                     ),
@@ -242,5 +242,23 @@ class _ThemeScreenState extends State<ThemeScreen> {
         );
       },
     );
+  }
+
+  void _updateThemeColor(bool isDarkMode, ColorScheme Function(ColorScheme) colorSchemeUpdater) {
+    setState(() {
+      if (isDarkMode) {
+        _theme = _theme.copyWith(
+          darkTheme: _theme.darkTheme.copyWith(
+            colorScheme: colorSchemeUpdater(_theme.darkTheme.colorScheme),
+          ),
+        );
+      } else {
+        _theme = _theme.copyWith(
+          lightTheme: _theme.lightTheme.copyWith(
+            colorScheme: colorSchemeUpdater(_theme.lightTheme.colorScheme),
+          ),
+        );
+      }
+    });
   }
 }

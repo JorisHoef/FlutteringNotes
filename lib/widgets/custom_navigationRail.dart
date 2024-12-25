@@ -9,11 +9,11 @@ class CustomNavigationRail extends StatelessWidget {
   final bool extended;
 
   const CustomNavigationRail({
-    Key? key,
+    super.key,
     required this.selectedIndex,
     required this.onDestinationSelected,
     required this.extended,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -16,7 +16,7 @@ class ThemeModel {
     ThemeData? darkTheme,
   }) {
     return ThemeModel(
-      name: this.name,
+      name: name,
       lightTheme: lightTheme ?? this.lightTheme,
       darkTheme: darkTheme ?? this.darkTheme,
     );

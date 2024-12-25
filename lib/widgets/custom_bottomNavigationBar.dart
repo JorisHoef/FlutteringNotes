@@ -7,10 +7,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final ValueChanged<int> onTap;
 
   const CustomBottomNavigationBar({
-    Key? key,
+    super.key,
     required this.selectedIndex,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
