@@ -9,6 +9,7 @@ class LocalThemeRepository extends ThemeRepository{
   final String _selectedThemeKey = "selectedTheme";
 
   // Fetch all themes with error handling
+  @override
   Future<List<ThemeModel>> fetchThemes() async {
     final prefs = await SharedPreferences.getInstance();
     final themesJson = prefs.getStringList(_themesKey);
@@ -40,6 +41,7 @@ class LocalThemeRepository extends ThemeRepository{
   }
 
   // Add or update a theme
+  @override
   Future<void> saveTheme(ThemeModel theme) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -76,6 +78,7 @@ class LocalThemeRepository extends ThemeRepository{
   }
 
   // Delete a theme
+  @override
   Future<void> deleteTheme(String themeName) async {
     final prefs = await SharedPreferences.getInstance();
     final themes = await fetchThemes();
@@ -88,6 +91,7 @@ class LocalThemeRepository extends ThemeRepository{
     prefs.setStringList(_themesKey, themesJson);
   }
 
+  @override
   Future<void> saveDarkMode(bool isDarkMode) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -100,6 +104,7 @@ class LocalThemeRepository extends ThemeRepository{
     }
   }
 
+  @override
   Future<bool?> fetchDarkMode() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -115,12 +120,14 @@ class LocalThemeRepository extends ThemeRepository{
   }
 
   // Save selected theme name
+  @override
   Future<void> saveSelectedTheme(String themeName) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(_selectedThemeKey, themeName);
   }
 
   // Fetch selected theme name
+  @override
   Future<String?> fetchSelectedTheme() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(_selectedThemeKey);
