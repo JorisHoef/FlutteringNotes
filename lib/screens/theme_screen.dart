@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttering_notes/constants/layout_constants.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-
+import '../constants/layout_constants.dart';
 import '../themes/theme_manager.dart';
 
 class ThemeScreen extends StatefulWidget {
@@ -20,36 +19,47 @@ class ThemeScreen extends StatefulWidget {
 class _ThemeScreenState extends State<ThemeScreen> {
   late ThemeModel _theme;
   bool isDarkMode = false;
+  late Map<String, Color> tempColors;
 
   @override
   void initState() {
     super.initState();
     _theme = widget.initialTheme;
+    _initializeTempColors();
+  }
+
+  void _initializeTempColors() {
+    final lightScheme = _theme.lightTheme.colorScheme;
+    final darkScheme = _theme.darkTheme.colorScheme;
+
+    tempColors = {
+      'lightPrimaryContainer': lightScheme.primaryContainer,
+      'lightOnPrimaryContainer': lightScheme.onPrimaryContainer,
+      'lightSecondaryContainer': lightScheme.secondaryContainer,
+      'lightOnSecondaryContainer': lightScheme.onSecondaryContainer,
+      'lightTertiaryContainer': lightScheme.tertiaryContainer,
+      'lightOnTertiaryContainer': lightScheme.onTertiaryContainer,
+
+      'darkPrimaryContainer': darkScheme.primaryContainer,
+      'darkOnPrimaryContainer': darkScheme.onPrimaryContainer,
+      'darkSecondaryContainer': darkScheme.secondaryContainer,
+      'darkOnSecondaryContainer': darkScheme.onSecondaryContainer,
+      'darkTertiaryContainer': darkScheme.tertiaryContainer,
+      'darkOnTertiaryContainer': darkScheme.onTertiaryContainer,
+    };
   }
 
   @override
   Widget build(BuildContext context) {
-    final themeData = isDarkMode ? _theme.darkTheme : _theme.lightTheme;
-    final colorScheme = themeData.colorScheme;
-
-    final primaryContainer = colorScheme.primaryContainer;
-    final onPrimaryContainer = colorScheme.onPrimaryContainer;
-    final secondaryContainer = colorScheme.secondaryContainer;
-    final onSecondaryContainer = colorScheme.onSecondaryContainer;
-    final tertiaryContainer = colorScheme.tertiaryContainer;
-    final onTertiaryContainer = colorScheme.onTertiaryContainer;
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Theme Preview'),
-        backgroundColor: primaryContainer,
+        backgroundColor: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer']!,
         actions: [
           IconButton(
             icon: Icon(isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
             onPressed: () {
-              setState(() {
-                isDarkMode = !isDarkMode;
-              });
+              setState(() => isDarkMode = !isDarkMode);
             },
           ),
         ],
@@ -59,140 +69,37 @@ class _ThemeScreenState extends State<ThemeScreen> {
           children: [
             Padding(
               padding: defaultPadding,
-              child: Column(
-                children: [
-                  _buildColorPicker(
-                    'Primary Container Color',
-                    primaryContainer,
-                        (color) => _updateThemeColor(
-                      isUpdatingDarkTheme: isDarkMode,
-                      label: 'Primary Container Color',
-                      newColor: color,
-                    ),
-                  ),
-                  _buildColorPicker(
-                    'Primary Container Color',
-                    primaryContainer,
-                        (color) => _updateThemeColor(
-                      isUpdatingDarkTheme: isDarkMode,
-                      label: 'Primary Container Color',
-                      newColor: color,
-                    ),
-                  ),
-                  _buildColorPicker(
-                    'On Primary Container Color',
-                    onPrimaryContainer,
-                        (color) => _updateThemeColor(
-                      isUpdatingDarkTheme: isDarkMode,
-                      label: 'On Primary Container Color',
-                      newColor: color,
-                    ),
-                  ),
-                  _buildColorPicker(
-                    'Secondary Container Color',
-                    secondaryContainer,
-                        (color) => _updateThemeColor(
-                      isUpdatingDarkTheme: isDarkMode,
-                      label: 'Secondary Container Color',
-                      newColor: color,
-                    ),
-                  ),
-                  _buildColorPicker(
-                    'On Secondary Container Color',
-                    onSecondaryContainer,
-                        (color) => _updateThemeColor(
-                      isUpdatingDarkTheme: isDarkMode,
-                      label: 'On Secondary Container Color',
-                      newColor: color,
-                    ),
-                  ),
-                  _buildColorPicker(
-                    'Tertiary Container Color',
-                    tertiaryContainer,
-                        (color) => _updateThemeColor(
-                      isUpdatingDarkTheme: isDarkMode,
-                      label: 'Tertiary Container Color',
-                      newColor: color,
-                    ),
-                  ),
-                  _buildColorPicker(
-                    'On Tertiary Container Color',
-                    onTertiaryContainer,
-                        (color) => _updateThemeColor(
-                      isUpdatingDarkTheme: isDarkMode,
-                      label: 'On Tertiary Container Color',
-                      newColor: color,
-                    ),
-                  ),
-                ],
-              ),
+              child: _buildNestedContainerPreview(), // Display the preview container
             ),
             Divider(),
-            Padding(
-              padding: defaultPadding,
-              child: _buildNestedContainerPreview(
-                primaryContainer: primaryContainer,
-                onPrimaryContainer: onPrimaryContainer,
-                secondaryContainer: secondaryContainer,
-                onSecondaryContainer: onSecondaryContainer,
-                tertiaryContainer: tertiaryContainer,
-                onTertiaryContainer: onTertiaryContainer,
-              ),
-            ),
+            _buildAllColorPickers(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildNestedContainerPreview({
-    required Color primaryContainer,
-    required Color onPrimaryContainer,
-    required Color secondaryContainer,
-    required Color onSecondaryContainer,
-    required Color tertiaryContainer,
-    required Color onTertiaryContainer,
-  }) {
-    return SizedBox(
-      width: double.infinity,
-      child: Container(
-        padding: defaultPadding,
-        color: primaryContainer,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Primary Container',
-              style: TextStyle(color: onPrimaryContainer),
-              textAlign: TextAlign.center,
-            ),
-            Container(
-              margin: defaultPadding,
-              padding: defaultPadding,
-              color: secondaryContainer,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    'Secondary Container',
-                    style: TextStyle(color: onSecondaryContainer),
-                    textAlign: TextAlign.center,
-                  ),
-                  Container(
-                    margin: defaultPadding,
-                    padding: defaultPadding,
-                    color: tertiaryContainer,
-                    child: Text(
-                      'Tertiary Container',
-                      style: TextStyle(color: onTertiaryContainer),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+  Widget _buildAllColorPickers() {
+    final keys = tempColors.keys.where((key) =>
+        key.startsWith(isDarkMode ? 'dark' : 'light'));
+
+    return Padding(
+      padding: defaultPadding,
+      child: Column(
+        children: keys.map((key) {
+          final color = tempColors[key]!;
+          final label = key.replaceFirst('${isDarkMode ? 'dark' : 'light'}', '');
+
+          return _buildColorPicker(
+            label,
+            color,
+                (newColor) {
+              setState(() {
+                tempColors[key] = newColor;
+              });
+            },
+          );
+        }).toList(),
       ),
     );
   }
@@ -213,29 +120,38 @@ class _ThemeScreenState extends State<ThemeScreen> {
 
         showDialog(
           context: context,
-          builder: (BuildContext context) {
+          builder: (context) {
             return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setState) {
+              builder: (context, setState) {
                 return AlertDialog(
-                  title: Text('Edit "$label"'),
+                  title: Text('Edit $label'),
                   content: SingleChildScrollView(
-                    child: ColorPicker(
-                      pickerColor: tempColor,
-                      onColorChanged: (color) {
-                        setState(() {
-                          tempColor = color;
-                        });
-                      },
-                      enableAlpha: true,
-                      pickerAreaHeightPercent: 0.5,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Container(
+                            padding: EdgeInsets.all(16),
+                            color: tempColor,
+                            child: _buildNestedContainerPreview(),
+                            height: 359,
+                          ),
+                        ),
+                        ColorPicker(
+                          pickerColor: tempColor,
+                          onColorChanged: (newColor) {
+                            setState(() => tempColor = newColor);
+                          },
+                          enableAlpha: true,
+                          pickerAreaHeightPercent: 0.5,
+                        ),
+                      ],
                     ),
                   ),
                   actions: [
                     TextButton(
                       child: Text('Cancel'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
+                      onPressed: () => Navigator.of(context).pop(),
                     ),
                     TextButton(
                       child: Text('Select'),
@@ -254,71 +170,94 @@ class _ThemeScreenState extends State<ThemeScreen> {
     );
   }
 
-  void _updateThemeColor({
-    required bool isUpdatingDarkTheme,
-    required String label,
-    required Color newColor,
-  }) {
-    setState(() {
-      // Determine which theme’s color scheme to update
-      if (isUpdatingDarkTheme) {
-        _theme = _theme.copyWith(
-          darkTheme: _theme.darkTheme.copyWith(
-            colorScheme: _updateColorScheme(
-              _theme.darkTheme.colorScheme,
-              label,
-              newColor,
+  Widget _buildNestedContainerPreview() {
+    return Container(
+      color: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer'],
+      child: Column(
+        children: [
+          SizedBox(height: 16),
+          Text(
+            'Primary Container',
+            style: TextStyle(
+              color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer'],
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 16),
+          SizedBox(
+            height: 250,
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: tempColors['${isDarkMode ? 'dark' : 'light'}SecondaryContainer'],
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Secondary Container',
+                    style: TextStyle(
+                      color: tempColors['${isDarkMode ? 'dark' : 'light'}OnSecondaryContainer'],
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 16),
+                  SizedBox(
+                    height: 100,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: tempColors['${isDarkMode ? 'dark' : 'light'}TertiaryContainer'],
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 6,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Tertiary Container',
+                          style: TextStyle(
+                            color: tempColors['${isDarkMode ? 'dark' : 'light'}OnTertiaryContainer'],
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        );
-      } else {
-        _theme = _theme.copyWith(
-          lightTheme: _theme.lightTheme.copyWith(
-            colorScheme: _updateColorScheme(
-              _theme.lightTheme.colorScheme,
-              label,
-              newColor,
-            ),
-          ),
-        );
-      }
-
-      widget.onThemeChange(
-        _theme.name,
-        {
-          'lightPrimaryContainer': _theme.lightTheme.colorScheme.primaryContainer,
-          'lightOnPrimaryContainer': _theme.lightTheme.colorScheme.onPrimaryContainer,
-          'lightSecondaryContainer': _theme.lightTheme.colorScheme.secondaryContainer,
-          'lightOnSecondaryContainer': _theme.lightTheme.colorScheme.onSecondaryContainer,
-          'lightTertiaryContainer': _theme.lightTheme.colorScheme.tertiaryContainer,
-          'lightOnTertiaryContainer': _theme.lightTheme.colorScheme.onTertiaryContainer,
-          'darkPrimaryContainer': _theme.darkTheme.colorScheme.primaryContainer,
-          'darkOnPrimaryContainer': _theme.darkTheme.colorScheme.onPrimaryContainer,
-          'darkSecondaryContainer': _theme.darkTheme.colorScheme.secondaryContainer,
-          'darkOnSecondaryContainer': _theme.darkTheme.colorScheme.onSecondaryContainer,
-          'darkTertiaryContainer': _theme.darkTheme.colorScheme.tertiaryContainer,
-          'darkOnTertiaryContainer': _theme.darkTheme.colorScheme.onTertiaryContainer,
-        },
-      );
-    });
+          SizedBox(height: 16),
+        ],
+      ),
+    );
   }
 
-  ColorScheme _updateColorScheme(ColorScheme scheme, String label, Color newColor) {
-    switch (label) {
-      case 'Primary Container Color':
-        return scheme.copyWith(primaryContainer: newColor);
-      case 'On Primary Container Color':
-        return scheme.copyWith(onPrimaryContainer: newColor);
-      case 'Secondary Container Color':
-        return scheme.copyWith(secondaryContainer: newColor);
-      case 'On Secondary Container Color':
-        return scheme.copyWith(onSecondaryContainer: newColor);
-      case 'Tertiary Container Color':
-        return scheme.copyWith(tertiaryContainer: newColor);
-      case 'On Tertiary Container Color':
-        return scheme.copyWith(onTertiaryContainer: newColor);
-      default:
-        return scheme;
-    }
+  @override
+  void dispose() {
+    widget.onThemeChange(
+      _theme.name,
+      tempColors,
+    );
+    super.dispose();
   }
 }
