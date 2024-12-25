@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../constants/app_strings.dart';
 import '../constants/navigation_constants.dart';
+import '../models/theme_model.dart';
 import '../providers/theme_provider.dart';
 import '../widgets/listTile_withMenu.dart';
 import 'theme_screen.dart';
@@ -144,6 +145,85 @@ class OptionsScreen extends StatelessWidget {
               ],
             ),
           ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final themeProvider = context.read<ThemeProvider>();
+
+          // Navigate to the ThemeScreen in "Add Theme" mode (no initialTheme)
+          final newTheme = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ThemeScreen(
+                initialTheme: ThemeModel(
+                  name: '', // Provide a blank name for new theme
+                  lightTheme: ThemeData.from(
+                    colorScheme: const ColorScheme.light(),
+                  ),
+                  darkTheme: ThemeData.from(
+                    colorScheme: const ColorScheme.dark(),
+                  ),
+                ),
+                initialIsDarkMode: isDarkMode, // Current dark mode state
+                onThemeChange: (String themeName, Map<String, Color> updatedColors) {
+                  // Instantly apply the new theme colors to the ThemeProvider after editing
+                  themeProvider.customizeTheme(
+                    themeName: themeName,
+                    lightScheme: ColorScheme(
+                      primary: updatedColors['lightPrimaryContainer']!,
+                      onPrimary: updatedColors['lightOnPrimaryContainer']!,
+                      primaryContainer: updatedColors['lightPrimaryContainer']!,
+                      onPrimaryContainer: updatedColors['lightOnPrimaryContainer']!,
+                      secondary: updatedColors['lightSecondaryContainer']!,
+                      onSecondary: updatedColors['lightOnSecondaryContainer']!,
+                      secondaryContainer: updatedColors['lightSecondaryContainer']!,
+                      onSecondaryContainer: updatedColors['lightOnSecondaryContainer']!,
+                      tertiary: updatedColors['lightTertiaryContainer']!,
+                      onTertiary: updatedColors['lightOnTertiaryContainer']!,
+                      tertiaryContainer: updatedColors['lightTertiaryContainer']!,
+                      onTertiaryContainer: updatedColors['lightOnTertiaryContainer']!,
+                      error: Colors.red, // Default error
+                      onError: Colors.white, // Default error on color
+                      surface: Colors.grey, // Default surface
+                      onSurface: Colors.black, // Default on-surface
+                      brightness: Brightness.light,
+                    ),
+                    darkScheme: ColorScheme(
+                      primary: updatedColors['darkPrimaryContainer']!,
+                      onPrimary: updatedColors['darkOnPrimaryContainer']!,
+                      primaryContainer: updatedColors['darkPrimaryContainer']!,
+                      onPrimaryContainer: updatedColors['darkOnPrimaryContainer']!,
+                      secondary: updatedColors['darkSecondaryContainer']!,
+                      onSecondary: updatedColors['darkOnSecondaryContainer']!,
+                      secondaryContainer: updatedColors['darkSecondaryContainer']!,
+                      onSecondaryContainer: updatedColors['darkOnSecondaryContainer']!,
+                      tertiary: updatedColors['darkTertiaryContainer']!,
+                      onTertiary: updatedColors['darkOnTertiaryContainer']!,
+                      tertiaryContainer: updatedColors['darkTertiaryContainer']!,
+                      onTertiaryContainer: updatedColors['darkOnTertiaryContainer']!,
+                      error: Colors.red, // Default error
+                      onError: Colors.black, // Default error on color
+                      surface: Colors.grey[850]!, // Default dark surface
+                      onSurface: Colors.white, // Default dark on-surface
+                      brightness: Brightness.dark,
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+
+          // If a new theme was saved, add it to the available themes
+          if (newTheme != null) {
+            themeProvider.addTheme(newTheme);
+          }
+        },
+        tooltip: AppStrings.addThemeText, // Tooltip for "Add Theme"
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        child: Icon(
+          Icons.add,
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
         ),
       ),
     );

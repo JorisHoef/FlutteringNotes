@@ -21,6 +21,8 @@ class AppStrings {
   static const String toggleThemeText = "Toggle Dark/Light Theme";
   static const String selectThemeText = "Select Theme";
   static const String themePreview = 'Theme Preview';
+  static const String addThemeText = "Add Theme";
+  static const String themeNameHint = "Name your theme";
 
   // Dialog Labels
   static const String editDialogTitle = "Edit";
