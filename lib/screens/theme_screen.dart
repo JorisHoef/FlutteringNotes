@@ -198,26 +198,67 @@ class _ThemeScreenState extends State<ThemeScreen> {
         showDialog(
           context: context,
           builder: (BuildContext context) {
-            Color tempColor = initialColor;
+            Color tempColor = initialColor; // Temporary color for live preview
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
                 return AlertDialog(
                   title: Text('Select $label'),
                   content: SingleChildScrollView(
-                    child: SlidePicker(
-                      pickerColor: tempColor,
-                      onColorChanged: (color) {
-                        setState(() {
-                          tempColor = color;
-                        });
-                        onColorChanged(color);
-                      },
-                      indicatorBorderRadius: const BorderRadius.vertical(top: Radius.circular(25)),
-                      enableAlpha: true,
-                      showIndicator: true,
-                      showParams: true,
-                      displayThumbColor: true,
-                      colorModel: ColorModel.rgb,
+                    child: Column(
+                      children: [
+                        // Theme Preview (reuse from ThemeScreen)
+                        Container(
+                          padding: EdgeInsets.all(16),
+                          color: tempColor,
+                          child: Column(
+                            children: [
+                              Text(
+                                'Preview',
+                                style: TextStyle(
+                                  color: useWhiteForeground(tempColor)
+                                      ? Colors.white
+                                      : Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'Primary Text Color',
+                                  style: TextStyle(
+                                    color: useWhiteForeground(tempColor)
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                              ListTile(
+                                title: Text(
+                                  'Secondary Text Color',
+                                  style: TextStyle(
+                                    color: useWhiteForeground(tempColor)
+                                        ? Colors.white70
+                                        : Colors.black87,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        // Color Picker
+                        SlidePicker(
+                          pickerColor: tempColor,
+                          onColorChanged: (color) {
+                            setState(() {
+                              tempColor = color; // Update temporary color
+                            });
+                            onColorChanged(color); // Update live color
+                          },
+                          enableAlpha: true,
+                          showIndicator: true,
+                        ),
+                      ],
                     ),
                   ),
                   actions: [
