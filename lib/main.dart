@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'constants/app_strings.dart';
 import 'screens/main_screen.dart';
 import 'states/note_state.dart';
+import 'storage/local_note_repository.dart';
 import 'themes/theme_provider.dart';
 
 void main() {
@@ -17,7 +18,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => NoteState()),
+        // Initialize NoteState with LocalNoteRepository
+        ChangeNotifierProvider(
+          create: (context) => NoteState(LocalNoteRepository())..loadNotes(),
+        ),
         ChangeNotifierProvider(create: (context) => ThemeProvider()),
       ],
       child: Consumer<ThemeProvider>(
@@ -25,7 +29,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             title: AppStrings.appName,
             theme: themeProvider.themeData,
-            home: MainScreen(),
+            home: MainScreen(), // The main entry-point screen
           );
         },
       ),
