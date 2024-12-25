@@ -151,13 +151,13 @@ class OptionsScreen extends StatelessWidget {
         onPressed: () async {
           final themeProvider = context.read<ThemeProvider>();
 
-          // Navigate to the ThemeScreen in "Add Theme" mode (no initialTheme)
+          // Navigate to the ThemeScreen in "Add Theme" mode
           final newTheme = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => ThemeScreen(
                 initialTheme: ThemeModel(
-                  name: '', // Provide a blank name for new theme
+                  name: '', // Blank name for newly created theme
                   lightTheme: ThemeData.from(
                     colorScheme: const ColorScheme.light(),
                   ),
@@ -165,9 +165,9 @@ class OptionsScreen extends StatelessWidget {
                     colorScheme: const ColorScheme.dark(),
                   ),
                 ),
-                initialIsDarkMode: isDarkMode, // Current dark mode state
+                initialIsDarkMode: false, // Default to light mode
                 onThemeChange: (String themeName, Map<String, Color> updatedColors) {
-                  // Instantly apply the new theme colors to the ThemeProvider after editing
+                  // Update the ThemeProvider with the edited themes
                   themeProvider.customizeTheme(
                     themeName: themeName,
                     lightScheme: ColorScheme(
@@ -183,11 +183,11 @@ class OptionsScreen extends StatelessWidget {
                       onTertiary: updatedColors['lightOnTertiaryContainer']!,
                       tertiaryContainer: updatedColors['lightTertiaryContainer']!,
                       onTertiaryContainer: updatedColors['lightOnTertiaryContainer']!,
-                      error: Colors.red, // Default error
-                      onError: Colors.white, // Default error on color
-                      surface: Colors.grey, // Default surface
-                      onSurface: Colors.black, // Default on-surface
-                      brightness: Brightness.light,
+                      brightness: Brightness.light, // Default brightness
+                      error: Colors.red, // Default error color
+                      onError: Colors.white,
+                      surface: Colors.grey,
+                      onSurface: Colors.black,
                     ),
                     darkScheme: ColorScheme(
                       primary: updatedColors['darkPrimaryContainer']!,
@@ -202,11 +202,11 @@ class OptionsScreen extends StatelessWidget {
                       onTertiary: updatedColors['darkOnTertiaryContainer']!,
                       tertiaryContainer: updatedColors['darkTertiaryContainer']!,
                       onTertiaryContainer: updatedColors['darkOnTertiaryContainer']!,
-                      error: Colors.red, // Default error
-                      onError: Colors.black, // Default error on color
-                      surface: Colors.grey[850]!, // Default dark surface
-                      onSurface: Colors.white, // Default dark on-surface
-                      brightness: Brightness.dark,
+                      brightness: Brightness.dark, // Default brightness
+                      error: Colors.red,
+                      onError: Colors.black,
+                      surface: Colors.black,
+                      onSurface: Colors.white,
                     ),
                   );
                 },
@@ -214,9 +214,9 @@ class OptionsScreen extends StatelessWidget {
             ),
           );
 
-          // If a new theme was saved, add it to the available themes
+          // Save the new theme (if any) to the ThemeProvider
           if (newTheme != null) {
-            themeProvider.addTheme(newTheme);
+            themeProvider.addTheme(newTheme); // Persisting here is automatic via the updated 'addTheme'
           }
         },
         tooltip: AppStrings.addThemeText, // Tooltip for "Add Theme"

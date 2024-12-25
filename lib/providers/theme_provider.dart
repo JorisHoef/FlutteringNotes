@@ -40,9 +40,10 @@ class ThemeProvider extends ChangeNotifier {
     await _saveThemeToPrefs(); // Save the updated theme selection
   }
 
-  void addTheme(ThemeModel newTheme) {
+  void addTheme(ThemeModel newTheme) async {
     _availableThemes.add(newTheme);
     notifyListeners();
+    await _themeRepository.saveTheme(newTheme);
   }
 
   void deleteTheme(String themeName) {
