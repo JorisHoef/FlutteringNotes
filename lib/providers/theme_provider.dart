@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../constants/theme_constants.dart';
 import '../models/theme_model.dart';
 import '../storage/theme_repository.dart';
 
 class ThemeProvider extends ChangeNotifier {
   final ThemeRepository _themeRepository = ThemeRepository();
+
   final List<ThemeModel> _availableThemes = [];
   late ThemeModel _currentTheme;
   bool _isDarkMode = false;
@@ -15,50 +14,53 @@ class ThemeProvider extends ChangeNotifier {
   ThemeModel get currentTheme => _currentTheme;
 
   ThemeProvider() {
-    _currentTheme = predefinedThemes().first; // Set a default temporary theme
-    _loadThemeFromPrefs(); // Load and restore themes/settings from storage
+    // Set the first theme as default temporarily
+    _currentTheme = predefinedThemes().first;
+
+    // Load themes and settings from repository
+    _loadThemeFromStorage();
   }
 
-  ThemeData get themeData =>
-      _isDarkMode ? _currentTheme.darkTheme : _currentTheme.lightTheme;
+  ThemeData get themeData => _isDarkMode ? _currentTheme.darkTheme : _currentTheme.lightTheme;
 
   List<ThemeModel> get availableThemes => _availableThemes;
 
   Future<void> toggleThemeMode() async {
     _isDarkMode = !_isDarkMode;
-    notifyListeners();
-    await _saveThemeToPrefs(); // Save the updated dark mode setting
+    notifyListeners(); // Notify listeners of the mode change
+    await _themeRepository.saveDarkMode(_isDarkMode); // Save mode to storage
   }
 
   Future<void> switchTheme(String themeName) async {
     final selectedTheme = _availableThemes.firstWhere(
           (theme) => theme.name == themeName,
-      orElse: () => _currentTheme, // Default to current theme if no match found
+      orElse: () => _currentTheme,
     );
     _currentTheme = selectedTheme;
-    notifyListeners();
-    await _saveThemeToPrefs(); // Save the updated theme selection
+    notifyListeners(); // Notify listeners of the theme change
+    await _themeRepository.saveSelectedTheme(themeName); // Save selected theme to storage
   }
 
-  void addTheme(ThemeModel newTheme) async {
+  Future<void> addTheme(ThemeModel newTheme) async {
     _availableThemes.add(newTheme);
-    notifyListeners();
-    await _themeRepository.saveTheme(newTheme);
+    notifyListeners(); // Notify listeners of the new theme addition
+    await _themeRepository.saveTheme(newTheme); // Save to storage
   }
 
-  void deleteTheme(String themeName) {
+  Future<void> deleteTheme(String themeName) async {
     final themeToDelete = _availableThemes.firstWhere(
           (theme) => theme.name == themeName,
       orElse: () => _currentTheme,
     );
 
+    // Prevent deleting the currently selected theme
     if (_currentTheme == themeToDelete) {
-      // Prevent deleting the currently selected theme
       return;
     }
 
     _availableThemes.removeWhere((theme) => theme.name == themeName);
-    notifyListeners();
+    await _themeRepository.deleteTheme(themeName); // Remove from storage
+    notifyListeners(); // Notify listeners after deletion
   }
 
   void customizeTheme({
@@ -66,8 +68,7 @@ class ThemeProvider extends ChangeNotifier {
     required ColorScheme lightScheme,
     required ColorScheme darkScheme,
   }) {
-    final themeIndex =
-    _availableThemes.indexWhere((theme) => theme.name == themeName);
+    final themeIndex = _availableThemes.indexWhere((theme) => theme.name == themeName);
     if (themeIndex != -1) {
       final theme = _availableThemes[themeIndex];
       final updatedTheme = ThemeModel(
@@ -76,45 +77,43 @@ class ThemeProvider extends ChangeNotifier {
         darkTheme: theme.darkTheme.copyWith(colorScheme: darkScheme),
       );
       _availableThemes[themeIndex] = updatedTheme;
-      notifyListeners();
+      notifyListeners(); // Notify changes
     }
   }
 
-  Future<void> _saveThemeToPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('currentTheme', _currentTheme.name);
-    await prefs.setBool('isDarkMode', _isDarkMode);
-  }
+  Future<void> _loadThemeFromStorage() async {
+    // Get selected theme name and dark mode state from repository
+    final savedThemeName = await _themeRepository.fetchSelectedTheme();
+    final savedDarkModeState = await _themeRepository.fetchDarkMode();
 
-  Future<void> _loadThemeFromPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    final themeName = prefs.getString('currentTheme');
-    final darkMode = prefs.getBool('isDarkMode') ?? false;
-
+    // Load available themes from repository
     final storedThemes = await _themeRepository.fetchThemes();
 
     if (storedThemes.isEmpty) {
+      // If no themes are saved, initialize with predefined themes
       for (final theme in predefinedThemes()) {
         await _themeRepository.saveTheme(theme);
       }
       _availableThemes.clear();
       _availableThemes.addAll(predefinedThemes());
     } else {
+      // Use stored themes
       _availableThemes.clear();
       _availableThemes.addAll(storedThemes);
     }
 
-    if (themeName != null) {
-      final savedTheme = _availableThemes.firstWhere(
-            (theme) => theme.name == themeName,
+    // Set the current theme and dark mode state
+    if (savedThemeName != null) {
+      _currentTheme = _availableThemes.firstWhere(
+            (theme) => theme.name == savedThemeName,
         orElse: () => _availableThemes.first,
       );
-      _currentTheme = savedTheme;
     } else {
       _currentTheme = _availableThemes.first;
     }
 
-    _isDarkMode = darkMode;
-    notifyListeners();
+    _isDarkMode = savedDarkModeState ?? false;
+
+    notifyListeners(); // Notify listeners of the loaded data
   }
 }

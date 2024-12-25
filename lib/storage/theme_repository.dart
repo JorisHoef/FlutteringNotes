@@ -40,28 +40,38 @@ class ThemeRepository {
 
   // Add or update a theme
   Future<void> saveTheme(ThemeModel theme) async {
-    final prefs = await SharedPreferences.getInstance();
-    final themes = await fetchThemes();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final themes = await fetchThemes();
 
-    // Replace existing or add new theme
-    final updatedThemes = [
-      for (final storedTheme in themes)
-        if (storedTheme.name == theme.name) theme else storedTheme,
-      if (!themes.any((storedTheme) => storedTheme.name == theme.name)) theme,
-    ];
+      // Replace existing or add new theme
+      final updatedThemes = [
+        for (final storedTheme in themes)
+          if (storedTheme.name == theme.name) theme else storedTheme,
+        if (!themes.any((storedTheme) => storedTheme.name == theme.name)) theme,
+      ];
 
-    // Save updated themes list
-    final themesJson = updatedThemes.map((theme) {
-      final lightJson = theme.lightTheme.toString(); // Simplify as an example
-      final darkJson = theme.darkTheme.toString();
-      return json.encode({
-        'name': theme.name,
-        'lightTheme': lightJson,
-        'darkTheme': darkJson,
-      });
-    }).toList();
+      // Save updated themes list
+      final themesJson = updatedThemes.map((theme) {
+        final lightJson = theme.lightTheme.toString(); // Simplify as an example
+        final darkJson = theme.darkTheme.toString();
+        return json.encode({
+          'name': theme.name,
+          'lightTheme': lightJson,
+          'darkTheme': darkJson,
+        });
+      }).toList();
 
-    prefs.setStringList(_themesKey, themesJson);
+      await prefs.setStringList(_themesKey, themesJson);
+
+      // Debugging: Log success
+      print('[DEBUG] Themes successfully saved: $themesJson');
+    } catch (e, stacktrace) {
+      // Error logging
+      print('[ERROR] Failed to save theme: ${theme.name}');
+      print('[ERROR] Exception: $e');
+      print('[ERROR] Stacktrace: $stacktrace');
+    }
   }
 
   // Delete a theme
@@ -75,6 +85,32 @@ class ThemeRepository {
     updatedThemes.map((theme) => json.encode(theme)).toList();
 
     prefs.setStringList(_themesKey, themesJson);
+  }
+
+  Future<void> saveDarkMode(bool isDarkMode) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isDarkMode', isDarkMode);
+      print('[DEBUG] Dark Mode state saved: $isDarkMode');
+    } catch (e, stacktrace) {
+      print('[ERROR] Failed to save Dark Mode state');
+      print('[ERROR] Exception: $e');
+      print('[ERROR] Stacktrace: $stacktrace');
+    }
+  }
+
+  Future<bool?> fetchDarkMode() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final isDarkMode = prefs.getBool('isDarkMode');
+      print('[DEBUG] Dark Mode state fetched: $isDarkMode');
+      return isDarkMode; // Returns `true`, `false`, or `null` if not set
+    } catch (e, stacktrace) {
+      print('[ERROR] Failed to fetch Dark Mode state');
+      print('[ERROR] Exception: $e');
+      print('[ERROR] Stacktrace: $stacktrace');
+      return null; // Return `null` in case of an error
+    }
   }
 
   // Save selected theme name
