@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import '../constants/app_strings.dart';
 import '../constants/app_keys.dart';
 import '../constants/layout_constants.dart';
-import '../themes/theme_manager.dart';
-import '../themes/theme_provider.dart';
+import '../models/theme_model.dart';
+import '../providers/theme_provider.dart';
 
 class ThemeScreen extends StatefulWidget {
   final ThemeModel initialTheme;

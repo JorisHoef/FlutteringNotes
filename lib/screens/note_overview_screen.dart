@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../constants/app_strings.dart';
 import '../constants/layout_constants.dart';
-import '../models/note.dart';
+import '../models/note_model.dart';
 import '../states/note_state.dart';
 import '../widgets/listTile_withMenu.dart';
 import 'note_writing_screen.dart';
@@ -132,7 +132,7 @@ class NoteOverviewScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          final newNote = Note(
+          final newNote = NoteModel(
             id: notesState.notes.length,
             title: '',
             content: '',

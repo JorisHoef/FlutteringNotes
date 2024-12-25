@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../constants/app_strings.dart';
 import '../constants/navigation_constants.dart';
-import '../themes/theme_provider.dart';
+import '../providers/theme_provider.dart';
 import '../widgets/listTile_withMenu.dart';
 import 'theme_screen.dart';
 
@@ -85,6 +85,7 @@ class OptionsScreen extends StatelessWidget {
                     title: theme.name,
                     onTap: () => themeProvider.switchTheme(theme.name),
                     titleStyle: textTheme.bodySmall,
+                    onDelete: () => themeProvider.deleteTheme(theme.name),
                     onEdit: () => Navigator.push(
                       context,
                       MaterialPageRoute(

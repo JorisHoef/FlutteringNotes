@@ -1,8 +1,8 @@
-import '../models/note.dart';
+import '../models/note_model.dart';
 
 abstract class NoteRepository {
-  Future<List<Note>> getNotes();
-  Future<void> addNote(Note note);
-  Future<void> updateNote(Note note);
+  Future<List<NoteModel>> getNotes();
+  Future<void> addNote(NoteModel note);
+  Future<void> updateNote(NoteModel note);
   Future<void> deleteNote(int noteId);
 }

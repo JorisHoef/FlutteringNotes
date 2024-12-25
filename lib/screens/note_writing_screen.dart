@@ -3,11 +3,11 @@ import 'package:provider/provider.dart';
 
 import '../constants/app_strings.dart';
 import '../constants/layout_constants.dart';
-import '../models/note.dart';
+import '../models/note_model.dart';
 import '../states/note_state.dart';
 
 class NoteWritingScreen extends StatefulWidget {
-  final Note note;
+  final NoteModel note;
 
   NoteWritingScreen(this.note);
 

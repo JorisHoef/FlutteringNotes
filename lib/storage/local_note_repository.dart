@@ -1,26 +1,26 @@
 import 'dart:convert'; // For JSON encoding/decoding
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/note.dart';
+import '../models/note_model.dart';
 import 'note_repository.dart';
 
 class LocalNoteRepository implements NoteRepository {
   final String _notesKey = "notes"; // Key for storing notes in SharedPreferences
 
   @override
-  Future<List<Note>> getNotes() async {
+  Future<List<NoteModel>> getNotes() async {
     final prefs = await SharedPreferences.getInstance(); // Get SharedPreferences instance
     final notesString = prefs.getString(_notesKey); // Retrieve the notes stored as a string
 
     if (notesString != null) {
       final List<dynamic> notesJson = json.decode(notesString); // Decode JSON string
-      return notesJson.map((json) => Note.fromJson(json)).toList(); // Convert JSON to List<Note>
+      return notesJson.map((json) => NoteModel.fromJson(json)).toList(); // Convert JSON to List<Note>
     } else {
       return []; // Return an empty list if no notes are stored
     }
   }
 
   @override
-  Future<void> addNote(Note note) async {
+  Future<void> addNote(NoteModel note) async {
     final prefs = await SharedPreferences.getInstance();
     final currentNotes = await getNotes();
     currentNotes.add(note); // Add the new note to the list
@@ -31,7 +31,7 @@ class LocalNoteRepository implements NoteRepository {
   }
 
   @override
-  Future<void> updateNote(Note note) async {
+  Future<void> updateNote(NoteModel note) async {
     final prefs = await SharedPreferences.getInstance();
     final currentNotes = await getNotes();
 

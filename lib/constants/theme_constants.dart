@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../themes/theme_manager.dart';
+import '../models/theme_model.dart';
 
 class ThemeConstants {
   static const double fontSizeSmall = 14.0;

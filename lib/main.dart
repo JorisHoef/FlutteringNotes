@@ -5,10 +5,26 @@ import 'constants/app_strings.dart';
 import 'screens/main_screen.dart';
 import 'states/note_state.dart';
 import 'storage/local_note_repository.dart';
-import 'themes/theme_provider.dart';
+import 'providers/theme_provider.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Required for async operations before app starts
+
+  runApp(
+    MultiProvider(
+      providers: [
+        // NoteState with LocalNoteRepository
+        ChangeNotifierProvider(
+          create: (context) => NoteState(LocalNoteRepository())..loadNotes(),
+        ),
+        // ThemeProvider (initialization handled internally)
+        ChangeNotifierProvider(
+          create: (context) => ThemeProvider(), // No explicit `loadThemeFromPrefs` here
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,23 +32,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        // Initialize NoteState with LocalNoteRepository
-        ChangeNotifierProvider(
-          create: (context) => NoteState(LocalNoteRepository())..loadNotes(),
-        ),
-        ChangeNotifierProvider(create: (context) => ThemeProvider()),
-      ],
-      child: Consumer<ThemeProvider>(
-        builder: (context, themeProvider, child) {
-          return MaterialApp(
-            title: AppStrings.appName,
-            theme: themeProvider.themeData,
-            home: MainScreen(), // The main entry-point screen
-          );
-        },
-      ),
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return MaterialApp(
+          title: AppStrings.appName,
+          theme: themeProvider.themeData, // Dynamically gets applied theme
+          home: MainScreen(), // Entry screen of the app
+        );
+      },
     );
   }
 }

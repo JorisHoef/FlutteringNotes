@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/note.dart';
+import '../models/note_model.dart';
 
 import '../storage/note_repository.dart';
 
@@ -9,10 +9,10 @@ class NoteState extends ChangeNotifier {
   NoteState(this.repository);
 
   // List to hold the current notes in memory
-  List<Note> _notes = [];
+  List<NoteModel> _notes = [];
 
   // Public getter to access notes (read-only outside this class)
-  List<Note> get notes => List.unmodifiable(_notes);
+  List<NoteModel> get notes => List.unmodifiable(_notes);
 
   // Loader to check if notes are still being loaded (optional, useful for showing a persistent loader)
   bool _isLoading = false;
@@ -30,7 +30,7 @@ class NoteState extends ChangeNotifier {
   }
 
   // Add a new note and persist it through the repository
-  Future<void> addNote(Note newNote) async {
+  Future<void> addNote(NoteModel newNote) async {
     await repository.addNote(newNote); // Add note to the repository
     _notes.add(newNote); // Add note to the in-memory list
     notifyListeners(); // Notify listeners about the change
@@ -49,7 +49,7 @@ class NoteState extends ChangeNotifier {
   }
 
   // Delete a note
-  Future<void> deleteNote(Note note) async {
+  Future<void> deleteNote(NoteModel note) async {
     await repository.deleteNote(note.id); // Delete the note from the repository
     _notes.removeWhere((n) => n.id == note.id); // Remove note from the in-memory list
     notifyListeners(); // Notify listeners about the change

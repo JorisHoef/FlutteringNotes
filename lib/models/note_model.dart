@@ -1,9 +1,9 @@
-class Note {
+class NoteModel {
   final int id;
   final String title;
   final String content;
 
-  Note({
+  NoteModel({
     required this.id,
     required this.title,
     required this.content,
@@ -19,8 +19,8 @@ class Note {
   }
 
   // Factory constructor to create a Note object from a JSON object (Map<String, dynamic>)
-  factory Note.fromJson(Map<String, dynamic> json) {
-    return Note(
+  factory NoteModel.fromJson(Map<String, dynamic> json) {
+    return NoteModel(
       id: json['id'],
       title: json['title'],
       content: json['content'],
@@ -28,8 +28,8 @@ class Note {
   }
 
   // Copying method to update specific fields immutably
-  Note copyWith({int? id, String? title, String? content}) {
-    return Note(
+  NoteModel copyWith({int? id, String? title, String? content}) {
+    return NoteModel(
       id: id ?? this.id,
       title: title ?? this.title,
       content: content ?? this.content,
