@@ -3,9 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/theme_constants.dart';
 import '../models/theme_model.dart';
+import '../storage/theme_repository.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  final List<ThemeModel> _availableThemes = predefinedThemes();
+  final ThemeRepository _themeRepository = ThemeRepository();
+  final List<ThemeModel> _availableThemes = [];
   late ThemeModel _currentTheme;
   bool _isDarkMode = false;
 
@@ -13,8 +15,8 @@ class ThemeProvider extends ChangeNotifier {
   ThemeModel get currentTheme => _currentTheme;
 
   ThemeProvider() {
-    _currentTheme = _availableThemes.first; // Default value during initialization
-    _loadThemeFromPrefs(); // Load the saved preferences
+    _currentTheme = predefinedThemes().first; // Set a default temporary theme
+    _loadThemeFromPrefs(); // Load and restore themes/settings from storage
   }
 
   ThemeData get themeData =>
@@ -29,9 +31,9 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   Future<void> switchTheme(String themeName) async {
-    var selectedTheme = _availableThemes.firstWhere(
+    final selectedTheme = _availableThemes.firstWhere(
           (theme) => theme.name == themeName,
-      orElse: () => _currentTheme,
+      orElse: () => _currentTheme, // Default to current theme if no match found
     );
     _currentTheme = selectedTheme;
     notifyListeners();
@@ -77,32 +79,41 @@ class ThemeProvider extends ChangeNotifier {
     }
   }
 
-  // Save the current theme and mode to SharedPreferences
   Future<void> _saveThemeToPrefs() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('currentTheme', _currentTheme.name);
     await prefs.setBool('isDarkMode', _isDarkMode);
   }
 
-  // Load the saved theme and mode from SharedPreferences
   Future<void> _loadThemeFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
-    final themeName = prefs.getString('currentTheme'); // Get stored theme name
-    final darkMode = prefs.getBool('isDarkMode') ?? false; // Get stored mode
+    final themeName = prefs.getString('currentTheme');
+    final darkMode = prefs.getBool('isDarkMode') ?? false;
 
-    if (themeName != null) {
-      // Find the matching theme by name from the saved preferences
-      final savedTheme = _availableThemes.firstWhere(
-            (theme) => theme.name == themeName,
-        // If the saved theme is no longer available, fallback to a default theme
-        orElse: () => _availableThemes.first,
-      );
-      _currentTheme = savedTheme; // Set the last selected (or fallback) theme
+    final storedThemes = await _themeRepository.fetchThemes();
+
+    if (storedThemes.isEmpty) {
+      for (final theme in predefinedThemes()) {
+        await _themeRepository.saveTheme(theme);
+      }
+      _availableThemes.clear();
+      _availableThemes.addAll(predefinedThemes());
     } else {
-      _currentTheme = _availableThemes.first; // Default fallback if no theme saved
+      _availableThemes.clear();
+      _availableThemes.addAll(storedThemes);
     }
 
-    _isDarkMode = darkMode; // Restore the dark mode preference
-    notifyListeners(); // Notify UI about the restored settings
+    if (themeName != null) {
+      final savedTheme = _availableThemes.firstWhere(
+            (theme) => theme.name == themeName,
+        orElse: () => _availableThemes.first,
+      );
+      _currentTheme = savedTheme;
+    } else {
+      _currentTheme = _availableThemes.first;
+    }
+
+    _isDarkMode = darkMode;
+    notifyListeners();
   }
 }

@@ -7,22 +7,35 @@ class ThemeRepository {
   final String _themesKey = "customThemes";
   final String _selectedThemeKey = "selectedTheme";
 
-  // Fetch all themes
+  // Fetch all themes with error handling
   Future<List<ThemeModel>> fetchThemes() async {
     final prefs = await SharedPreferences.getInstance();
     final themesJson = prefs.getStringList(_themesKey);
 
-    if (themesJson == null) return [];
+    if (themesJson == null) {
+      // No stored themes, return an empty list
+      return [];
+    }
 
-    // Decode JSON and convert to ThemeModel objects
-    return themesJson.map((theme) {
-      final Map<String, dynamic> decoded = json.decode(theme);
-      return ThemeModel(
-        name: decoded['name'],
-        lightTheme: _buildThemeFromJson(decoded['lightTheme']),
-        darkTheme: _buildThemeFromJson(decoded['darkTheme']),
-      );
-    }).toList();
+    final List<ThemeModel> themes = [];
+    for (final themeJson in themesJson) {
+      try {
+        // Attempt to decode each theme JSON
+        final Map<String, dynamic> decoded = json.decode(themeJson);
+        themes.add(
+          ThemeModel(
+            name: decoded['name'],
+            lightTheme: _buildThemeFromJson(decoded['lightTheme']),
+            darkTheme: _buildThemeFromJson(decoded['darkTheme']),
+          ),
+        );
+      } catch (e) {
+        // Log or handle malformed JSON gracefully
+        print('Error decoding theme JSON: $themeJson - $e');
+      }
+    }
+
+    return themes;
   }
 
   // Add or update a theme
