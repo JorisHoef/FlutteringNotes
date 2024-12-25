@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttering_notes/storage/local_theme_repository.dart';
 import 'package:provider/provider.dart';
 
 import 'constants/app_strings.dart';
@@ -19,7 +20,7 @@ void main() async {
         ),
         // ThemeProvider (initialization handled internally)
         ChangeNotifierProvider(
-          create: (context) => ThemeProvider(), // No explicit `loadThemeFromPrefs` here
+          create: (context) => ThemeProvider(LocalThemeRepository()), // No// explicit// `loadThemeFromPrefs` here
         ),
       ],
       child: const MyApp(),

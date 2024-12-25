@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttering_notes/storage/theme_repository.dart';
 import '../constants/theme_constants.dart';
 import '../models/theme_model.dart';
-import '../storage/theme_repository.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  final ThemeRepository _themeRepository = ThemeRepository();
+  final ThemeRepository _themeRepository;
 
   final List<ThemeModel> _availableThemes = [];
   late ThemeModel _currentTheme;
@@ -13,7 +13,7 @@ class ThemeProvider extends ChangeNotifier {
   bool get isDarkMode => _isDarkMode;
   ThemeModel get currentTheme => _currentTheme;
 
-  ThemeProvider() {
+  ThemeProvider(this._themeRepository) {
     // Set the first theme as default temporarily
     _currentTheme = predefinedThemes().first;
 
