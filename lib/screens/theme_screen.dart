@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:provider/provider.dart';
+
 import '../constants/layout_constants.dart';
 import '../themes/theme_manager.dart';
+import '../themes/theme_provider.dart';
 
 class ThemeScreen extends StatefulWidget {
   final ThemeModel initialTheme;
@@ -56,51 +59,60 @@ class _ThemeScreenState extends State<ThemeScreen> {
     final colorScheme = isDarkMode ? _theme.darkTheme.colorScheme : _theme.lightTheme.colorScheme;
     final textTheme = isDarkMode ? _theme.darkTheme.textTheme : _theme.lightTheme.textTheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer']!,
-          ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        title: Text(
-          'Theme Preview',
-          style: textTheme.bodyLarge?.copyWith(
-            color: colorScheme.onPrimaryContainer,
-          ),
-        ),
-        backgroundColor: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer']!,
-        actions: [
-          IconButton(
+    return WillPopScope(
+      onWillPop: () async {
+        widget.onThemeChange(_theme.name, tempColors);
+        context.read<ThemeProvider>().switchTheme(_theme.name);
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
             icon: Icon(
-              isDarkMode ? Icons.wb_sunny : Icons.nightlight_round,
+              Icons.arrow_back,
               color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer']!,
             ),
             onPressed: () {
-              setState(() {
-                isDarkMode = !isDarkMode;
-              });
+              widget.onThemeChange(_theme.name, tempColors);
+              context.read<ThemeProvider>().switchTheme(_theme.name);
+              Navigator.of(context).pop();
             },
           ),
-        ],
-      ),
-      backgroundColor: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer']!,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: defaultPadding,
-              child: _buildNestedContainerPreview(context),
-            ),
-            Divider(
+          title: Text(
+            'Theme Preview',
+            style: textTheme.bodyLarge?.copyWith(
               color: colorScheme.onPrimaryContainer,
             ),
-            _buildAllColorPickers(context),
+          ),
+          backgroundColor: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer']!,
+          actions: [
+            IconButton(
+              icon: Icon(
+                isDarkMode ? Icons.wb_sunny : Icons.nightlight_round,
+                color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer']!,
+              ),
+              onPressed: () {
+                setState(() {
+                  isDarkMode = !isDarkMode;
+                });
+              },
+            ),
           ],
+        ),
+        backgroundColor: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer']!,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: defaultPadding,
+                child: _buildNestedContainerPreview(context),
+              ),
+              Divider(
+                color: colorScheme.onPrimaryContainer,
+              ),
+              _buildAllColorPickers(context),
+            ],
+          ),
         ),
       ),
     );
@@ -303,10 +315,10 @@ class _ThemeScreenState extends State<ThemeScreen> {
 
   @override
   void dispose() {
-    widget.onThemeChange(
-      _theme.name,
-      tempColors,
-    );
+    // widget.onThemeChange(
+    //   _theme.name,
+    //   tempColors,
+    // );
     super.dispose();
   }
 }

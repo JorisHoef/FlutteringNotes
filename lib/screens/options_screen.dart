@@ -90,7 +90,9 @@ class OptionsScreen extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) => ThemeScreen(
                           initialTheme: theme,
+                          initialIsDarkMode: isDarkMode,
                           onThemeChange: (themeName, updatedColors) {
+                            // Apply the customized theme to the ThemeProvider instantly
                             themeProvider.customizeTheme(
                               themeName: themeName,
                               lightScheme: ColorScheme(
@@ -132,12 +134,12 @@ class OptionsScreen extends StatelessWidget {
                                 onSurface: theme.darkTheme.colorScheme.onSurface,
                               ),
                             );
-                          }, initialIsDarkMode: isDarkMode,
+                          },
                         ),
                       ),
                     ),
                   );
-                }),
+                })
               ],
             ),
           ],
