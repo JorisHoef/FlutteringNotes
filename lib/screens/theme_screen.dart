@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import '../constants/app_strings.dart';
 import '../constants/app_keys.dart';
 import '../constants/layout_constants.dart';
-import '../themes/theme_manager.dart';
-import '../themes/theme_provider.dart';
+import '../models/theme_model.dart';
+import '../providers/theme_provider.dart';
 
 class ThemeScreen extends StatefulWidget {
   final ThemeModel initialTheme;
@@ -114,9 +114,26 @@ class _ThemeScreenState extends State<ThemeScreen> {
               Navigator.of(context).pop();
             },
           ),
-          title: Text(
-            AppStrings.themePreview,
-            style: textTheme.bodyLarge?.copyWith(
+          title: TextField(
+            controller: TextEditingController(text: _theme.name)
+              ..selection = TextSelection.fromPosition(
+                TextPosition(offset: _theme.name.length),
+              ),
+            onChanged: (value) {
+              setState(() {
+                _theme = _theme.copyWith(
+                    name: value);
+              });
+            },
+            decoration: InputDecoration(
+              hintText: AppStrings.themeNameHint,
+              border: InputBorder.none,
+              hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: _getColor(AppKeys.onPrimaryContainer).withOpacity(0.6),
+                fontSize: textTheme.bodyLarge?.fontSize,
+              ),
+            ),
+            style: _theme.lightTheme.textTheme.bodyLarge?.copyWith(
               color: _getColor(AppKeys.onPrimaryContainer),
             ),
           ),

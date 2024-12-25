@@ -12,6 +12,7 @@ class ThemeModel {
   });
 
   ThemeModel copyWith({
+    required String name,
     ThemeData? lightTheme,
     ThemeData? darkTheme,
   }) {

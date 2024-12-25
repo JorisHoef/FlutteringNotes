@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/app_strings.dart';
-import '../themes/theme_provider.dart';
+import '../providers/theme_provider.dart';
 import 'custom_listTile.dart';
 
 class ListTileWithMenu extends StatelessWidget {
