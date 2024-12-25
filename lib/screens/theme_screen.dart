@@ -15,25 +15,28 @@ class ThemeScreen extends StatefulWidget {
 
 class _ThemeScreenState extends State<ThemeScreen> {
   late ThemeModel _theme;
-  late TextTheme textTheme;
   bool isDarkMode = false;
 
   @override
   void initState() {
     super.initState();
     _theme = widget.initialTheme;
-    textTheme = _theme.lightTheme.textTheme;
   }
 
   @override
   Widget build(BuildContext context) {
-    final themeData = _theme.lightTheme;
-    final primaryContainer = themeData.colorScheme.primaryContainer;
-    final onPrimaryContainer = themeData.colorScheme.onPrimaryContainer;
-    final secondaryContainer = themeData.colorScheme.secondaryContainer;
-    final onSecondaryContainer = themeData.colorScheme.onSecondaryContainer;
-    final tertiaryContainer = themeData.colorScheme.tertiaryContainer;
-    final onTertiaryContainer = themeData.colorScheme.onTertiaryContainer;
+    // Use the correct theme based on the current mode (light or dark)
+    final themeData = isDarkMode ? _theme.darkTheme : _theme.lightTheme;
+
+    // Get color values from the color scheme of the active theme
+    final colorScheme = themeData.colorScheme;
+
+    final primaryContainer = colorScheme.primaryContainer;
+    final onPrimaryContainer = colorScheme.onPrimaryContainer;
+    final secondaryContainer = colorScheme.secondaryContainer;
+    final onSecondaryContainer = colorScheme.onSecondaryContainer;
+    final tertiaryContainer = colorScheme.tertiaryContainer;
+    final onTertiaryContainer = colorScheme.onTertiaryContainer;
 
     return Scaffold(
       appBar: AppBar(
@@ -58,69 +61,33 @@ class _ThemeScreenState extends State<ThemeScreen> {
               child: Column(
                 children: [
                   _buildColorPicker('Primary Container Color', primaryContainer, (color) {
-                    setState(() {
-                      _theme = _theme.copyWith(
-                        lightTheme: _theme.lightTheme.copyWith(
-                          colorScheme: _theme.lightTheme.colorScheme.copyWith(
-                            primaryContainer: color,
-                          ),
-                        ),
-                      );
+                    _updateThemeColor(isDarkMode, (colorScheme) {
+                      return colorScheme.copyWith(primaryContainer: color);
                     });
                   }),
                   _buildColorPicker('On Primary Container Color', onPrimaryContainer, (color) {
-                    setState(() {
-                      _theme = _theme.copyWith(
-                        lightTheme: _theme.lightTheme.copyWith(
-                          colorScheme: _theme.lightTheme.colorScheme.copyWith(
-                            onPrimaryContainer: color,
-                          ),
-                        ),
-                      );
+                    _updateThemeColor(isDarkMode, (colorScheme) {
+                      return colorScheme.copyWith(onPrimaryContainer: color);
                     });
                   }),
                   _buildColorPicker('Secondary Container Color', secondaryContainer, (color) {
-                    setState(() {
-                      _theme = _theme.copyWith(
-                        lightTheme: _theme.lightTheme.copyWith(
-                          colorScheme: _theme.lightTheme.colorScheme.copyWith(
-                            secondaryContainer: color,
-                          ),
-                        ),
-                      );
+                    _updateThemeColor(isDarkMode, (colorScheme) {
+                      return colorScheme.copyWith(secondaryContainer: color);
                     });
                   }),
                   _buildColorPicker('On Secondary Container Color', onSecondaryContainer, (color) {
-                    setState(() {
-                      _theme = _theme.copyWith(
-                        lightTheme: _theme.lightTheme.copyWith(
-                          colorScheme: _theme.lightTheme.colorScheme.copyWith(
-                            onSecondaryContainer: color,
-                          ),
-                        ),
-                      );
+                    _updateThemeColor(isDarkMode, (colorScheme) {
+                      return colorScheme.copyWith(onSecondaryContainer: color);
                     });
                   }),
                   _buildColorPicker('Tertiary Container Color', tertiaryContainer, (color) {
-                    setState(() {
-                      _theme = _theme.copyWith(
-                        lightTheme: _theme.lightTheme.copyWith(
-                          colorScheme: _theme.lightTheme.colorScheme.copyWith(
-                            tertiaryContainer: color,
-                          ),
-                        ),
-                      );
+                    _updateThemeColor(isDarkMode, (colorScheme) {
+                      return colorScheme.copyWith(tertiaryContainer: color);
                     });
                   }),
                   _buildColorPicker('On Tertiary Container Color', onTertiaryContainer, (color) {
-                    setState(() {
-                      _theme = _theme.copyWith(
-                        lightTheme: _theme.lightTheme.copyWith(
-                          colorScheme: _theme.lightTheme.colorScheme.copyWith(
-                            onTertiaryContainer: color,
-                          ),
-                        ),
-                      );
+                    _updateThemeColor(isDarkMode, (colorScheme) {
+                      return colorScheme.copyWith(onTertiaryContainer: color);
                     });
                   }),
                 ],
@@ -142,6 +109,24 @@ class _ThemeScreenState extends State<ThemeScreen> {
         ),
       ),
     );
+  }
+
+  void _updateThemeColor(bool isDarkMode, ColorScheme Function(ColorScheme) colorSchemeUpdater) {
+    setState(() {
+      if (isDarkMode) {
+        _theme = _theme.copyWith(
+          darkTheme: _theme.darkTheme.copyWith(
+            colorScheme: colorSchemeUpdater(_theme.darkTheme.colorScheme),
+          ),
+        );
+      } else {
+        _theme = _theme.copyWith(
+          lightTheme: _theme.lightTheme.copyWith(
+            colorScheme: colorSchemeUpdater(_theme.lightTheme.colorScheme),
+          ),
+        );
+      }
+    });
   }
 
   Widget _buildNestedContainerPreview({
@@ -205,18 +190,21 @@ class _ThemeScreenState extends State<ThemeScreen> {
           builder: (BuildContext context) {
             return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
+                final themeData = isDarkMode ? _theme.darkTheme : _theme.lightTheme;
+                final colorScheme = themeData.colorScheme;
+
                 return AlertDialog(
                   title: Text('Edit $label'),
                   content: SingleChildScrollView(
                     child: Column(
                       children: [
                         _buildNestedContainerPreview(
-                          primaryContainer: _theme.lightTheme.colorScheme.primaryContainer,
-                          onPrimaryContainer: _theme.lightTheme.colorScheme.onPrimaryContainer,
-                          secondaryContainer: _theme.lightTheme.colorScheme.secondaryContainer,
-                          onSecondaryContainer: _theme.lightTheme.colorScheme.onSecondaryContainer,
-                          tertiaryContainer: _theme.lightTheme.colorScheme.tertiaryContainer,
-                          onTertiaryContainer: _theme.lightTheme.colorScheme.onTertiaryContainer,
+                          primaryContainer: colorScheme.primaryContainer,
+                          onPrimaryContainer: colorScheme.onPrimaryContainer,
+                          secondaryContainer: colorScheme.secondaryContainer,
+                          onSecondaryContainer: colorScheme.onSecondaryContainer,
+                          tertiaryContainer: colorScheme.tertiaryContainer,
+                          onTertiaryContainer: colorScheme.onTertiaryContainer,
                         ),
                         SizedBox(height: 20),
                         ColorPicker(
