@@ -9,6 +9,8 @@ import '../widgets/listTile_withMenu.dart';
 import 'note_writing_screen.dart';
 
 class NoteOverviewScreen extends StatelessWidget {
+  late String imageLocation = 'https://picsum.photos/1500/300?grayscale&blur=1';
+
   @override
   Widget build(BuildContext context) {
     var notesState = context.watch<NoteState>();
@@ -32,9 +34,26 @@ class NoteOverviewScreen extends StatelessWidget {
                 background: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.asset(
-                      'assets/images/your_image.png',
+                    Image.network(
+                      imageLocation,
                       fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                  (loadingProgress.expectedTotalBytes ?? 1)
+                                  : null,
+                            ),
+                          );
+                        }
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Text('Failed to load image');
+                      },
                     ),
                     Positioned(
                       bottom: defaultPadding.bottom - defaultPadding.bottom,
