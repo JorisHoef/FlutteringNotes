@@ -132,7 +132,7 @@ class OptionsScreen extends StatelessWidget {
                                 onSurface: theme.darkTheme.colorScheme.onSurface,
                               ),
                             );
-                          },
+                          }, initialIsDarkMode: isDarkMode,
                         ),
                       ),
                     ),

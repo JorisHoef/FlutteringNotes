@@ -46,6 +46,15 @@ class _NoteWritingScreenState extends State<NoteWritingScreen> {
               pinned: true,
               expandedHeight: 50.0,
               backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+              leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
               title: Padding(
                 padding: defaultPadding,
                 child: TextField(
@@ -59,6 +68,9 @@ class _NoteWritingScreenState extends State<NoteWritingScreen> {
                   decoration: InputDecoration(
                     hintText: AppStrings.noteTitlePlaceholder,
                     border: InputBorder.none,
+                    hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.6),
+                    ),
                   ),
                 ),
               ),

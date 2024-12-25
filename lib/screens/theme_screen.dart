@@ -5,10 +5,12 @@ import '../themes/theme_manager.dart';
 
 class ThemeScreen extends StatefulWidget {
   final ThemeModel initialTheme;
+  final bool initialIsDarkMode;
   final Function(String themeName, Map<String, Color>) onThemeChange;
 
   ThemeScreen({
     required this.initialTheme,
+    required this.initialIsDarkMode,
     required this.onThemeChange,
   });
 
@@ -18,13 +20,14 @@ class ThemeScreen extends StatefulWidget {
 
 class _ThemeScreenState extends State<ThemeScreen> {
   late ThemeModel _theme;
-  bool isDarkMode = false;
+  late bool isDarkMode;
   late Map<String, Color> tempColors;
 
   @override
   void initState() {
     super.initState();
     _theme = widget.initialTheme;
+    isDarkMode = widget.initialIsDarkMode;
     _initializeTempColors();
   }
 
@@ -39,7 +42,6 @@ class _ThemeScreenState extends State<ThemeScreen> {
       'lightOnSecondaryContainer': lightScheme.onSecondaryContainer,
       'lightTertiaryContainer': lightScheme.tertiaryContainer,
       'lightOnTertiaryContainer': lightScheme.onTertiaryContainer,
-
       'darkPrimaryContainer': darkScheme.primaryContainer,
       'darkOnPrimaryContainer': darkScheme.onPrimaryContainer,
       'darkSecondaryContainer': darkScheme.secondaryContainer,
@@ -51,44 +53,71 @@ class _ThemeScreenState extends State<ThemeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = isDarkMode ? _theme.darkTheme.colorScheme : _theme.lightTheme.colorScheme;
+    final textTheme = isDarkMode ? _theme.darkTheme.textTheme : _theme.lightTheme.textTheme;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Theme Preview'),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer']!,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Text(
+          'Theme Preview',
+          style: textTheme.bodyLarge?.copyWith(
+            color: colorScheme.onPrimaryContainer,
+          ),
+        ),
         backgroundColor: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer']!,
         actions: [
           IconButton(
-            icon: Icon(isDarkMode ? Icons.wb_sunny : Icons.nightlight_round),
+            icon: Icon(
+              isDarkMode ? Icons.wb_sunny : Icons.nightlight_round,
+              color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer']!,
+            ),
             onPressed: () {
-              setState(() => isDarkMode = !isDarkMode);
+              setState(() {
+                isDarkMode = !isDarkMode;
+              });
             },
           ),
         ],
       ),
+      backgroundColor: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer']!,
       body: SingleChildScrollView(
         child: Column(
           children: [
             Padding(
               padding: defaultPadding,
-              child: _buildNestedContainerPreview(), // Display the preview container
+              child: _buildNestedContainerPreview(context),
             ),
-            Divider(),
-            _buildAllColorPickers(),
+            Divider(
+              color: colorScheme.onPrimaryContainer,
+            ),
+            _buildAllColorPickers(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildAllColorPickers() {
+  Widget _buildAllColorPickers(BuildContext context) {
     final keys = tempColors.keys.where((key) =>
         key.startsWith(isDarkMode ? 'dark' : 'light'));
+    final colorScheme = isDarkMode ? _theme.darkTheme.colorScheme : _theme.lightTheme.colorScheme;
+    final textTheme = isDarkMode ? _theme.darkTheme.textTheme : _theme.lightTheme.textTheme;
 
     return Padding(
       padding: defaultPadding,
       child: Column(
         children: keys.map((key) {
           final color = tempColors[key]!;
-          final label = key.replaceFirst('${isDarkMode ? 'dark' : 'light'}', '');
+          final label = key.replaceFirst(isDarkMode ? 'dark' : 'light', '');
 
           return _buildColorPicker(
             label,
@@ -98,15 +127,26 @@ class _ThemeScreenState extends State<ThemeScreen> {
                 tempColors[key] = newColor;
               });
             },
+            textTheme,
+            colorScheme,
           );
         }).toList(),
       ),
     );
   }
 
-  Widget _buildColorPicker(String label, Color initialColor, ValueChanged<Color> onColorChanged) {
+  Widget _buildColorPicker(
+      String label,
+      Color initialColor,
+      ValueChanged<Color> onColorChanged,
+      TextTheme textTheme,
+      ColorScheme colorScheme,
+      ) {
     return ListTile(
-      title: Text(label),
+      title: Text(
+        label,
+        style: textTheme.bodyMedium?.copyWith(color: colorScheme.onPrimaryContainer),
+      ),
       trailing: Container(
         width: 30,
         height: 30,
@@ -117,15 +157,16 @@ class _ThemeScreenState extends State<ThemeScreen> {
       ),
       onTap: () {
         Color tempColor = initialColor;
-
-        // Open a popup for the color picker
         showDialog(
           context: context,
           builder: (context) {
             return StatefulBuilder(
               builder: (context, setState) {
                 return AlertDialog(
-                  title: Text('Edit $label'),
+                  title: Text(
+                    'Edit $label',
+                    style: textTheme.titleMedium?.copyWith(color: colorScheme.onPrimaryContainer),
+                  ),
                   content: SingleChildScrollView(
                     child: Column(
                       children: [
@@ -134,7 +175,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                           child: Container(
                             padding: EdgeInsets.all(16),
                             height: 370,
-                            child: _buildNestedContainerPreview(),
+                            child: _buildNestedContainerPreview(context),
                             decoration: BoxDecoration(
                               border: Border.all(color: tempColor, width: 2),
                             ),
@@ -145,8 +186,6 @@ class _ThemeScreenState extends State<ThemeScreen> {
                           onColorChanged: (newColor) {
                             setState(() {
                               tempColor = newColor;
-
-                              // Update tempColors dynamically for live updates
                               tempColors['${isDarkMode ? 'dark' : 'light'}$label'] = newColor;
                             });
                           },
@@ -164,7 +203,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                     TextButton(
                       child: const Text('Select'),
                       onPressed: () {
-                        onColorChanged(tempColor); // Commit the final changes
+                        onColorChanged(tempColor);
                         Navigator.of(context).pop();
                       },
                     ),
@@ -178,8 +217,9 @@ class _ThemeScreenState extends State<ThemeScreen> {
     );
   }
 
-  Widget _buildNestedContainerPreview() {
-    // Constructs the container preview dynamically from tempColors
+  Widget _buildNestedContainerPreview(BuildContext context) {
+    final colorScheme = isDarkMode ? _theme.darkTheme.colorScheme : _theme.lightTheme.colorScheme;
+
     return Container(
       color: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer'],
       child: Column(
