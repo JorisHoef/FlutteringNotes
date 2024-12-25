@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:fluttering_notes/storage/theme_repository.dart';
+
 import '../constants/theme_constants.dart';
 import '../models/theme_model.dart';
+import '../storage/theme_repository.dart';
 
 class ThemeProvider extends ChangeNotifier {
   final ThemeRepository _themeRepository;

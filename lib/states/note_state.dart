@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/note_model.dart';
 
+import '../models/note_model.dart';
 import '../storage/note_repository.dart';
 
 class NoteState extends ChangeNotifier {
