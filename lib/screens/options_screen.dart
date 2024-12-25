@@ -5,6 +5,7 @@ import '../constants/app_strings.dart';
 import '../constants/navigation_constants.dart';
 import '../themes/theme_provider.dart';
 import '../widgets/listTile_withMenu.dart';
+import 'theme_screen.dart';
 
 class OptionsScreen extends StatelessWidget {
   @override
@@ -84,6 +85,13 @@ class OptionsScreen extends StatelessWidget {
                     title: theme.name,
                     onTap: () => themeProvider.switchTheme(theme.name),
                     titleStyle: textTheme.bodySmall,
+                    onEdit: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ThemeScreen(
+                        ),
+                      ),
+                    ),
                   );
                 }),
               ],
