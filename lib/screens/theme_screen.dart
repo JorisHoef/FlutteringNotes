@@ -3,6 +3,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/provider.dart';
 
 import '../constants/app_strings.dart';
+import '../constants/app_keys.dart';
 import '../constants/layout_constants.dart';
 import '../themes/theme_manager.dart';
 import '../themes/theme_provider.dart';
@@ -40,19 +41,54 @@ class _ThemeScreenState extends State<ThemeScreen> {
     final darkScheme = _theme.darkTheme.colorScheme;
 
     tempColors = {
-      'lightPrimaryContainer': lightScheme.primaryContainer,
-      'lightOnPrimaryContainer': lightScheme.onPrimaryContainer,
-      'lightSecondaryContainer': lightScheme.secondaryContainer,
-      'lightOnSecondaryContainer': lightScheme.onSecondaryContainer,
-      'lightTertiaryContainer': lightScheme.tertiaryContainer,
-      'lightOnTertiaryContainer': lightScheme.onTertiaryContainer,
-      'darkPrimaryContainer': darkScheme.primaryContainer,
-      'darkOnPrimaryContainer': darkScheme.onPrimaryContainer,
-      'darkSecondaryContainer': darkScheme.secondaryContainer,
-      'darkOnSecondaryContainer': darkScheme.onSecondaryContainer,
-      'darkTertiaryContainer': darkScheme.tertiaryContainer,
-      'darkOnTertiaryContainer': darkScheme.onTertiaryContainer,
+      AppKeys.lightPrimaryContainer: lightScheme.primaryContainer,
+      AppKeys.lightOnPrimaryContainer: lightScheme.onPrimaryContainer,
+      AppKeys.lightSecondaryContainer: lightScheme.secondaryContainer,
+      AppKeys.lightOnSecondaryContainer: lightScheme.onSecondaryContainer,
+      AppKeys.lightTertiaryContainer: lightScheme.tertiaryContainer,
+      AppKeys.lightOnTertiaryContainer: lightScheme.onTertiaryContainer,
+      AppKeys.darkPrimaryContainer: darkScheme.primaryContainer,
+      AppKeys.darkOnPrimaryContainer: darkScheme.onPrimaryContainer,
+      AppKeys.darkSecondaryContainer: darkScheme.secondaryContainer,
+      AppKeys.darkOnSecondaryContainer: darkScheme.onSecondaryContainer,
+      AppKeys.darkTertiaryContainer: darkScheme.tertiaryContainer,
+      AppKeys.darkOnTertiaryContainer: darkScheme.onTertiaryContainer,
     };
+  }
+
+  /// Helper to construct keys for tempColors
+  String _getColorKey(String baseKey) {
+    return '${isDarkMode ? "dark" : "light"}$baseKey';
+  }
+
+  /// Helper to retrieve colors from tempColors by base key
+  Color _getColor(String baseKey) {
+    return tempColors[_getColorKey(baseKey)]!;
+  }
+
+  /// Helper to set colors in tempColors by base key
+  void _setColor(String baseKey, Color color) {
+    tempColors[_getColorKey(baseKey)] = color;
+  }
+
+  /// Helper to retrieve a label for containers
+  String _getLabel(String baseKey) {
+    switch (baseKey) {
+      case AppKeys.primaryContainer:
+        return AppStrings.primaryContainer;
+      case AppKeys.secondaryContainer:
+        return AppStrings.secondaryContainer;
+      case AppKeys.tertiaryContainer:
+        return AppStrings.tertiaryContainer;
+      case AppKeys.onPrimaryContainer:
+        return AppStrings.onPrimaryContainer;
+      case AppKeys.onSecondaryContainer:
+        return AppStrings.onSecondaryContainer;
+      case AppKeys.onTertiaryContainer:
+        return AppStrings.onTertiaryContainer;
+      default:
+        return baseKey; // Fallback case
+    }
   }
 
   @override
@@ -70,7 +106,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
           leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
-              color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer']!,
+              color: _getColor(AppKeys.onPrimaryContainer),
             ),
             onPressed: () {
               widget.onThemeChange(_theme.name, tempColors);
@@ -81,15 +117,15 @@ class _ThemeScreenState extends State<ThemeScreen> {
           title: Text(
             AppStrings.themePreview,
             style: textTheme.bodyLarge?.copyWith(
-              color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer'],
+              color: _getColor(AppKeys.onPrimaryContainer),
             ),
           ),
-          backgroundColor: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer']!,
+          backgroundColor: _getColor(AppKeys.primaryContainer),
           actions: [
             IconButton(
               icon: Icon(
                 isDarkMode ? Icons.wb_sunny : Icons.nightlight_round,
-                color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer']!,
+                color: _getColor(AppKeys.onPrimaryContainer),
               ),
               onPressed: () {
                 setState(() {
@@ -99,7 +135,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
             ),
           ],
         ),
-        backgroundColor: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer']!,
+        backgroundColor: _getColor(AppKeys.primaryContainer),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -108,7 +144,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                 child: _buildNestedContainerPreview(context),
               ),
               Divider(
-                color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer']!,
+                color: _getColor(AppKeys.onPrimaryContainer),
               ),
               _buildAllColorPickers(context),
             ],
@@ -136,7 +172,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
             color,
                 (newColor) {
               setState(() {
-                tempColors[key] = newColor;
+                _setColor(label, newColor);
               });
             },
             textTheme,
@@ -156,9 +192,9 @@ class _ThemeScreenState extends State<ThemeScreen> {
       ) {
     return ListTile(
       title: Text(
-        label,
+        _getLabel(label),
         style: TextStyle(
-          color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer'],
+          color: _getColor(AppKeys.onPrimaryContainer),
           fontSize: textTheme.bodyMedium?.fontSize,
         ),
       ),
@@ -177,11 +213,11 @@ class _ThemeScreenState extends State<ThemeScreen> {
             return StatefulBuilder(
               builder: (context, setState) {
                 return AlertDialog(
-                  backgroundColor: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer'],
+                  backgroundColor: _getColor(AppKeys.primaryContainer),
                   title: Text(
-                    '${AppStrings.editText} $label',
+                    '${AppStrings.editDialogTitle} ${_getLabel(label)}',
                     style: TextStyle(
-                      color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer'],
+                      color: _getColor(AppKeys.onPrimaryContainer),
                       fontSize: textTheme.titleMedium?.fontSize,
                       fontWeight: textTheme.titleMedium?.fontWeight,
                     ),
@@ -196,7 +232,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                             height: 370,
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: tempColors['${isDarkMode ? 'dark' : 'light'}$label'] ?? initialColor,
+                                color: _getColor(label),
                                 width: 2,
                               ),
                             ),
@@ -204,10 +240,10 @@ class _ThemeScreenState extends State<ThemeScreen> {
                           ),
                         ),
                         ColorPicker(
-                          pickerColor: tempColors['${isDarkMode ? 'dark' : 'light'}$label'] ?? initialColor,
+                          pickerColor: _getColor(label),
                           onColorChanged: (newColor) {
                             setState(() {
-                              tempColors['${isDarkMode ? 'dark' : 'light'}$label'] = newColor;
+                              _setColor(label, newColor);
                             });
                           },
                           enableAlpha: true,
@@ -221,7 +257,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                       child: Text(
                         AppStrings.cancelText,
                         style: TextStyle(
-                          color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer'],
+                          color: _getColor(AppKeys.onPrimaryContainer),
                         ),
                       ),
                       onPressed: () => Navigator.of(context).pop(),
@@ -230,11 +266,11 @@ class _ThemeScreenState extends State<ThemeScreen> {
                       child: Text(
                         AppStrings.applyText,
                         style: TextStyle(
-                          color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer'],
+                          color: _getColor(AppKeys.onPrimaryContainer),
                         ),
                       ),
                       onPressed: () {
-                        onColorChanged(tempColors['${isDarkMode ? 'dark' : 'light'}$label'] ?? initialColor);
+                        onColorChanged(_getColor(label));
                         Navigator.of(context).pop();
                       },
                     ),
@@ -249,17 +285,15 @@ class _ThemeScreenState extends State<ThemeScreen> {
   }
 
   Widget _buildNestedContainerPreview(BuildContext context) {
-    final colorScheme = isDarkMode ? _theme.darkTheme.colorScheme : _theme.lightTheme.colorScheme;
-
     return Container(
-      color: tempColors['${isDarkMode ? 'dark' : 'light'}PrimaryContainer'],
+      color: _getColor(AppKeys.primaryContainer),
       child: Column(
         children: [
           SizedBox(height: 16),
           Text(
-            'Primary Container',
+            _getLabel(AppKeys.primaryContainer),
             style: TextStyle(
-              color: tempColors['${isDarkMode ? 'dark' : 'light'}OnPrimaryContainer'],
+              color: _getColor(AppKeys.onPrimaryContainer),
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -271,7 +305,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: tempColors['${isDarkMode ? 'dark' : 'light'}SecondaryContainer'],
+                color: _getColor(AppKeys.secondaryContainer),
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
@@ -285,9 +319,9 @@ class _ThemeScreenState extends State<ThemeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Secondary Container',
+                    _getLabel(AppKeys.secondaryContainer),
                     style: TextStyle(
-                      color: tempColors['${isDarkMode ? 'dark' : 'light'}OnSecondaryContainer'],
+                      color: _getColor(AppKeys.onSecondaryContainer),
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
@@ -299,7 +333,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal: 16),
                       decoration: BoxDecoration(
-                        color: tempColors['${isDarkMode ? 'dark' : 'light'}TertiaryContainer'],
+                        color: _getColor(AppKeys.tertiaryContainer),
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
@@ -311,9 +345,9 @@ class _ThemeScreenState extends State<ThemeScreen> {
                       ),
                       child: Center(
                         child: Text(
-                          'Tertiary Container',
+                          _getLabel(AppKeys.tertiaryContainer),
                           style: TextStyle(
-                            color: tempColors['${isDarkMode ? 'dark' : 'light'}OnTertiaryContainer'],
+                            color: _getColor(AppKeys.onTertiaryContainer),
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
