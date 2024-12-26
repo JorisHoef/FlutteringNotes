@@ -196,9 +196,7 @@ class OptionsScreen extends StatelessWidget {
       error: fallbackScheme.error, // Set fallback error
       onError: fallbackScheme.onError, // Set fallback onError
       surface: fallbackScheme.surface, // Set fallback surface
-      onSurface: fallbackScheme.onSurface, // Set fallback onSurface
-      background: fallbackScheme.background, // Set fallback background
-      onBackground: fallbackScheme.onBackground, // Set fallback onBackground
+      onSurface: fallbackScheme.onSurface, // Set fallback onBackground
     );
   }
 
