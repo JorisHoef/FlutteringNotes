@@ -22,6 +22,7 @@ class CustomNavigationRail extends StatelessWidget {
       selectedIndex: selectedIndex,
       onDestinationSelected: onDestinationSelected,
       extended: extended,
+      minExtendedWidth: 175,
       selectedIconTheme: IconThemeData(
         color: Theme.of(context).colorScheme.onPrimaryContainer,
         size: 28.0,
