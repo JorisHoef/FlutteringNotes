@@ -88,63 +88,77 @@ class OptionsScreen extends StatelessWidget {
             ),
           ),
 
-          // Section Title (wrapped with SliverToBoxAdapter)
+// Wrap everything in a unified container with secondaryContainer background
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              child: Text(
-                AppStrings.selectThemeText,
-                style: textTheme.bodyMedium?.copyWith(
-                  color:
-                      themeProvider.themeData.colorScheme.onSecondaryContainer,
-                ),
-              ),
-            ),
-          ),
-
-          // Theme List (SliverList)
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                final theme = themeProvider.availableThemes[index];
-
-                return ListTileWithMenu(
-                  leadingWidget: CircleAvatar(
-                    backgroundColor: isDarkMode
-                        ? theme.darkTheme.colorScheme.primary
-                        : theme.lightTheme.colorScheme.primary,
-                  ),
-                  title: theme.name,
-                  onTap: () => themeProvider.switchTheme(theme.name),
-                  titleStyle: textTheme.bodySmall,
-                  onDelete: () => themeProvider.deleteTheme(theme.name),
-                  onEdit: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ThemeScreen(
-                        initialTheme: theme,
-                        initialIsDarkMode: isDarkMode,
-                        onThemeChange: (themeName, updatedColors) {
-                          themeProvider.customizeTheme(
-                            themeName: themeName,
-                            lightScheme: _generateColorScheme(updatedColors,
-                                Brightness.light, theme.lightTheme.colorScheme),
-                            darkScheme: _generateColorScheme(updatedColors,
-                                Brightness.dark, theme.darkTheme.colorScheme),
-                          );
-                        },
+            child: Container(
+              color: themeProvider.themeData.colorScheme
+                  .secondaryContainer, // Use secondaryContainer as the background color
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Section Title
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 16),
+                    child: Text(
+                      AppStrings.selectThemeText,
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: themeProvider
+                            .themeData.colorScheme.onSecondaryContainer,
                       ),
                     ),
                   ),
-                );
-              },
-              childCount: themeProvider.availableThemes.length,
-            ),
-          ),
 
-          // Extra bottom padding (optional for floating action button spacing)
-          SliverToBoxAdapter(
-            child: SizedBox(height: 80),
+                  // Theme List
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics:
+                        const NeverScrollableScrollPhysics(), // Let parent scroll
+                    itemCount: themeProvider.availableThemes.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final theme = themeProvider.availableThemes[index];
+
+                      return ListTileWithMenu(
+                        leadingWidget: CircleAvatar(
+                          backgroundColor: isDarkMode
+                              ? theme.darkTheme.colorScheme.onPrimaryContainer
+                              : theme.lightTheme.colorScheme.onPrimaryContainer,
+                        ),
+                        title: theme.name,
+                        onTap: () => themeProvider.switchTheme(theme.name),
+                        titleStyle: textTheme.bodySmall,
+                        onDelete: () => themeProvider.deleteTheme(theme.name),
+                        onEdit: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ThemeScreen(
+                              initialTheme: theme,
+                              initialIsDarkMode: isDarkMode,
+                              onThemeChange: (themeName, updatedColors) {
+                                themeProvider.customizeTheme(
+                                  themeName: themeName,
+                                  lightScheme: _generateColorScheme(
+                                      updatedColors,
+                                      Brightness.light,
+                                      theme.lightTheme.colorScheme),
+                                  darkScheme: _generateColorScheme(
+                                      updatedColors,
+                                      Brightness.dark,
+                                      theme.darkTheme.colorScheme),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+
+                  // Extra bottom padding
+                  const SizedBox(height: 80),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -217,10 +231,10 @@ class OptionsScreen extends StatelessWidget {
         brightness: brightness,
         error: fallbackScheme.error,
         onError: fallbackScheme.onError,
-        surface: fallbackScheme.surface,
-        onSurface: fallbackScheme.onSurface,
-        secondary: fallbackScheme.secondary,
-        onSecondary: fallbackScheme.onSecondary);
+        surface: fallbackScheme.primaryContainer,
+        onSurface: fallbackScheme.onPrimaryContainer,
+        secondary: fallbackScheme.secondaryContainer,
+        onSecondary: fallbackScheme.onSecondaryContainer);
   }
 
   void _showDeleteConfirmationDialog(BuildContext context) {
