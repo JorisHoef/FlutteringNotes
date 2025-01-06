@@ -22,7 +22,8 @@ class ThemeProvider extends ChangeNotifier {
     _loadThemeFromStorage();
   }
 
-  ThemeData get themeData => _isDarkMode ? _currentTheme.darkTheme : _currentTheme.lightTheme;
+  ThemeData get themeData =>
+      _isDarkMode ? _currentTheme.darkTheme : _currentTheme.lightTheme;
 
   List<ThemeModel> get availableThemes => _availableThemes;
 
@@ -34,23 +35,25 @@ class ThemeProvider extends ChangeNotifier {
 
   Future<void> switchTheme(String themeName) async {
     final selectedTheme = _availableThemes.firstWhere(
-          (theme) => theme.name == themeName,
+      (theme) => theme.name == themeName,
       orElse: () => _currentTheme,
     );
     _currentTheme = selectedTheme;
     notifyListeners(); // Notify listeners of the theme change
-    await _themeRepository.saveSelectedTheme(themeName); // Save selected theme to storage
+    await _themeRepository
+        .saveSelectedTheme(themeName); // Save selected theme to storage
   }
 
   Future<void> addTheme(ThemeModel newTheme) async {
+    debugPrint("Adding new theme: ${newTheme.name}");
     _availableThemes.add(newTheme);
-    notifyListeners(); // Notify listeners of the new theme addition
-    await _themeRepository.saveTheme(newTheme); // Save to storage
+    notifyListeners();
+    await _themeRepository.saveTheme(newTheme);
   }
 
   Future<void> deleteTheme(String themeName) async {
     final themeToDelete = _availableThemes.firstWhere(
-          (theme) => theme.name == themeName,
+      (theme) => theme.name == themeName,
       orElse: () => _currentTheme,
     );
 
@@ -69,16 +72,26 @@ class ThemeProvider extends ChangeNotifier {
     required ColorScheme lightScheme,
     required ColorScheme darkScheme,
   }) {
-    final themeIndex = _availableThemes.indexWhere((theme) => theme.name == themeName);
+    final themeIndex =
+        _availableThemes.indexWhere((theme) => theme.name == themeName);
     if (themeIndex != -1) {
       final theme = _availableThemes[themeIndex];
+
+      // Update the theme with new color schemes
       final updatedTheme = ThemeModel(
         name: theme.name,
         lightTheme: theme.lightTheme.copyWith(colorScheme: lightScheme),
         darkTheme: theme.darkTheme.copyWith(colorScheme: darkScheme),
       );
+
+      // Update the in-memory list of themes
       _availableThemes[themeIndex] = updatedTheme;
-      notifyListeners(); // Notify changes
+
+      // Save the updated theme to persistent storage
+      _themeRepository.saveTheme(updatedTheme);
+
+      notifyListeners(); // Notify listeners of the changes
+      debugPrint("Theme updated and saved: ${updatedTheme.name}");
     }
   }
 
@@ -90,14 +103,15 @@ class ThemeProvider extends ChangeNotifier {
     // Load available themes from repository
     final storedThemes = await _themeRepository.fetchThemes();
 
-    if (storedThemes.isEmpty) {
+    if (storedThemes.isEmpty && _availableThemes.isEmpty) {
+      // Fix to not overwrite if already present
       // If no themes are saved, initialize with predefined themes
       for (final theme in predefinedThemes()) {
         await _themeRepository.saveTheme(theme);
       }
-      _availableThemes.clear();
+      _availableThemes.clear(); // Populate with predefined themes
       _availableThemes.addAll(predefinedThemes());
-    } else {
+    } else if (storedThemes.isNotEmpty) {
       // Use stored themes
       _availableThemes.clear();
       _availableThemes.addAll(storedThemes);
@@ -106,7 +120,7 @@ class ThemeProvider extends ChangeNotifier {
     // Set the current theme and dark mode state
     if (savedThemeName != null) {
       _currentTheme = _availableThemes.firstWhere(
-            (theme) => theme.name == savedThemeName,
+        (theme) => theme.name == savedThemeName,
         orElse: () => _availableThemes.first,
       );
     } else {

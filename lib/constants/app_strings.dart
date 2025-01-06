@@ -23,6 +23,8 @@ class AppStrings {
   static const String themePreview = 'Theme Preview';
   static const String addThemeText = "Add Theme";
   static const String themeNameHint = "Name your theme";
+  static const String saveThemeButtonText = "Save Theme";
+  static const String themeNameEmptyError = "Theme name shouldn't be empty!";
 
   // Dialog Labels
   static const String editDialogTitle = "Edit";
@@ -44,8 +46,10 @@ class AppStrings {
 
   static const String deletePreferencesText = 'Delete Preferences';
   static const String deletePreferencesTitle = 'Delete All Preferences';
-  static const String deletePreferencesConfirmation = 'Are you sure you want to delete all saved preferences? This action cannot be undone.';
-  static const String preferencesDeletedSuccess = 'All preferences have been successfully deleted.';
+  static const String deletePreferencesConfirmation =
+      'Are you sure you want to delete all saved preferences? This action cannot be undone.';
+  static const String preferencesDeletedSuccess =
+      'All preferences have been successfully deleted.';
   static const String confirm = 'Confirm';
   static const String cancel = 'Cancel';
 }

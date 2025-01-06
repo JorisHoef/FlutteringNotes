@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:provider/provider.dart';
 
-import '../constants/app_strings.dart';
 import '../constants/app_keys.dart';
+import '../constants/app_strings.dart';
 import '../constants/layout_constants.dart';
 import '../models/theme_model.dart';
-import '../providers/theme_provider.dart';
 
 class ThemeScreen extends StatefulWidget {
   final ThemeModel initialTheme;
@@ -91,14 +89,63 @@ class _ThemeScreenState extends State<ThemeScreen> {
     }
   }
 
+  /// Save the state before popping the screen
+  void _saveTheme() {
+    debugPrint('Save theme triggered with theme name: ${_theme.name}');
+
+    // Handle empty theme name
+    if (_theme.name.isEmpty) {
+      debugPrint('Error: Theme name is empty.');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppStrings.themeNameEmptyError),
+        ),
+      );
+      return; // Don't proceed if the theme name is invalid
+    }
+
+    // Call parent callback
+    widget.onThemeChange(_theme.name, tempColors);
+    debugPrint('onThemeChange callback invoked with theme: ${_theme.name}');
+    debugPrint('Updated tempColors: $tempColors');
+
+    // Return the new ThemeModel to the parent
+    Navigator.of(context).pop(
+      ThemeModel(
+        name: _theme.name,
+        lightTheme: ThemeModel.buildLightTheme(
+          onPrimaryContainer: tempColors[AppKeys.lightOnPrimaryContainer]!,
+          onSecondaryContainer: tempColors[AppKeys.lightOnSecondaryContainer]!,
+          onTertiaryContainer: tempColors[AppKeys.lightOnTertiaryContainer]!,
+          primaryContainer: tempColors[AppKeys.lightPrimaryContainer]!,
+          secondaryContainer: tempColors[AppKeys.lightSecondaryContainer]!,
+          tertiaryContainer: tempColors[AppKeys.lightTertiaryContainer]!,
+          textTheme: _theme.lightTheme.textTheme, // Use existing textTheme
+        ),
+        darkTheme: ThemeModel.buildDarkTheme(
+          onPrimaryContainer: tempColors[AppKeys.darkOnPrimaryContainer]!,
+          onSecondaryContainer: tempColors[AppKeys.darkOnSecondaryContainer]!,
+          onTertiaryContainer: tempColors[AppKeys.darkOnTertiaryContainer]!,
+          primaryContainer: tempColors[AppKeys.darkPrimaryContainer]!,
+          secondaryContainer: tempColors[AppKeys.darkSecondaryContainer]!,
+          tertiaryContainer: tempColors[AppKeys.darkTertiaryContainer]!,
+          textTheme: _theme.darkTheme.textTheme, // Use existing textTheme
+        ),
+      ),
+    );
+
+    debugPrint('Navigator.pop called.');
+  }
+
   @override
   Widget build(BuildContext context) {
-    final textTheme = isDarkMode ? _theme.darkTheme.textTheme : _theme.lightTheme.textTheme;
+    final textTheme =
+        isDarkMode ? _theme.darkTheme.textTheme : _theme.lightTheme.textTheme;
 
     return WillPopScope(
+      // Trigger save action before popping the screen
       onWillPop: () async {
-        widget.onThemeChange(_theme.name, tempColors);
-        context.read<ThemeProvider>().switchTheme(_theme.name);
+        _saveTheme();
         return true;
       },
       child: Scaffold(
@@ -108,11 +155,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
               Icons.arrow_back,
               color: _getColor(AppKeys.onPrimaryContainer),
             ),
-            onPressed: () {
-              widget.onThemeChange(_theme.name, tempColors);
-              context.read<ThemeProvider>().switchTheme(_theme.name);
-              Navigator.of(context).pop();
-            },
+            onPressed: _saveTheme,
           ),
           title: TextField(
             controller: TextEditingController(text: _theme.name)
@@ -121,19 +164,17 @@ class _ThemeScreenState extends State<ThemeScreen> {
               ),
             onChanged: (value) {
               setState(() {
-                _theme = _theme.copyWith(
-                    name: value);
+                _theme = _theme.copyWith(name: value);
               });
             },
             decoration: InputDecoration(
               hintText: AppStrings.themeNameHint,
               border: InputBorder.none,
-              hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              hintStyle: textTheme.bodyLarge?.copyWith(
                 color: _getColor(AppKeys.onPrimaryContainer).withOpacity(0.6),
-                fontSize: textTheme.bodyLarge?.fontSize,
               ),
             ),
-            style: _theme.lightTheme.textTheme.bodyLarge?.copyWith(
+            style: textTheme.bodyLarge?.copyWith(
               color: _getColor(AppKeys.onPrimaryContainer),
             ),
           ),
@@ -172,10 +213,13 @@ class _ThemeScreenState extends State<ThemeScreen> {
   }
 
   Widget _buildAllColorPickers(BuildContext context) {
-    final keys = tempColors.keys.where((key) =>
-        key.startsWith(isDarkMode ? 'dark' : 'light'));
-    final colorScheme = isDarkMode ? _theme.darkTheme.colorScheme : _theme.lightTheme.colorScheme;
-    final textTheme = isDarkMode ? _theme.darkTheme.textTheme : _theme.lightTheme.textTheme;
+    final keys = tempColors.keys
+        .where((key) => key.startsWith(isDarkMode ? 'dark' : 'light'));
+    final colorScheme = isDarkMode
+        ? _theme.darkTheme.colorScheme
+        : _theme.lightTheme.colorScheme;
+    final textTheme =
+        isDarkMode ? _theme.darkTheme.textTheme : _theme.lightTheme.textTheme;
 
     return Padding(
       padding: defaultPadding,
@@ -187,7 +231,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
           return _buildColorPicker(
             label,
             color,
-                (newColor) {
+            (newColor) {
               setState(() {
                 _setColor(label, newColor);
               });
@@ -201,12 +245,12 @@ class _ThemeScreenState extends State<ThemeScreen> {
   }
 
   Widget _buildColorPicker(
-      String label,
-      Color initialColor,
-      ValueChanged<Color> onColorChanged,
-      TextTheme textTheme,
-      ColorScheme colorScheme,
-      ) {
+    String label,
+    Color initialColor,
+    ValueChanged<Color> onColorChanged,
+    TextTheme textTheme,
+    ColorScheme colorScheme,
+  ) {
     return ListTile(
       title: Text(
         _getLabel(label),

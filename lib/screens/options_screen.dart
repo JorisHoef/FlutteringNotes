@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../constants/app_keys.dart';
 import '../constants/app_strings.dart';
 import '../constants/navigation_constants.dart';
 import '../models/theme_model.dart';
@@ -31,13 +32,15 @@ class OptionsScreen extends StatelessWidget {
               color: themeProvider.themeData.colorScheme.onPrimaryContainer,
             ),
           ),
-          actions: [ // Add the action section in the AppBar
+          actions: [
+            // Add the action section in the AppBar
             IconButton(
               icon: Icon(
                 Icons.delete, // Icon representing delete action
                 color: themeProvider.themeData.colorScheme.onPrimaryContainer,
               ),
-              tooltip: AppStrings.deletePreferencesText, // Tooltip for the button
+              tooltip:
+                  AppStrings.deletePreferencesText, // Tooltip for the button
               onPressed: () {
                 _showDeleteConfirmationDialog(context);
               },
@@ -53,7 +56,8 @@ class OptionsScreen extends StatelessWidget {
                     title: Text(
                       AppStrings.toggleThemeText,
                       style: textTheme.bodySmall?.copyWith(
-                        color: themeProvider.themeData.colorScheme.onPrimaryContainer,
+                        color: themeProvider
+                            .themeData.colorScheme.onPrimaryContainer,
                       ),
                     ),
                     trailing: Switch(
@@ -67,7 +71,8 @@ class OptionsScreen extends StatelessWidget {
                   ),
                   Divider(
                     height: 1,
-                    color: themeProvider.themeData.colorScheme.onPrimaryContainer,
+                    color:
+                        themeProvider.themeData.colorScheme.onPrimaryContainer,
                   ),
                 ],
               ),
@@ -85,7 +90,8 @@ class OptionsScreen extends StatelessWidget {
                   title: Text(
                     AppStrings.selectThemeText,
                     style: textTheme.bodyMedium?.copyWith(
-                      color: themeProvider.themeData.colorScheme.onSecondaryContainer,
+                      color: themeProvider
+                          .themeData.colorScheme.onSecondaryContainer,
                     ),
                   ),
                 ),
@@ -106,19 +112,17 @@ class OptionsScreen extends StatelessWidget {
                         builder: (context) => ThemeScreen(
                           initialTheme: theme,
                           initialIsDarkMode: isDarkMode,
-                            onThemeChange: (themeName, updatedColors) {
-                              themeProvider.customizeTheme(
-                                themeName: themeName,
-                                lightScheme: _generateColorScheme(
-                                    updatedColors,
-                                    Brightness.light,
-                                    theme.lightTheme.colorScheme),
-                                darkScheme: _generateColorScheme(
-                                    updatedColors,
-                                    Brightness.dark,
-                                    theme.darkTheme.colorScheme),
-                              );
-                            },
+                          onThemeChange: (themeName, updatedColors) {
+                            themeProvider.customizeTheme(
+                              themeName: themeName,
+                              lightScheme: _generateColorScheme(
+                                  updatedColors,
+                                  Brightness.light,
+                                  theme.lightTheme.colorScheme),
+                              darkScheme: _generateColorScheme(updatedColors,
+                                  Brightness.dark, theme.darkTheme.colorScheme),
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -133,7 +137,7 @@ class OptionsScreen extends StatelessWidget {
         onPressed: () async {
           final themeProvider = context.read<ThemeProvider>();
 
-          final newTheme = await Navigator.push(
+          final newTheme = await Navigator.push<ThemeModel>(
             context,
             MaterialPageRoute(
               builder: (context) => ThemeScreen(
@@ -148,16 +152,68 @@ class OptionsScreen extends StatelessWidget {
                 ),
                 initialIsDarkMode: false,
                 onThemeChange: (themeName, updatedColors) {
+                  final themeProvider = context.read<ThemeProvider>();
+                  debugPrint("Updating existing theme: $themeName");
+
+                  // Find the existing theme to customize
+                  final existingTheme =
+                      themeProvider.availableThemes.firstWhere(
+                    (theme) => theme.name == themeName,
+                    orElse: () => throw Exception('Theme not found!'),
+                  );
+
+                  // Customize the theme with updated lightScheme and darkScheme
                   themeProvider.customizeTheme(
                     themeName: themeName,
                     lightScheme: _generateColorScheme(
-                        updatedColors,
-                        Brightness.light,
-                        const ColorScheme.light()),
+                      updatedColors,
+                      Brightness.light,
+                      existingTheme.lightTheme.colorScheme,
+                    ),
                     darkScheme: _generateColorScheme(
-                        updatedColors,
-                        Brightness.dark,
-                        const ColorScheme.dark()),
+                      updatedColors,
+                      Brightness.dark,
+                      existingTheme.darkTheme.colorScheme,
+                    ),
+                  );
+
+                  // Save the updated theme in persistent storage as well
+                  themeProvider.addTheme(
+                    existingTheme.copyWith(
+                      lightTheme: ThemeModel.buildLightTheme(
+                        onPrimaryContainer:
+                            updatedColors[AppKeys.lightOnPrimaryContainer]!,
+                        onSecondaryContainer:
+                            updatedColors[AppKeys.lightOnSecondaryContainer]!,
+                        onTertiaryContainer:
+                            updatedColors[AppKeys.lightOnTertiaryContainer]!,
+                        primaryContainer:
+                            updatedColors[AppKeys.lightPrimaryContainer]!,
+                        secondaryContainer:
+                            updatedColors[AppKeys.lightSecondaryContainer]!,
+                        tertiaryContainer:
+                            updatedColors[AppKeys.lightTertiaryContainer]!,
+                        textTheme: existingTheme
+                            .lightTheme.textTheme, // Keep existing textTheme
+                      ),
+                      darkTheme: ThemeModel.buildDarkTheme(
+                        onPrimaryContainer:
+                            updatedColors[AppKeys.darkOnPrimaryContainer]!,
+                        onSecondaryContainer:
+                            updatedColors[AppKeys.darkOnSecondaryContainer]!,
+                        onTertiaryContainer:
+                            updatedColors[AppKeys.darkOnTertiaryContainer]!,
+                        primaryContainer:
+                            updatedColors[AppKeys.darkPrimaryContainer]!,
+                        secondaryContainer:
+                            updatedColors[AppKeys.darkSecondaryContainer]!,
+                        tertiaryContainer:
+                            updatedColors[AppKeys.darkTertiaryContainer]!,
+                        textTheme: existingTheme
+                            .darkTheme.textTheme, // Keep existing textTheme
+                      ),
+                      name: '',
+                    ),
                   );
                 },
               ),
@@ -165,7 +221,10 @@ class OptionsScreen extends StatelessWidget {
           );
 
           if (newTheme != null) {
-            themeProvider.addTheme(newTheme);
+            debugPrint("New theme created: ${newTheme.name}");
+            await themeProvider.addTheme(newTheme); // Add theme to the provider
+          } else {
+            debugPrint("Theme creation was cancelled.");
           }
         },
         tooltip: AppStrings.addThemeText,
@@ -178,20 +237,45 @@ class OptionsScreen extends StatelessWidget {
     );
   }
 
-  ColorScheme _generateColorScheme(Map<String, Color> updatedColors, Brightness brightness, ColorScheme fallbackScheme) {
+  ColorScheme _generateColorScheme(Map<String, Color> updatedColors,
+      Brightness brightness, ColorScheme fallbackScheme) {
     return ColorScheme(
-      primary: updatedColors['${brightness == Brightness.light ? "light" : "dark"}PrimaryContainer'] ?? fallbackScheme.primary,
-      onPrimary: updatedColors['${brightness == Brightness.light ? "light" : "dark"}OnPrimaryContainer'] ?? fallbackScheme.onPrimary,
-      primaryContainer: updatedColors['${brightness == Brightness.light ? "light" : "dark"}PrimaryContainer'] ?? fallbackScheme.primaryContainer,
-      onPrimaryContainer: updatedColors['${brightness == Brightness.light ? "light" : "dark"}OnPrimaryContainer'] ?? fallbackScheme.onPrimaryContainer,
-      secondary: updatedColors['${brightness == Brightness.light ? "light" : "dark"}SecondaryContainer'] ?? fallbackScheme.secondary,
-      onSecondary: updatedColors['${brightness == Brightness.light ? "light" : "dark"}OnSecondaryContainer'] ?? fallbackScheme.onSecondary,
-      secondaryContainer: updatedColors['${brightness == Brightness.light ? "light" : "dark"}SecondaryContainer'] ?? fallbackScheme.secondaryContainer,
-      onSecondaryContainer: updatedColors['${brightness == Brightness.light ? "light" : "dark"}OnSecondaryContainer'] ?? fallbackScheme.onSecondaryContainer,
-      tertiary: updatedColors['${brightness == Brightness.light ? "light" : "dark"}TertiaryContainer'] ?? fallbackScheme.tertiary,
-      onTertiary: updatedColors['${brightness == Brightness.light ? "light" : "dark"}OnTertiaryContainer'] ?? fallbackScheme.onTertiary,
-      tertiaryContainer: updatedColors['${brightness == Brightness.light ? "light" : "dark"}TertiaryContainer'] ?? fallbackScheme.tertiaryContainer,
-      onTertiaryContainer: updatedColors['${brightness == Brightness.light ? "light" : "dark"}OnTertiaryContainer'] ?? fallbackScheme.onTertiaryContainer,
+      primary: updatedColors[
+              '${brightness == Brightness.light ? "light" : "dark"}PrimaryContainer'] ??
+          fallbackScheme.primary,
+      onPrimary: updatedColors[
+              '${brightness == Brightness.light ? "light" : "dark"}OnPrimaryContainer'] ??
+          fallbackScheme.onPrimary,
+      primaryContainer: updatedColors[
+              '${brightness == Brightness.light ? "light" : "dark"}PrimaryContainer'] ??
+          fallbackScheme.primaryContainer,
+      onPrimaryContainer: updatedColors[
+              '${brightness == Brightness.light ? "light" : "dark"}OnPrimaryContainer'] ??
+          fallbackScheme.onPrimaryContainer,
+      secondary: updatedColors[
+              '${brightness == Brightness.light ? "light" : "dark"}SecondaryContainer'] ??
+          fallbackScheme.secondary,
+      onSecondary: updatedColors[
+              '${brightness == Brightness.light ? "light" : "dark"}OnSecondaryContainer'] ??
+          fallbackScheme.onSecondary,
+      secondaryContainer: updatedColors[
+              '${brightness == Brightness.light ? "light" : "dark"}SecondaryContainer'] ??
+          fallbackScheme.secondaryContainer,
+      onSecondaryContainer: updatedColors[
+              '${brightness == Brightness.light ? "light" : "dark"}OnSecondaryContainer'] ??
+          fallbackScheme.onSecondaryContainer,
+      tertiary: updatedColors[
+              '${brightness == Brightness.light ? "light" : "dark"}TertiaryContainer'] ??
+          fallbackScheme.tertiary,
+      onTertiary: updatedColors[
+              '${brightness == Brightness.light ? "light" : "dark"}OnTertiaryContainer'] ??
+          fallbackScheme.onTertiary,
+      tertiaryContainer: updatedColors[
+              '${brightness == Brightness.light ? "light" : "dark"}TertiaryContainer'] ??
+          fallbackScheme.tertiaryContainer,
+      onTertiaryContainer: updatedColors[
+              '${brightness == Brightness.light ? "light" : "dark"}OnTertiaryContainer'] ??
+          fallbackScheme.onTertiaryContainer,
       brightness: brightness,
       error: fallbackScheme.error, // Set fallback error
       onError: fallbackScheme.onError, // Set fallback onError
