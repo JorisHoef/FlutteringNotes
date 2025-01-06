@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/theme_provider.dart';
+import 'custom_animatedWidget.dart';
 
-class CustomListTile extends StatelessWidget {
+class CustomListTile extends StatefulWidget {
   final String title;
   final String? subTitle;
   final VoidCallback onTapCallback;
@@ -26,42 +27,55 @@ class CustomListTile extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final themeData = Provider.of<ThemeProvider>(context).themeData;
-    final colorScheme = themeData.colorScheme;
-    final textTheme = themeData.textTheme;
+  State<CustomListTile> createState() => _CustomListTileState();
+}
 
-    return ListTile(
-      leading: leadingWidget,
-      title: Text(
-        title,
-        maxLines: 1,
-        overflow: TextOverflow.fade,
-        softWrap: true,
-        style: textStyleTitle?.copyWith(
-          color: colorScheme.onPrimaryContainer,
-        )
-      ),
-      subtitle: subTitle != null
-          ? Text(
-        subTitle!,
-        maxLines: 1,
-        overflow: TextOverflow.fade,
-        softWrap: true,
-        style: textStyleSubTitle?.copyWith(
-          color: colorScheme.onSecondaryContainer,
+class _CustomListTileState extends State<CustomListTile> {
+  bool _hovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = context.watch<ThemeProvider>().themeData;
+    final colorScheme = themeData.colorScheme;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovering = true),
+      onExit: (_) => setState(() => _hovering = false),
+      child: ListTile(
+        leading: widget.leadingWidget,
+        title: Text(
+          widget.title,
+          maxLines: 1,
+          overflow: TextOverflow.fade,
+          softWrap: true,
+          style: widget.textStyleTitle?.copyWith(
+            color: colorScheme.onPrimaryContainer,
+          ),
         ),
-      )
-          : null,
-      onTap: onTapCallback,
-      trailing: PopupMenuButton<String>(
-        icon: Icon(
-          Icons.more_vert,
-          color: colorScheme.onPrimaryContainer,
+        subtitle: widget.subTitle != null
+            ? Text(
+                widget.subTitle!,
+                maxLines: 1,
+                overflow: TextOverflow.fade,
+                softWrap: true,
+                style: widget.textStyleSubTitle?.copyWith(
+                  color: colorScheme.onSecondaryContainer,
+                ),
+              )
+            : null,
+        onTap: widget.onTapCallback,
+        trailing: CustomAnimatedWidget(
+          hovering: _hovering,
+          child: PopupMenuButton<String>(
+            icon: Icon(
+              Icons.more_vert,
+              color: colorScheme.onPrimaryContainer,
+            ),
+            color: colorScheme.primaryContainer,
+            onSelected: widget.onMenuItemSelected,
+            itemBuilder: (BuildContext context) => widget.menuItems,
+          ),
         ),
-        color: colorScheme.primaryContainer,
-        onSelected: onMenuItemSelected,
-        itemBuilder: (BuildContext context) => menuItems,
       ),
     );
   }
