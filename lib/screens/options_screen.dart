@@ -12,22 +12,26 @@ import 'theme_screen.dart';
 class OptionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Get the theme provider
     var themeProvider = context.watch<ThemeProvider>();
 
+    // Dark mode toggle
     bool isDarkMode = themeProvider.themeData.brightness == Brightness.dark;
 
+    // Theme styles
     TextTheme textTheme = themeProvider.themeData.textTheme;
     ColorScheme colorScheme = themeProvider.themeData.colorScheme;
 
     return Scaffold(
       body: CustomScrollView(
         slivers: [
+          // Sliver AppBar
           SliverAppBar(
             pinned: true,
             expandedHeight: 100.0,
-            surfaceTintColor: colorScheme.primaryContainer,
             backgroundColor:
                 themeProvider.themeData.colorScheme.primaryContainer,
+            surfaceTintColor: colorScheme.primaryContainer,
             title: Text(
               NavigationConstants.optionsRoute,
               style: textTheme.bodyLarge?.copyWith(
@@ -37,7 +41,7 @@ class OptionsScreen extends StatelessWidget {
             actions: [
               IconButton(
                 icon: Icon(
-                  Icons.delete, // Icon representing delete action
+                  Icons.delete, // Delete icon
                   color: themeProvider.themeData.colorScheme.onPrimaryContainer,
                 ),
                 tooltip: AppStrings.deletePreferencesText, // Tooltip
@@ -46,9 +50,11 @@ class OptionsScreen extends StatelessWidget {
                 },
               ),
             ],
+            // Customize bottom section (toggle switch and divider)
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(50),
+              preferredSize: Size.fromHeight(70),
               child: Container(
+                // Background for the bottom area of the AppBar
                 color: themeProvider.themeData.colorScheme.primaryContainer,
                 child: Column(
                   children: [
@@ -66,7 +72,9 @@ class OptionsScreen extends StatelessWidget {
                         inactiveThumbColor: colorScheme.primaryContainer,
                         inactiveTrackColor: colorScheme.onPrimaryContainer,
                         value: isDarkMode,
-                        onChanged: (value) => themeProvider.toggleThemeMode(),
+                        onChanged: (value) {
+                          themeProvider.toggleThemeMode();
+                        },
                       ),
                     ),
                     Divider(
@@ -79,10 +87,11 @@ class OptionsScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Section Title
+
+          // Section Title (wrapped with SliverToBoxAdapter)
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
               child: Text(
                 AppStrings.selectThemeText,
                 style: textTheme.bodyMedium?.copyWith(
@@ -92,7 +101,8 @@ class OptionsScreen extends StatelessWidget {
               ),
             ),
           ),
-          // Theme List
+
+          // Theme List (SliverList)
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
@@ -131,12 +141,15 @@ class OptionsScreen extends StatelessWidget {
               childCount: themeProvider.availableThemes.length,
             ),
           ),
+
+          // Extra bottom padding (optional for floating action button spacing)
+          SliverToBoxAdapter(
+            child: SizedBox(height: 80),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final themeProvider = context.read<ThemeProvider>();
-
           final newTheme = await Navigator.push<ThemeModel>(
             context,
             MaterialPageRoute(
@@ -156,13 +169,15 @@ class OptionsScreen extends StatelessWidget {
                   themeProvider.customizeTheme(
                     themeName: themeName,
                     lightScheme: _generateColorScheme(
-                        updatedColors,
-                        Brightness.light,
-                        themeProvider.currentTheme.lightTheme.colorScheme),
+                      updatedColors,
+                      Brightness.light,
+                      themeProvider.currentTheme.lightTheme.colorScheme,
+                    ),
                     darkScheme: _generateColorScheme(
-                        updatedColors,
-                        Brightness.dark,
-                        themeProvider.currentTheme.darkTheme.colorScheme),
+                      updatedColors,
+                      Brightness.dark,
+                      themeProvider.currentTheme.darkTheme.colorScheme,
+                    ),
                   );
                 },
               ),
@@ -170,8 +185,8 @@ class OptionsScreen extends StatelessWidget {
           );
 
           if (newTheme != null) {
-            debugPrint("New theme created: ${newTheme.name}");
-            await themeProvider.addTheme(newTheme); // Add theme to the provider
+            debugPrint("New theme added: ${newTheme.name}");
+            context.read<ThemeProvider>().addTheme(newTheme);
           }
         },
         tooltip: AppStrings.addThemeText,
@@ -187,48 +202,25 @@ class OptionsScreen extends StatelessWidget {
   ColorScheme _generateColorScheme(Map<String, Color> updatedColors,
       Brightness brightness, ColorScheme fallbackScheme) {
     return ColorScheme(
-      primary: updatedColors[
-              '${brightness == Brightness.light ? "light" : "dark"}PrimaryContainer'] ??
-          fallbackScheme.primary,
-      onPrimary: updatedColors[
-              '${brightness == Brightness.light ? "light" : "dark"}OnPrimaryContainer'] ??
-          fallbackScheme.onPrimary,
-      primaryContainer: updatedColors[
-              '${brightness == Brightness.light ? "light" : "dark"}PrimaryContainer'] ??
-          fallbackScheme.primaryContainer,
-      onPrimaryContainer: updatedColors[
-              '${brightness == Brightness.light ? "light" : "dark"}OnPrimaryContainer'] ??
-          fallbackScheme.onPrimaryContainer,
-      secondary: updatedColors[
-              '${brightness == Brightness.light ? "light" : "dark"}SecondaryContainer'] ??
-          fallbackScheme.secondary,
-      onSecondary: updatedColors[
-              '${brightness == Brightness.light ? "light" : "dark"}OnSecondaryContainer'] ??
-          fallbackScheme.onSecondary,
-      secondaryContainer: updatedColors[
-              '${brightness == Brightness.light ? "light" : "dark"}SecondaryContainer'] ??
-          fallbackScheme.secondaryContainer,
-      onSecondaryContainer: updatedColors[
-              '${brightness == Brightness.light ? "light" : "dark"}OnSecondaryContainer'] ??
-          fallbackScheme.onSecondaryContainer,
-      tertiary: updatedColors[
-              '${brightness == Brightness.light ? "light" : "dark"}TertiaryContainer'] ??
-          fallbackScheme.tertiary,
-      onTertiary: updatedColors[
-              '${brightness == Brightness.light ? "light" : "dark"}OnTertiaryContainer'] ??
-          fallbackScheme.onTertiary,
-      tertiaryContainer: updatedColors[
-              '${brightness == Brightness.light ? "light" : "dark"}TertiaryContainer'] ??
-          fallbackScheme.tertiaryContainer,
-      onTertiaryContainer: updatedColors[
-              '${brightness == Brightness.light ? "light" : "dark"}OnTertiaryContainer'] ??
-          fallbackScheme.onTertiaryContainer,
-      brightness: brightness,
-      error: fallbackScheme.error,
-      onError: fallbackScheme.onError,
-      surface: fallbackScheme.surface,
-      onSurface: fallbackScheme.onSurface,
-    );
+        primary: updatedColors[
+                '${brightness == Brightness.light ? "light" : "dark"}Primary'] ??
+            fallbackScheme.primary,
+        onPrimary: updatedColors[
+                '${brightness == Brightness.light ? "light" : "dark"}OnPrimary'] ??
+            fallbackScheme.onPrimary,
+        primaryContainer: updatedColors[
+                '${brightness == Brightness.light ? "light" : "dark"}PrimaryContainer'] ??
+            fallbackScheme.primaryContainer,
+        onPrimaryContainer: updatedColors[
+                '${brightness == Brightness.light ? "light" : "dark"}OnPrimaryContainer'] ??
+            fallbackScheme.onPrimaryContainer,
+        brightness: brightness,
+        error: fallbackScheme.error,
+        onError: fallbackScheme.onError,
+        surface: fallbackScheme.surface,
+        onSurface: fallbackScheme.onSurface,
+        secondary: fallbackScheme.secondary,
+        onSecondary: fallbackScheme.onSecondary);
   }
 
   void _showDeleteConfirmationDialog(BuildContext context) {
@@ -245,12 +237,10 @@ class OptionsScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Close the dialog
                 await clearAllSharedPreferences();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(AppStrings.preferencesDeletedSuccess),
-                  ),
+                  SnackBar(content: Text(AppStrings.preferencesDeletedSuccess)),
                 );
               },
               child: Text(
@@ -267,6 +257,6 @@ class OptionsScreen extends StatelessWidget {
   Future<void> clearAllSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    print('All shared preferences cleared!');
+    debugPrint('All shared preferences cleared!');
   }
 }
