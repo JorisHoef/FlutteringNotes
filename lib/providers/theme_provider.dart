@@ -29,16 +29,43 @@ class ThemeProvider extends ChangeNotifier {
 
   Future<void> toggleThemeMode() async {
     _isDarkMode = !_isDarkMode;
+
+    // Ensure the font family is consistent for the new theme mode
+    _currentTheme = ThemeModel(
+      name: _currentTheme.name,
+      lightTheme: _currentTheme.lightTheme.copyWith(
+        textTheme:
+            ThemeConstants.ensureFontFamily(_currentTheme.lightTheme.textTheme),
+      ),
+      darkTheme: _currentTheme.darkTheme.copyWith(
+        textTheme:
+            ThemeConstants.ensureFontFamily(_currentTheme.darkTheme.textTheme),
+      ),
+    );
+
     notifyListeners(); // Notify listeners of the mode change
     await _themeRepository.saveDarkMode(_isDarkMode); // Save mode to storage
   }
 
   Future<void> switchTheme(String themeName) async {
+    // Switch to the selected theme
     final selectedTheme = _availableThemes.firstWhere(
       (theme) => theme.name == themeName,
       orElse: () => _currentTheme,
     );
-    _currentTheme = selectedTheme;
+
+    _currentTheme = ThemeModel(
+      name: selectedTheme.name,
+      lightTheme: selectedTheme.lightTheme.copyWith(
+        textTheme:
+            ThemeConstants.ensureFontFamily(selectedTheme.lightTheme.textTheme),
+      ),
+      darkTheme: selectedTheme.darkTheme.copyWith(
+        textTheme:
+            ThemeConstants.ensureFontFamily(selectedTheme.darkTheme.textTheme),
+      ),
+    );
+
     notifyListeners(); // Notify listeners of the theme change
     await _themeRepository
         .saveSelectedTheme(themeName); // Save selected theme to storage
@@ -46,9 +73,23 @@ class ThemeProvider extends ChangeNotifier {
 
   Future<void> addTheme(ThemeModel newTheme) async {
     debugPrint("Adding new theme: ${newTheme.name}");
-    _availableThemes.add(newTheme);
+
+    // Ensure font consistency for the new theme before adding it
+    final themeToAdd = ThemeModel(
+      name: newTheme.name,
+      lightTheme: newTheme.lightTheme.copyWith(
+        textTheme:
+            ThemeConstants.ensureFontFamily(newTheme.lightTheme.textTheme),
+      ),
+      darkTheme: newTheme.darkTheme.copyWith(
+        textTheme:
+            ThemeConstants.ensureFontFamily(newTheme.darkTheme.textTheme),
+      ),
+    );
+
+    _availableThemes.add(themeToAdd);
     notifyListeners();
-    await _themeRepository.saveTheme(newTheme);
+    await _themeRepository.saveTheme(themeToAdd); // Save theme to storage
   }
 
   Future<void> deleteTheme(String themeName) async {
@@ -84,14 +125,27 @@ class ThemeProvider extends ChangeNotifier {
         darkTheme: theme.darkTheme.copyWith(colorScheme: darkScheme),
       );
 
+      // Ensure font consistency for the updated theme
+      final updatedThemeWithFont = ThemeModel(
+        name: updatedTheme.name,
+        lightTheme: updatedTheme.lightTheme.copyWith(
+          textTheme: ThemeConstants.ensureFontFamily(
+              updatedTheme.lightTheme.textTheme),
+        ),
+        darkTheme: updatedTheme.darkTheme.copyWith(
+          textTheme:
+              ThemeConstants.ensureFontFamily(updatedTheme.darkTheme.textTheme),
+        ),
+      );
+
       // Update the in-memory list of themes
-      _availableThemes[themeIndex] = updatedTheme;
+      _availableThemes[themeIndex] = updatedThemeWithFont;
 
       // Save the updated theme to persistent storage
-      _themeRepository.saveTheme(updatedTheme);
+      _themeRepository.saveTheme(updatedThemeWithFont);
 
       notifyListeners(); // Notify listeners of the changes
-      debugPrint("Theme updated and saved: ${updatedTheme.name}");
+      debugPrint("Theme updated and saved: ${updatedThemeWithFont.name}");
     }
   }
 
@@ -127,8 +181,20 @@ class ThemeProvider extends ChangeNotifier {
       _currentTheme = _availableThemes.first;
     }
 
-    _isDarkMode = savedDarkModeState ?? false;
+    // Ensure font family is consistent across the current theme's light and dark text themes
+    _currentTheme = ThemeModel(
+      name: _currentTheme.name,
+      lightTheme: _currentTheme.lightTheme.copyWith(
+        textTheme:
+            ThemeConstants.ensureFontFamily(_currentTheme.lightTheme.textTheme),
+      ),
+      darkTheme: _currentTheme.darkTheme.copyWith(
+        textTheme:
+            ThemeConstants.ensureFontFamily(_currentTheme.darkTheme.textTheme),
+      ),
+    );
 
+    _isDarkMode = savedDarkModeState ?? false;
     notifyListeners(); // Notify listeners of the loaded data
   }
 }

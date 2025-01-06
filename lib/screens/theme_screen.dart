@@ -4,6 +4,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import '../constants/app_keys.dart';
 import '../constants/app_strings.dart';
 import '../constants/layout_constants.dart';
+import '../constants/theme_constants.dart';
 import '../models/theme_model.dart';
 
 class ThemeScreen extends StatefulWidget {
@@ -95,19 +96,19 @@ class _ThemeScreenState extends State<ThemeScreen> {
 
     // Handle empty theme name
     if (_theme.name.isEmpty) {
-      debugPrint('Error: Theme name is empty.');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppStrings.themeNameEmptyError),
         ),
       );
-      return; // Don't proceed if the theme name is invalid
+      return;
     }
 
-    // Call parent callback
-    widget.onThemeChange(_theme.name, tempColors);
-    debugPrint('onThemeChange callback invoked with theme: ${_theme.name}');
-    debugPrint('Updated tempColors: $tempColors');
+    // Apply the fallback for fonts to ensure Montserrat is used when undefined
+    final lightTextTheme =
+        ThemeConstants.ensureFontFamily(_theme.lightTheme.textTheme);
+    final darkTextTheme =
+        ThemeConstants.ensureFontFamily(_theme.darkTheme.textTheme);
 
     // Return the new ThemeModel to the parent
     Navigator.of(context).pop(
@@ -120,7 +121,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
           primaryContainer: tempColors[AppKeys.lightPrimaryContainer]!,
           secondaryContainer: tempColors[AppKeys.lightSecondaryContainer]!,
           tertiaryContainer: tempColors[AppKeys.lightTertiaryContainer]!,
-          textTheme: _theme.lightTheme.textTheme, // Use existing textTheme
+          textTheme: lightTextTheme,
         ),
         darkTheme: ThemeModel.buildDarkTheme(
           onPrimaryContainer: tempColors[AppKeys.darkOnPrimaryContainer]!,
@@ -129,12 +130,10 @@ class _ThemeScreenState extends State<ThemeScreen> {
           primaryContainer: tempColors[AppKeys.darkPrimaryContainer]!,
           secondaryContainer: tempColors[AppKeys.darkSecondaryContainer]!,
           tertiaryContainer: tempColors[AppKeys.darkTertiaryContainer]!,
-          textTheme: _theme.darkTheme.textTheme, // Use existing textTheme
+          textTheme: darkTextTheme,
         ),
       ),
     );
-
-    debugPrint('Navigator.pop called.');
   }
 
   @override
