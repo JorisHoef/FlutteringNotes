@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../constants/app_keys.dart';
 import '../constants/app_strings.dart';
 import '../constants/navigation_constants.dart';
 import '../models/theme_model.dart';
@@ -21,117 +20,118 @@ class OptionsScreen extends StatelessWidget {
     ColorScheme colorScheme = themeProvider.themeData.colorScheme;
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: AppBar(
-          surfaceTintColor: colorScheme.primaryContainer,
-          backgroundColor: themeProvider.themeData.colorScheme.primaryContainer,
-          title: Text(
-            NavigationConstants.optionsRoute,
-            style: textTheme.bodyLarge?.copyWith(
-              color: themeProvider.themeData.colorScheme.onPrimaryContainer,
-            ),
-          ),
-          actions: [
-            // Add the action section in the AppBar
-            IconButton(
-              icon: Icon(
-                Icons.delete, // Icon representing delete action
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            expandedHeight: 100.0,
+            surfaceTintColor: colorScheme.primaryContainer,
+            backgroundColor:
+                themeProvider.themeData.colorScheme.primaryContainer,
+            title: Text(
+              NavigationConstants.optionsRoute,
+              style: textTheme.bodyLarge?.copyWith(
                 color: themeProvider.themeData.colorScheme.onPrimaryContainer,
               ),
-              tooltip:
-                  AppStrings.deletePreferencesText, // Tooltip for the button
-              onPressed: () {
-                _showDeleteConfirmationDialog(context);
-              },
             ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: Size.fromHeight(50),
-            child: Container(
-              color: themeProvider.themeData.colorScheme.primaryContainer,
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Text(
-                      AppStrings.toggleThemeText,
-                      style: textTheme.bodySmall?.copyWith(
-                        color: themeProvider
-                            .themeData.colorScheme.onPrimaryContainer,
+            actions: [
+              IconButton(
+                icon: Icon(
+                  Icons.delete, // Icon representing delete action
+                  color: themeProvider.themeData.colorScheme.onPrimaryContainer,
+                ),
+                tooltip: AppStrings.deletePreferencesText, // Tooltip
+                onPressed: () {
+                  _showDeleteConfirmationDialog(context);
+                },
+              ),
+            ],
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(50),
+              child: Container(
+                color: themeProvider.themeData.colorScheme.primaryContainer,
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text(
+                        AppStrings.toggleThemeText,
+                        style: textTheme.bodySmall?.copyWith(
+                          color: themeProvider
+                              .themeData.colorScheme.onPrimaryContainer,
+                        ),
+                      ),
+                      trailing: Switch(
+                        activeColor: colorScheme.secondaryContainer,
+                        activeTrackColor: colorScheme.primary,
+                        inactiveThumbColor: colorScheme.primaryContainer,
+                        inactiveTrackColor: colorScheme.onPrimaryContainer,
+                        value: isDarkMode,
+                        onChanged: (value) => themeProvider.toggleThemeMode(),
                       ),
                     ),
-                    trailing: Switch(
-                      activeColor: colorScheme.secondaryContainer,
-                      activeTrackColor: colorScheme.onPrimaryContainer,
-                      inactiveThumbColor: colorScheme.primaryContainer,
-                      inactiveTrackColor: colorScheme.secondaryContainer,
-                      value: isDarkMode,
-                      onChanged: (value) => themeProvider.toggleThemeMode(),
+                    Divider(
+                      height: 1,
+                      color: themeProvider
+                          .themeData.colorScheme.onPrimaryContainer,
                     ),
-                  ),
-                  Divider(
-                    height: 1,
-                    color:
-                        themeProvider.themeData.colorScheme.onPrimaryContainer,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
-      body: Container(
-        color: themeProvider.themeData.colorScheme.secondaryContainer,
-        child: ListView(
-          children: [
-            Column(
-              children: [
-                ListTile(
-                  title: Text(
-                    AppStrings.selectThemeText,
-                    style: textTheme.bodyMedium?.copyWith(
-                      color: themeProvider
-                          .themeData.colorScheme.onSecondaryContainer,
-                    ),
-                  ),
+          // Section Title
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                AppStrings.selectThemeText,
+                style: textTheme.bodyMedium?.copyWith(
+                  color:
+                      themeProvider.themeData.colorScheme.onSecondaryContainer,
                 ),
-                ...themeProvider.availableThemes.map((theme) {
-                  return ListTileWithMenu(
-                    leadingWidget: CircleAvatar(
-                      backgroundColor: isDarkMode
-                          ? theme.darkTheme.colorScheme.primary
-                          : theme.lightTheme.colorScheme.primary,
-                    ),
-                    title: theme.name,
-                    onTap: () => themeProvider.switchTheme(theme.name),
-                    titleStyle: textTheme.bodySmall,
-                    onDelete: () => themeProvider.deleteTheme(theme.name),
-                    onEdit: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ThemeScreen(
-                          initialTheme: theme,
-                          initialIsDarkMode: isDarkMode,
-                          onThemeChange: (themeName, updatedColors) {
-                            themeProvider.customizeTheme(
-                              themeName: themeName,
-                              lightScheme: _generateColorScheme(
-                                  updatedColors,
-                                  Brightness.light,
-                                  theme.lightTheme.colorScheme),
-                              darkScheme: _generateColorScheme(updatedColors,
-                                  Brightness.dark, theme.darkTheme.colorScheme),
-                            );
-                          },
-                        ),
+              ),
+            ),
+          ),
+          // Theme List
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                final theme = themeProvider.availableThemes[index];
+
+                return ListTileWithMenu(
+                  leadingWidget: CircleAvatar(
+                    backgroundColor: isDarkMode
+                        ? theme.darkTheme.colorScheme.primary
+                        : theme.lightTheme.colorScheme.primary,
+                  ),
+                  title: theme.name,
+                  onTap: () => themeProvider.switchTheme(theme.name),
+                  titleStyle: textTheme.bodySmall,
+                  onDelete: () => themeProvider.deleteTheme(theme.name),
+                  onEdit: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ThemeScreen(
+                        initialTheme: theme,
+                        initialIsDarkMode: isDarkMode,
+                        onThemeChange: (themeName, updatedColors) {
+                          themeProvider.customizeTheme(
+                            themeName: themeName,
+                            lightScheme: _generateColorScheme(updatedColors,
+                                Brightness.light, theme.lightTheme.colorScheme),
+                            darkScheme: _generateColorScheme(updatedColors,
+                                Brightness.dark, theme.darkTheme.colorScheme),
+                          );
+                        },
                       ),
                     ),
-                  );
-                })
-              ],
+                  ),
+                );
+              },
+              childCount: themeProvider.availableThemes.length,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
@@ -153,67 +153,16 @@ class OptionsScreen extends StatelessWidget {
                 initialIsDarkMode: false,
                 onThemeChange: (themeName, updatedColors) {
                   final themeProvider = context.read<ThemeProvider>();
-                  debugPrint("Updating existing theme: $themeName");
-
-                  // Find the existing theme to customize
-                  final existingTheme =
-                      themeProvider.availableThemes.firstWhere(
-                    (theme) => theme.name == themeName,
-                    orElse: () => throw Exception('Theme not found!'),
-                  );
-
-                  // Customize the theme with updated lightScheme and darkScheme
                   themeProvider.customizeTheme(
                     themeName: themeName,
                     lightScheme: _generateColorScheme(
-                      updatedColors,
-                      Brightness.light,
-                      existingTheme.lightTheme.colorScheme,
-                    ),
+                        updatedColors,
+                        Brightness.light,
+                        themeProvider.currentTheme.lightTheme.colorScheme),
                     darkScheme: _generateColorScheme(
-                      updatedColors,
-                      Brightness.dark,
-                      existingTheme.darkTheme.colorScheme,
-                    ),
-                  );
-
-                  // Save the updated theme in persistent storage as well
-                  themeProvider.addTheme(
-                    existingTheme.copyWith(
-                      lightTheme: ThemeModel.buildLightTheme(
-                        onPrimaryContainer:
-                            updatedColors[AppKeys.lightOnPrimaryContainer]!,
-                        onSecondaryContainer:
-                            updatedColors[AppKeys.lightOnSecondaryContainer]!,
-                        onTertiaryContainer:
-                            updatedColors[AppKeys.lightOnTertiaryContainer]!,
-                        primaryContainer:
-                            updatedColors[AppKeys.lightPrimaryContainer]!,
-                        secondaryContainer:
-                            updatedColors[AppKeys.lightSecondaryContainer]!,
-                        tertiaryContainer:
-                            updatedColors[AppKeys.lightTertiaryContainer]!,
-                        textTheme: existingTheme
-                            .lightTheme.textTheme, // Keep existing textTheme
-                      ),
-                      darkTheme: ThemeModel.buildDarkTheme(
-                        onPrimaryContainer:
-                            updatedColors[AppKeys.darkOnPrimaryContainer]!,
-                        onSecondaryContainer:
-                            updatedColors[AppKeys.darkOnSecondaryContainer]!,
-                        onTertiaryContainer:
-                            updatedColors[AppKeys.darkOnTertiaryContainer]!,
-                        primaryContainer:
-                            updatedColors[AppKeys.darkPrimaryContainer]!,
-                        secondaryContainer:
-                            updatedColors[AppKeys.darkSecondaryContainer]!,
-                        tertiaryContainer:
-                            updatedColors[AppKeys.darkTertiaryContainer]!,
-                        textTheme: existingTheme
-                            .darkTheme.textTheme, // Keep existing textTheme
-                      ),
-                      name: '',
-                    ),
+                        updatedColors,
+                        Brightness.dark,
+                        themeProvider.currentTheme.darkTheme.colorScheme),
                   );
                 },
               ),
@@ -223,8 +172,6 @@ class OptionsScreen extends StatelessWidget {
           if (newTheme != null) {
             debugPrint("New theme created: ${newTheme.name}");
             await themeProvider.addTheme(newTheme); // Add theme to the provider
-          } else {
-            debugPrint("Theme creation was cancelled.");
           }
         },
         tooltip: AppStrings.addThemeText,
@@ -277,10 +224,10 @@ class OptionsScreen extends StatelessWidget {
               '${brightness == Brightness.light ? "light" : "dark"}OnTertiaryContainer'] ??
           fallbackScheme.onTertiaryContainer,
       brightness: brightness,
-      error: fallbackScheme.error, // Set fallback error
-      onError: fallbackScheme.onError, // Set fallback onError
-      surface: fallbackScheme.surface, // Set fallback surface
-      onSurface: fallbackScheme.onSurface, // Set fallback onBackground
+      error: fallbackScheme.error,
+      onError: fallbackScheme.onError,
+      surface: fallbackScheme.surface,
+      onSurface: fallbackScheme.onSurface,
     );
   }
 
@@ -293,13 +240,13 @@ class OptionsScreen extends StatelessWidget {
           content: Text(AppStrings.deletePreferencesConfirmation),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(), // Close the dialog
+              onPressed: () => Navigator.of(context).pop(),
               child: Text(AppStrings.cancel),
             ),
             TextButton(
               onPressed: () async {
-                Navigator.of(context).pop(); // Close the dialog
-                await clearAllSharedPreferences(); // Clear preferences
+                Navigator.of(context).pop();
+                await clearAllSharedPreferences();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(AppStrings.preferencesDeletedSuccess),
