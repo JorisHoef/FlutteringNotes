@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants/theme_constants.dart';
+
 class ThemeModel {
   final String name;
   final ThemeData lightTheme;
@@ -44,7 +46,7 @@ class ThemeModel {
         onSecondaryContainer: onSecondaryContainer,
         onTertiaryContainer: onTertiaryContainer,
       ),
-      textTheme: textTheme,
+      textTheme: ThemeConstants.ensureFontFamily(textTheme),
     );
   }
 
@@ -69,7 +71,7 @@ class ThemeModel {
         onSecondaryContainer: onSecondaryContainer,
         onTertiaryContainer: onTertiaryContainer,
       ),
-      textTheme: textTheme,
+      textTheme: ThemeConstants.ensureFontFamily(textTheme),
     );
   }
 }
