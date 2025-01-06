@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:provider/provider.dart';
 
 import '../constants/app_keys.dart';
 import '../constants/app_strings.dart';
 import '../constants/layout_constants.dart';
 import '../constants/theme_constants.dart';
 import '../models/theme_model.dart';
+import '../providers/theme_provider.dart';
 
 class ThemeScreen extends StatefulWidget {
   final ThemeModel initialTheme;
@@ -98,7 +100,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
     if (_theme.name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppStrings.themeNameEmptyError),
+          content: Text('The theme name cannot be empty.'),
         ),
       );
       return;
@@ -110,30 +112,39 @@ class _ThemeScreenState extends State<ThemeScreen> {
     final darkTextTheme =
         ThemeConstants.ensureFontFamily(_theme.darkTheme.textTheme);
 
-    // Return the new ThemeModel to the parent
-    Navigator.of(context).pop(
-      ThemeModel(
-        name: _theme.name,
-        lightTheme: ThemeModel.buildLightTheme(
-          onPrimaryContainer: tempColors[AppKeys.lightOnPrimaryContainer]!,
-          onSecondaryContainer: tempColors[AppKeys.lightOnSecondaryContainer]!,
-          onTertiaryContainer: tempColors[AppKeys.lightOnTertiaryContainer]!,
-          primaryContainer: tempColors[AppKeys.lightPrimaryContainer]!,
-          secondaryContainer: tempColors[AppKeys.lightSecondaryContainer]!,
-          tertiaryContainer: tempColors[AppKeys.lightTertiaryContainer]!,
-          textTheme: lightTextTheme,
-        ),
-        darkTheme: ThemeModel.buildDarkTheme(
-          onPrimaryContainer: tempColors[AppKeys.darkOnPrimaryContainer]!,
-          onSecondaryContainer: tempColors[AppKeys.darkOnSecondaryContainer]!,
-          onTertiaryContainer: tempColors[AppKeys.darkOnTertiaryContainer]!,
-          primaryContainer: tempColors[AppKeys.darkPrimaryContainer]!,
-          secondaryContainer: tempColors[AppKeys.darkSecondaryContainer]!,
-          tertiaryContainer: tempColors[AppKeys.darkTertiaryContainer]!,
-          textTheme: darkTextTheme,
-        ),
+    // Call updateTheme in ThemeProvider
+    final updatedTheme = ThemeModel(
+      name: _theme.name,
+      lightTheme: ThemeModel.buildLightTheme(
+        onPrimaryContainer: tempColors[AppKeys.lightOnPrimaryContainer]!,
+        onSecondaryContainer: tempColors[AppKeys.lightOnSecondaryContainer]!,
+        onTertiaryContainer: tempColors[AppKeys.lightOnTertiaryContainer]!,
+        primaryContainer: tempColors[AppKeys.lightPrimaryContainer]!,
+        secondaryContainer: tempColors[AppKeys.lightSecondaryContainer]!,
+        tertiaryContainer: tempColors[AppKeys.lightTertiaryContainer]!,
+        textTheme: lightTextTheme,
+      ),
+      darkTheme: ThemeModel.buildDarkTheme(
+        onPrimaryContainer: tempColors[AppKeys.darkOnPrimaryContainer]!,
+        onSecondaryContainer: tempColors[AppKeys.darkOnSecondaryContainer]!,
+        onTertiaryContainer: tempColors[AppKeys.darkOnTertiaryContainer]!,
+        primaryContainer: tempColors[AppKeys.darkPrimaryContainer]!,
+        secondaryContainer: tempColors[AppKeys.darkSecondaryContainer]!,
+        tertiaryContainer: tempColors[AppKeys.darkTertiaryContainer]!,
+        textTheme: darkTextTheme,
       ),
     );
+
+    // Use the ThemeProvider to save changes
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    themeProvider.customizeTheme(
+      themeName: updatedTheme.name,
+      lightScheme: updatedTheme.lightTheme.colorScheme,
+      darkScheme: updatedTheme.darkTheme.colorScheme,
+    );
+
+    // Close the screen
+    Navigator.of(context).pop();
   }
 
   @override
