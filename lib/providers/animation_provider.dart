@@ -9,7 +9,7 @@ enum AnimationType {
 
 class AnimationProvider extends ChangeNotifier {
   Duration _duration = const Duration(milliseconds: 300);
-  Curve _curve = Curves.fastOutSlowIn;
+  Curve _curve = Curves.easeOutBack;
   AnimationType _animationType = AnimationType.combined;
 
   Duration get duration => _duration;

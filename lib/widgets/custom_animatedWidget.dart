@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/animation_provider.dart'; // Import AnimationProvider
+import '../providers/animation_provider.dart';
 
 class CustomAnimatedWidget extends StatelessWidget {
   final bool hovering;
@@ -17,7 +17,6 @@ class CustomAnimatedWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final animationProvider = context.watch<AnimationProvider>();
 
-    // Get global animation configurations
     final animationType = animationProvider.animationType;
     final duration = animationProvider.duration;
     final curve = animationProvider.curve;
