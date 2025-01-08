@@ -41,8 +41,16 @@ class MyApp extends StatelessWidget {
       builder: (context, themeProvider, child) {
         return MaterialApp(
           title: AppStrings.appName,
-          theme: themeProvider.themeData, // Dynamically gets applied theme
-          home: MainScreen(), // Entry screen of the app
+          theme: themeProvider.themeData, // Dynamically applies selected theme
+
+          // Wrap all screens globally with SafeArea
+          builder: (context, child) {
+            return SafeArea(
+              child: child ?? const SizedBox.shrink(), // Adds SafeArea
+            );
+          },
+
+          home: MainScreen(), // Entry point screen of the app
         );
       },
     );
