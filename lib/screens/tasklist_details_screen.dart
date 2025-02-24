@@ -23,12 +23,43 @@ class _TaskListDetailScreenState extends State<TaskListDetailScreen> {
 
   void _addTask() {
     setState(() {
-      // Create a new task with a temporary id.
       tasks.add(Task(
         id: DateTime.now().millisecondsSinceEpoch,
         title: 'New Task',
       ));
     });
+  }
+
+  /// Opens a dialog to rename the task at [index].
+  void _renameTask(int index) {
+    final task = tasks[index];
+    final controller = TextEditingController(text: task.title);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Rename Task'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(labelText: 'Task Title'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                tasks[index].title = controller.text;
+              });
+              Navigator.pop(context);
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _onReorder(int oldIndex, int newIndex) {
@@ -55,7 +86,16 @@ class _TaskListDetailScreenState extends State<TaskListDetailScreen> {
             ListTile(
               key: ValueKey(tasks[index].id),
               title: Text(tasks[index].title),
-              trailing: const Icon(Icons.drag_handle),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () => _renameTask(index),
+                  ),
+                  const Icon(Icons.drag_handle),
+                ],
+              ),
             ),
         ],
       ),
