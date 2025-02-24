@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class NavigationConstants {
   static const String homeRoute = 'Home';
   static const String notesRoute = 'Notes';
+  static const String tasksRoute = "Tasks";
   static const String optionsRoute = "Options";
 }
 
@@ -16,6 +17,11 @@ const List<NavigationDestinationConfig> navigationDestinations = [
     icon: Icon(Icons.note),
     label: NavigationConstants.notesRoute,
     route: '/${NavigationConstants.notesRoute}',
+  ),
+  NavigationDestinationConfig(
+      icon: Icon(Icons.list_alt),
+      label: NavigationConstants.tasksRoute,
+      route: '/${NavigationConstants.tasksRoute}'
   ),
   NavigationDestinationConfig(
     icon: Icon(Icons.settings),

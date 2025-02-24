@@ -15,17 +15,14 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        // NoteState with LocalNoteRepository
         ChangeNotifierProvider(
           create: (context) => NoteState(LocalNoteRepository())..loadNotes(),
         ),
-        // ThemeProvider (initialization handled internally)
         ChangeNotifierProvider(
           create: (context) => ThemeProvider(LocalThemeRepository()),
         ),
-        // AnimationProvider
         ChangeNotifierProvider(
-            create: (_) => AnimationProvider()), // Add AnimationProvider
+            create: (_) => AnimationProvider()),
       ],
       child: const MyApp(),
     ),
@@ -41,16 +38,16 @@ class MyApp extends StatelessWidget {
       builder: (context, themeProvider, child) {
         return MaterialApp(
           title: AppStrings.appName,
-          theme: themeProvider.themeData, // Dynamically applies selected theme
+          theme: themeProvider.themeData,
 
           // Wrap all screens globally with SafeArea
           builder: (context, child) {
             return SafeArea(
-              child: child ?? const SizedBox.shrink(), // Adds SafeArea
+              child: child ?? const SizedBox.shrink(),
             );
           },
 
-          home: MainScreen(), // Entry point screen of the app
+          home: MainScreen(),
         );
       },
     );

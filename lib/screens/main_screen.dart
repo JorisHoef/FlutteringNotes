@@ -7,6 +7,7 @@ import '../widgets/custom_navigationRail.dart';
 import 'home_screen.dart';
 import 'note_overview_screen.dart';
 import 'options_screen.dart';
+import 'tasklist_overview_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -35,8 +36,8 @@ class _MainScreenState extends State<MainScreen> {
                       });
                     },
                     extended: CustomNavigationRail.isRailExtended(
-                        constraints,
-                        railThreshold
+                      constraints,
+                      railThreshold,
                     ),
                   ),
                 ),
@@ -73,6 +74,8 @@ class _MainScreenState extends State<MainScreen> {
       case 1:
         return NoteOverviewScreen();
       case 2:
+        return TaskListOverviewScreen();
+      case 3:
         return OptionsScreen();
       default:
         throw UnimplementedError('No widget for index $index');
